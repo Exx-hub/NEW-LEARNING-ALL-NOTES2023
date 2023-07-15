@@ -1,0 +1,6 @@
+Adding in a max-width:
+
+avoid min-width as much as possible cause it again like height, limits responsiveness
+
+
+-- max width on the other hand, lets you set a responsive width like 80% across all screens for example, but prevents further increase when it reaches a certain point. this is helpful for bigger screens. avoids text spanning across the screen, making it harder to read.

@@ -1,0 +1,254 @@
+FILE UPLOADS and DOWNLOADS - section20
+
+
+npm i multer
+
+---Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files 
+
+
+--added attribute to form element => enctype="multipart/form-data"
+--first time to use this
+
+
+in app.js
+
+-import 
+const multer = require("multer");
+
+-then use middleware, specifying input name where image will be uploaded from
+app.use(multer({ dest: "images" }).single("image"));
+
+or
+
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+--use as middleware => upload.single('avatar')
+
+
+--in controller console log the file uploaded, access not in body but in req.file
+
+const image = req.file;
+
+console.log(image)
+ outputs - 
+ 
+ 
+ {
+  fieldname: 'image',
+  originalname: 'pinebag.jpg',
+  encoding: '7bit',
+  mimetype: 'image/jpeg',
+  buffer: <Buffer ff d8 ff e0 00 10 4a 46 49 46 00 01 01 01 00 48 00 48 00 00 ff e1 00 bc 45 78 69 66 00 00 49 49 2a 00   		 08 00 00 00 06 00 12 01 03 00 01 00 00 00 01 00 ... 33452 more bytes>,
+  size: 33502
+}
+
+after adding dest: "images"
+
+image file becomes
+
+{
+  fieldname: 'image',
+  originalname: 'pinebag.jpg',
+  encoding: '7bit',
+  mimetype: 'image/jpeg',
+  destination: 'images',
+  filename: 'a92bef3713cd0dfba1b9cfcf5564caca',
+  path: 'images/a92bef3713cd0dfba1b9cfcf5564caca',
+  size: 33502
+}
+
+and is saved in images folder in your app
+
+
+
+storage engine
+
+DiskStorage
+The disk storage engine gives you full control on storing files to disk.
+
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+and use this diskStorage option in your multer middleware call
+
+=> app.use(multer({ storage: fileStorage }).single("image"));
+
+
+*ADDING FILTER to multer to filter files by mimetype
+
+*create filter function
+
+const fileFilterFunc = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+ 
+ 
+*pass to multer options as well
+
+app.use(multer({ storage: fileStorage, fileFilter: fileFilterFunc }).single("image")); 
+
+
+
+***DO NOT STORE DATA like IMAGES in the database, they are too big. STORE IMAGES in the file system.
+--then store the path to the file in the database.
+
+
+---so storing images, store only file path (strings). image data should be in your file system or in a cdn.
+--- i think another uploading could be uploaded directly into cdn?
+
+---files are then served using the saved path, used as img src.
+---just need to correctly configure express static and relative path etc. etc.
+
+
+
+
+
+==DOWNLOADING FILES w AUTHENTICATION
+
+-create invoice folder in your app, maybe inside data folder.
+-create an anchor tag that call getInvoice endpoint "/orders/:orderId"
+
+router.get("/orders/:orderId", isAuth, shopController.getInvoice);
+
+--do logic in getInvoice function in shopController
+--using the file system and path from node
+
+
+const getInvoice = (req, res, next) => {
+  const { orderId } = req.params;
+
+  const invoiceName = `invoice-${orderId}.pdf`;
+  const invoicePath = path.join("data", "invoices", invoiceName);
+  console.log(invoicePath);
+
+  fs.readFile(invoicePath, (err, data) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.send(data);
+  });
+};
+
+
+
+---at this point able to download invoice from data/invoices...but that is hardcoded static dummy data.
+---and filename is cryptic with no pdf extension.
+
+
+==SETTING FILE TYPE HEADERS
+
+ fs.readFile(invoicePath, (err, data) => {
+    if (err) return next(err);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'attachment; filename="' + invoiceName + '"  ');
+    res.send(data);
+  });
+  
+  
+---now the downloaded pdf has a proper filename now. and pdf extension.
+
+
+==STREAMING Data vs PRELOADING Data
+
+--reading files and sending files can be okay for small files, but for bigger files, and many requests from many users,
+--memory on the server may not be sufficient and also these requests on big files may take a long time.
+
+hence, stream data. -- like read data in chunks, gradually, then combined in the browser into whole
+
+
+ReadFile - It is used to read files into memory completely before it is available for the client-side. 
+createReadStream - It takes small parts of a file loads them into the memory and makes them visible for the client-side more briskly.
+
+
+
+--------replace readFile with:
+
+ const file = fs.createReadStream(invoicePath)
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'attachment; filename="' + invoiceName + '"  ');
+    
+    file.pipe(res)
+
+
+
+==USING PDFKit library
+-to be able to create pdf from data you have, instead of serving dummy hardcoded pdf file
+
+https://pdfkit.org/
+
+npm install pdfkit
+
+
+---replace readFile or createReadStrem and pipe with this:
+
+ const pdfDoc = new PDFDocument();
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", 'attachment; filename="' + invoiceName + '"  ');
+
+  pdfDoc.pipe(fs.createWriteStream(invoicePath)); // save in your file system data/invoices
+  pdfDoc.pipe(res); // serve in client with response
+
+  pdfDoc.fontSize(26).text("Order Invoice", {
+    underline: true,
+  });
+
+  let totalPrice = 0;
+
+  orderItem.products.forEach((item) => {
+    totalPrice = totalPrice + item.quantity * item.product.price;
+    pdfDoc
+      .fontSize(14)
+      .text(item.product.title + " - " + item.quantity + " x " + "$" + item.product.price);
+  });
+
+  pdfDoc.text("------");
+  pdfDoc.fontSize(20).text("Total Price: $ " + totalPrice);
+
+  pdfDoc.end();
+
+
+
+
+==DELETING FILES
+
+--create helper function
+
+const deleteFile = (filePath) => {
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+};
+
+use in controller functions just pass filePath
+
+ex. this example is when editing item image, so when a new image is uploaded , delete the old one also in the file system, similar to delete
+
+ if (uploadedImage) {
+      deleteFile(productToEdit.imageUrl);
+      productToEdit.imageUrl = uploadedImage.path;
+    }
+
+
+

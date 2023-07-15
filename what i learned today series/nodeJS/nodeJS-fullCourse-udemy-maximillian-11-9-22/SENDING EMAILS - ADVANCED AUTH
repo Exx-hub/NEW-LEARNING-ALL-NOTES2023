@@ -1,0 +1,101 @@
+January 15, 2022
+
+SENDING EMAILS - ADVANCED AUTH
+
+
+-created free account on SendGrid
+
+-install nodemailer and nodemailer-sendgrid-transport on your node app
+
+npm i nodemailer nodemailer-sendgrid-transport
+
+
+-in your auth controller, import both nodemailer
+
+-then create a transporter, basically will hold your email configurations and transport them,
+
+let config = {
+  service: "gmail",
+  auth: {
+    user: "ragnarokmobile166@gmail.com",
+    pass: "xgdyppiiuwjxlcmk",
+  },
+};
+
+
+const transporter = nodemailer.createTransport(config);
+
+
+
+*use transporter in your functions.
+
+ex. after signing up, use transporter to send an email to newly signed up user.
+
+ let details = {
+    from: "ragnarokmobile166@gmail.com",
+    to: email,
+    subject: "Signup with Shop",
+    text: "Congratulations! You have successfully created an account. Happy shopping!",
+  };
+
+ transporter.sendMail(details);
+  
+================================================
+
+ADVANCED AUTHENTICATION
+
+
+1. resetting password
+-user should be able to enter email and click reset password button
+
+---user will then be sent a link to reset his password.
+
+--node build in library
+
+const crypto = require('crypto');
+
+-- so user enters email and clicks reset password
+--- so use crypto to create a random token
+--- check if email exists and if so,
+--- add reset token field and reset token expiry field in User model.
+
+--- find user with email and add reset token and reset token expiry
+--- then send an email to user with a link to url with token
+
+-- an email will be sent to entered email, containing a link with token as param
+
+--when user clicks link, with token in params
+-- find user with token from params
+-- check if token is not expired.
+--if token expired i think redirect to reset password page
+
+const foundUser = await User.findOne({ resetToken: token, resetTokenExpiration: {$gt: Date.now()} });
+
+-- if not expired
+-- render update password page where user enters new password
+-- when update password click, update user password in database after encrypting
+-- remove reset token and reset token expiry
+
+-- voila! password updated!
+
+
+*****also one way is sa email palang, isesend na ang randomly generated password. update user in database with that password. so user can login and just go to update password page.
+
+
+
+===========
+
+2. AUTHORIZATION
+---restrict what an authenticated user can do.
+---like a customer logged in, cannot delete items or view inventory
+--- while a user who has an admin role can do so.
+
+
+*one way is to prevent any user from deleting or editing items not created by them,
+---is simply not displaying items not created by them :D
+---filter fetched items based on user id of logged in user.
+
+
+*for post actions like deleting and editing, check the user id of logged in user through req.user object.
+* do not allow if user id is not the same as user id ref of product. which means a different user is associated / created that item
+

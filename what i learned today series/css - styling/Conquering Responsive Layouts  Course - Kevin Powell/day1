@@ -1,0 +1,28 @@
+11/18/22
+
+Day 1 | Using percentages & avoiding heights
+
+PERCENTAGES
+
+--by default, html only is responsive, may not look good but responsive.
+-- by adding set values like width:800px for examples, this creates issues like side scrolling if screen becomes smaller
+
+why is it responsive by default:
+-block level elements like divs , headings, paragraphs => they are of width: 100%. this makes it responsive by default
+-a hundred percent of what? => the parent element
+
+
+	
+--- avoid set values, instead use percentages.
+
+-- even in child elements. use percentage, for the child to just take space within the parent no matter how big or small the parent is
+
+
+
+AVOIDING HEIGHTS
+
+-avoid using heights as much as possible. this removes the natural responsiveness because when the screen size adjusts, the set values for something will still be followed. 
+
+- for more space in a hero component for example, instead of using height, add padding
+
+- use em or rem for responsiveness, try to avoid px or set units

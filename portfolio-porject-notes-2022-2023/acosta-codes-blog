@@ -1,0 +1,30 @@
+Dec 8, 2022 - acosta-codes-blog
+
+
+1. initialize next app with TS
+
+2. npm i react-icons
+
+3. npm i react-syntax-highlighter
+4. npm i react-markdown
+
+
+npm i gray-matter react-markdown react-icons react-syntax-highlighter
+
+5. -light and dark => npm i next-themes
+-create themchanger component
+-add a themeProvider
+-add lightbulb as button for changing themes
+
+6. start with landing page
+-navigation bar and themechanger
+
+	-navigation media queries and menu and mobile menu
+
+- create reusable layout
+
+- create main component for homepage add media queries for home page
+
+-adjust other light and dark styles
+
+-done with nav and home page

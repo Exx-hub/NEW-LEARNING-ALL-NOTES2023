@@ -1,0 +1,291 @@
+WOD APP feb25 start
+
+next13 - check
+TS - check
+tailwind - check
+prisma - check
+mongodb - check
+nextauth
+
+
+
+1. npx create-next-app@latest --experimental-app
+2. install and setup tailwind
+3. install and setup prisma ==> npm install prisma typescript ts-node @types/node --save-dev
+4. initialize prisma =====> npx prisma init
+5. setup mongodb and add mongo uri to env file
+6. install prisma client ====> npm i @prisma/client
+
+---created an api to test creating a user, success. new user created in mongodb.
+---confirmed that prisma is working.
+
+
+feb25
+7. create navbar , navlinks and logo
+
+potential tabs:
+login
+signup
+create wod
+wod today? -- this may be the home?
+wod history
+generic wods -- pre-generated wods
+random wod pick
+
+
+8. working on  home page now...
+
+create black and white banner for home page
+
+to add bg image in tailwind need to extend tailwind config
+
+  theme: {
+    extend: {
+      backgroundImage: {
+        "deadlift-man": "url('/bg-images/deadliftbg.jpg')",
+      },
+    },
+  },
+
+---and use deadlift-man as classname
+
+9. SIGNUP and SIGNIN pages basic setup ---- react hook form, bcrypt
+--to test creating user and loggin in through credentials
+
+9a) signup basic page and signup api
+
+9b) encrypt password - install bcrypt
+
+9c) react hook form validation
+
+9d) signup api complete logic
+
+
+10. login page --- login with Credentials
+-bare login page done.
+-able to use login with next auth credentials
+
+
+feb 26
+11.  useSession
+
+- conditionally display navlinks
+
+***created separate Provider component, where SessionProvider is rendered. to be able to add use client. and then
+use this Provider in the layout.
+--if you dont create separate Provider component, you will be forced to 'use client' layout page.
+
+and then able to use now useSession in Navbar. of couse 'use client' also.
+
+- signout and clear jwt in cookies
+
+
+12. finish banner 
+-added logo and get started button
+-added today's wod arrow icon positioned absolutely bottom center
+
+
+feb 27
+
+13a.
+
+-adjusted navlinks, added permanent navlinks and conditional navlinks
+-initialize wod list page
+-added barbell floor as custom background image class
+-create initial wods
+- fetch wods in WodList Page, and map through wods 
+- Wod Component, and map through exercises in each Wod => Exercise Component
+
+--did an update, get userId of logged in user, then fetch wods of logged in user.
+-- so display wods of logged in user only. wods by other users are not displayed.
+
+13b. 
+
+wod list page -- display wods created by user
+
+-create few pre made wods. use schema. 
+- fetch wods and display in wod list
+- created wod items closes and opens. and inside the exercises are listed. w button to set as wod today.
+- added EmptyWod component to create new wod.
+
+
+
+feb 28
+
+-edited and added white board image
+-create custom hero icons components for readability
+
+14. create new wod
+-create page - createWod component with editing state and dynamic ui
+-fetch api to create function. then route to wod list after create
+
+--user is hard coded, will try to add user id of logged in user.
+--fixed ts error by extending Session and jwt interface
+-able to create wod now with title but no exercises. but able to add user to wod
+
+--after creating wod, i need a refresh
+---solution, transfer createWod component and functionality in wod-list, then after create router.refresh.
+---pwede na for now
+
+---change create route into prs route also in navbar
+
+
+15. add exercises in each wod
+-make wod title a link also icon Link as well to go to WOD single page route by id.
+-extract params automatically in props {props} since server component.
+
+-create getWodById in prisma helpers and use in WodPage component to fetch Wod by id and display single wod details
+
+-wod page styling
+
+-create add exercise api
+
+----able to add hardcoded exercise info to specific wods now. exercise info hardcoded cause of hassle sa inputs.
+----but basically adding exercise to wods selected is working fine.
+----in client, pass exercise info like name weight etc, and also include wodId of selected wodPAge.
+---in api, use exercise info to create exercise details and use wodId to connect created exercise to specific wod.
+----its like creating an exercise then inserting newly created exercise into an existing wod. 
+
+
+
+MAR 1
+
+-fixed container , placed container and max width on parent instead of each child. better layout
+ ---done in wodlist and wodpage. will do for other pages too.
+
+15A. add form to add exercise, exercise info. dynamic.
+---add exercises in wodpage view. refresh after add.
+
+*add form in create exercise
+*conditional display if editing or not
+
+*able to add exercise on specific wod now using forms.
+
+*display exercises on single wod page, maybe adjust layout -- place add on top then title then exercises
+*added no exercise if no exercise yet
+
+*adjusted design of add wod and add exercise button tab, transparent effect. 
+--will try to test other bg images on wodPage
+
+--test protect routes
+
+15B.
+*delete exercise
+*delete wod and cascade
+=> create api for deleting exercise and wod
+=> use api in client in fetch
+=> add onDelete: Cascade in prisma schema to delete all exercises related if parent WOD is deleted.
+
+
+15C.
+*created WodAddEditForm used both in adding WOD and Editing WOD Title
+
+*edit wod title
+=> created api for editing wod title, and client logic for cancelling and displaying correct value and no flicker.
+
+==
+*create exercise label component, and separate it from bigger ExerciseComponent.
+--exercise label is just the title setsreps and weight., exercise component contains all Exercise logic in wodPage
+
+
+Mar 2
+15D.
+*edit exercise
+-create edit logic and edit API
+
+
+!!!!!! =>>> converted page/[id] or WodPage into client component using useEffect fetch on mount.
+---bandaid solution. because getting unknown error when passing params to getWodId.
+---error only in building. but in dev environment okay.
+---weirdly passing value to getWodById with '%5Dasd%; something like that.
+---forced to convert into good ol fetch on mount client component to be able to continue.
+
+**also created getWodById api handler for this.
+
+
+
+16. pr's tab
+---add background
+-create PR item component
+-create CreatePr component
+
+---create PR api and functionality
+
+---fetch PRs prisma helper function --- and try to fetch in server component
+==> getPrsByUser and then after fetching PRS map through and render PrCard per PR fetched.
+
+ 
+---edit and delete PR api functionality
+
+==> DELETE 
+==> EDIT weight
+--done similar to wods and exercises
+---api then client fetch
+
+
+==> Toggle Favorite / Best
+--api and use api in fetch in client
+
+
+17. Fixed media queries for components -- -done
+
+CURRENT ====
+
+2) create favicon - DONE
+
+19. login and signup layout --- DONE
+
+
+
+20. footer - footer done
+
+21. signout call back url done - redirect to home page
+
+
+
+MAR 3
+
+22. add exercise form basic validation and no value disable -- done
+
+23. burger menu and nav - done
+
+24. loading text on signin button and other loadings. - done
+
+
+Mar 4
+
+*centered footer text if on mobile
+
+*working on footbar
+-installed react icons to create socials
+-created back to top
+
+25. Footbar created to tend to viewport height issue.
+-added socials
+-back to top nav link
+
+
+
+25. set wod today
+-added white board
+-fetched random WOD
+-display in white board
+-added crossing out functionality but does not persist
+--added wod creator to the displayed wod
+
+
+MAR 5
+26) protect routes - DONE
+
+27. try out where you can implement loading component if not nprogress --- to follow if slow routing
+
+
+28. animation of opening and closing of WOD -- done
+
+
+
+
+
+
+
+

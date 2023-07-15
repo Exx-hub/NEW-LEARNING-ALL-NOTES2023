@@ -1,0 +1,67 @@
+July 13, 2023
+
+Rn Firebase Auth TS
+
+1. bootstrap expo app using expo typescript template
+
+- npx create-expo-app ./ -t expo-template-blank-typescript
+
+
+2. install firebase in expo
+
+- npx expo install firebase
+
+
+
+3. setup react navigation in expo app
+
+npm install @react-navigation/native @react-navigation/native-stack
+npx expo install react-native-screens react-native-safe-area-context
+npm install --save @types/react-native
+
+
+4. firebase setup (very similar to web)
+
+- create firebase project
+
+- choose web since we're using react native, and register app to initialize sdk config
+- create firebaseConfig file in your app and paste sdk config 
+- go to build authentication and enable chosen provider
+
+5. Configure Metro
+
+- npx expo customize metro.config.js
+
+
+
+===
+
+6. create screens folder
+
+setup routes
+
+-Login.tsx
+
+--setup TextInput and buttons ui
+--create signin and signup functions - createUserWithEmailAndPassword signInWithEmailAndPassword
+
+
+7. setup nested stack 
+8. setup onAuthStateChanged listener to watch for changes in auth state
+
+9. use user auth state to conditionally show login or todos component
+
+
+=======
+
+NEW LEARNING!
+
+1. secureTextEntry={true}
+- TextInput property to conceal password input
+
+
+2. KeyboardAvoidingView
+
+ <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>

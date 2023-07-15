@@ -1,0 +1,165 @@
+week 5 lec
+
+
+DATA STRUCTURES
+
+==
+Queues
+-First in First Out  FIFO
+
+-like a line at a fast food. first to fall in line first to order and get out
+
+two functions => enqueue at the end  dequeue at the beginning
+
+
+*ARRAY Implementation
+typedef struct queue
+{
+  VALUE array[CAPACITY];
+  int front;
+  int size
+}
+stack;
+
+*LINK-LIST 
+typedef struct stack
+{
+  VALUE val;
+  struct queue *prev;
+  struct queue *next;
+}
+stack;
+
+==
+Stacks
+-Last In First Out LIFO
+
+--like a pile of clothes. or trays. sometimes items at the very bottom dont get a chance to go out.
+
+
+*ARRAY Implementation
+typedef struct stack
+{
+  VALUE array[CAPACITY];
+  int top;
+}
+stack;
+
+*LINK-LIST 
+typedef struct stack
+{
+  VALUE val;
+  struct stack *next;
+}
+stack;
+
+push and pop
+
+push on top
+pop from
+
+
+to resize malloc => realloc
+
+
+==
+Linked Lists
+
+node (data and metadata) => linked nodes === linked lists
+
+data linked in memory through addresses of linked items 
+
+
+typedef struct node
+{
+
+   int number;
+   struct node *next;
+}
+node;
+
+pros- 
+data can be not contiguous or together. 
+easier to increase size unlike in arrays
+
+
+
+cons- 
+cannot do binary search
+uses twice as much memory. 
+cannot index into it. 
+cannot use square bracket notation since data are not contiguous
+
+
+
+
+==
+Trees
+
+Binary Search Tree - 
+
+typedef struct node
+{
+
+   int number;
+   struct node *left; 
+   struct node *right;
+}
+node;
+
+
+
+
+==
+Dictionaries
+
+
+
+=
+hashing
+-makes problem smaller?
+
+=
+hash tables
+
+--combine an array with linked lists
+
+---it can be an array of linked lists
+
+typedef struct node
+{
+
+   char *name;
+   char *number; 
+   struct node *next;
+}
+node;
+
+node *table[26]; 
+
+--like putting in buckets
+--put all names that start with H in the H bucket
+
+
+==
+Tries
+
+typedef struct node
+{
+
+   char *number; 
+   struct node *children[26];
+}
+node;
+
+
+node *trie;
+
+
+--- like connecting letters
+
+H -> E -> L -> L
+           -> P
+
+
+

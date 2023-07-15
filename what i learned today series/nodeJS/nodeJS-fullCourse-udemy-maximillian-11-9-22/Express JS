@@ -1,0 +1,251 @@
+10/11/22
+
+Express JS
+
+Why Express?
+server logic is complex..
+remove nitty gritty details. abstracts some logic.
+
+What is express?
+express is a framework - helper functions / tools and rules.
+
+
+alternatives to express: 
+- vanilla nodejs
+- adonisjs
+- koa
+- sailsjs
+- nestjs
+
+
+
+1. install express
+npm i express
+npm i -D nodemon
+
+
+
+==Express js is all about middleware: ==
+
+Request -> middleware (req,res,next) => {} -> next() -> middleware (req,res,next) => {} -> res.send() -> Response
+
+
+========================================
+app.use(path, callback)
+
+-- if no path is passed, default is "/"
+-- Since path defaults to “/”, middleware mounted without a path will be executed for every request to the app.
+
+--- app.use => path, then does the callback.
+app.use("/test, testRoute) => if "/test" is matched, enters testRoute
+app.use(cors()) => since there is no path, default is "/", this is called on every request. does the callback cors().
+
+
+app.get post delete  etc, do need a path. no default path for methods and filters exact path. if use, not strict.
+
+both "/" and "/alvin" will match "/". order now comes into play.
+
+===========================================
+
+
+==MIDDLEWARE==
+
+Middleware functions are functions that have access to the request object (req), the response object (res), and the next function in the application’s request-response cycle. The next function is a function in the Express router which, when invoked, executes the middleware succeeding the current middleware.
+
+Middleware functions can perform the following tasks:
+
+-Execute any code.
+-Make changes to the request and the response objects.
+-End the request-response cycle.
+-Call the next middleware in the stack.
+
+If the current middleware function does not end the request-response cycle, it must call next() to pass control to the next middleware function. Otherwise, the request will be left hanging.
+
+
+next() --- allows thre request to continue to the next middleware.
+
+example flow of using middleware:
+
+!!!top to bottom!!!
+
+app.use((req, res, next) => {
+  console.log("middleware");
+  next();
+});
+
+app.use("/test", require("./routes/testRoute"));
+
+app.use((req, res, next) => {
+  console.log("another middleware");
+  next();
+});
+
+app.get("/", (req, res) => {
+  console.log("root route");
+  res.send("hello from express!");
+});
+
+
+-everytime there is a request,goes from top to bottom, goes to the first middleware, calls next, goes to 2nd middleware, calls next, then proceeds to request handler function of the matching url.
+
+-- if route matches, same, goes from top to bottom passing through middlewares, with next goes to next middleware, then enters
+route that matched and does the functions there whatever they are.
+
+--- if test url gets hit, it enters that route and routehandler function, doesnt go to the next in line middleware anymore.
+
+!!!top to bottom!!!
+
+so order of code is important, especially with routing.
+
+
+console log as follows:
+middleware
+another middleware
+root route
+
+** if next is not called, execution hangs and will not continue.
+
+
+***see middlewareFlow.js for another middleware flow example where /test route gets matched.
+
+
+=================================================================================
+TYPES OF MIDDLEWARE:
+
+==built in middlewares==
+*next function abstracted
+
+ex. app.use(express.json()) --- *next function abstracted in this json function if you look at the type check
+
+
+==thirdparty middlwares==
+same here
+*next function abstracted
+
+ex. app.use(cors()) --- *next function abstracted in this json function if you look at the type check
+
+==custom middlwares==
+for custom middlewares you create yourself, next should be included.
+
+ex. app.use(logger);
+
+
+const logger = (req, res, next) => {
+  logEvents(`${req.method}\t${req.url}\t${req.headers.origin}`, "reqLog.log");
+  console.log(`${req.method} ${req.path}`);
+  next();
+};
+
+
+==routes middleware==
+*i think next function is also abstracted.
+
+ex. app.use("/api/users", usersRoute)
+
+// userRoute -- a router. is a valid middleware.
+
+
+--if app.use receives a path and it matches, it goes into the route handler passed instead of the usual request handler with next.
+-- if no path is passed, default is "/"
+-- Since path defaults to “/”, middleware mounted without a path will be executed for every request to the app.
+
+--but if app.get or app.post, path must be exact!
+
+
+=====================================================================================
+
+==Handling Routes==
+
+
+==Parsing Incoming Requests==
+
+// app.use(express.urlencoded({ extended: true })); --- need this if url endcoded, if it came from server side code html
+--- if from body object passing in a request from client, express.json() only since it is json that is passed.
+
+
+urlencoded if data came from html post form. it will return empty object is no urlencoded ex.
+
+<form action="/" method="POST">
+    <input type="text" name="username">
+    <button>Submit</button>
+</form>
+
+
+epress.json / bodyparser --- parses data that came from request object body. like from postman or fetch post request
+
+
+https://stackoverflow.com/questions/23259168/what-are-express-json-and-express-urlencoded
+
+==Express Router==
+routes folder => routing related code for different route paths
+
+
+=> Filtering Paths
+
+app.use("/admin", adminRoutes);
+
+--2 routes with diffrent methods but both start with /admin.
+
+in adminRoutes -
+
+router.get("/add", (req,res) => {}) => matches get request to /admin/add
+router.post("/products", (req,res) => {}) => matches post request to /admin/products
+
+
+=================================================================
+
+==Creating & Serving HTML Pages==
+
+-create views folder
+- will be a bunch of html
+
+-create html files to serve
+
+
+res.sendFile(path)
+
+to create the path => path.join(__dirname, "views","shop.html")
+
+__dirname => absolute path of current folder we are in
+
+if in /routes/shop.js file:
+
+so... res.sendFile(path.join(__dirname, "..", "views", "add-product.html"));
+__dirname === routes
+".." === go out of routes one level. (root of project)
+"views" === go into the views directory
+"add-product.html" === find this file there
+
+path.join will connect these and form a path based on your operating system. so dont add slashes because slashes differs per OS
+
+result =====> /home/alvinacosta/Desktop/NodeJS/nodeJS-fullCourse-udemy-maximillian/express-js/routes/views/add-product.html
+
+__dirname => current folder
+__filename => path of current file
+
+
+========================================================================
+
+==Using a helper Function for Navigation==
+
+module.exports = path.dirname(require.main.filename);
+
+// aternative to __dirname, ".." in path.join()
+// helper function to direct you to the root file wherever you are in your project.
+// it will give you the root path*
+
+
+==Styling Pages== ==Serving Files Statically==
+
+create public dir and style.css file
+
+use middleware express.static
+
+app.use(express.static(path.join(__dirname, "public"))); --- no path so defaults to "/", which will be called on every request
+
+===> look into root dir, go into public folder --- static files there become available. like images or css files
+
+
+
+
+

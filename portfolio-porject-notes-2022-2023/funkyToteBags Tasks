@@ -1,0 +1,131 @@
+REALIZATIONS / Questions:
+
+1. is way of rendering pages correct? like in pages/cart.tsx , just render CartItemList and pass props from getServerSideProps.
+  -- why not do the logic in this page mismo?
+  
+  
+2. how to use redux toolkit with nextjs?
+
+
+3. verify usage of mongoose like models etc.
+
+
+4. updating getServerSideProps after fetch or update api?
+
+
+5. use nextjs with swr or react query?
+--https://prateeksurana.me/blog/mastering-data-fetching-with-react-query-and-next-js/
+
+
+6. super bagal.. is it because of vercel? or free? or what..
+
+
+7. hmmm need more practice doing nextjs,ts,full stack...
+
+
+fnky tote bags tasks: 
+
+pages:
+
+
+single product view - DONE
+
+login page - done
+signup page - done
+
+dynamic nav links based on auth - DONE
+hide add to bag button if not logged in - DONE
+redirect to signin if not logged in and add to bag in shop item detail is clicked - done
+
+
+cart page - done!
+cart context , cart badge quantity - DONE
+cart Quantity reduce method from cartItems - DONE
+wishlist page - done!
+
+
+shipping address - done
+
+orders page - done
+
+tempo footer - done
+
+DB:
+
+db initial product data - DONE
+setup mongodb and mongoose - DONE
+connect db - DONE
+
+
+apis:
+
+product model - done
+create user model - done
+
+signup - done
+login - done
+logout - done
+
+get products - DONE
+get product by id - DONE
+
+add to cart - DONE
+getCart - done
+populate cart - done
+
+add to wishlist - done
+fetch wishlist - done
+populate wishlist - done
+
+
+
+add to order - done
+clear cart after add to order - done
+cart checkout - done
+
+getOrders - done
+
+add to cart with quantity -- done
+
+
+remove item from wishlist --- done! used refreshData
+
+remove item from cart --- done!
+
+re-render or refresh when add item to bag --- done!
+
+fixed populate issue , but i want to research more about it - DONE
+
+
+add createdOn date when orders are made -- DONE
+so as able to add delivery date plus 7 days  -- DONE
+
+---add shipping address to order -- done
+---display shipping address to order page -- done
+
+---disbale checkout button if no shipping address - done
+
+--form validations --done
+
+--media queries - done
+-- mobie nav menu - done
+
+--minimal toastify for now
+
+upload images to imgbb - DONE
+========================
+
+
+*******************
+
+--change images to static
+
+
+
+--build load times all red. find out why!!
+
+--- find out why if not logged in, weird rerouting to "/" instead of just staying at signin page
+
+
+
+

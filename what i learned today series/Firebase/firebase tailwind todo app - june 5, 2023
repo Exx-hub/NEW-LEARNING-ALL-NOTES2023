@@ -1,0 +1,74 @@
+June 5, 2023
+
+code commerce firebase tailwind todo app --- fire base practice
+
+
+1. bootstrap a vite react project
+2. install tailwind
+3. create new project, register new project in firebase console
+
+4.  install firebase in your react app
+
+5. copy sdk and paste in firebase-config you created in your app
+
+6. create firestore database in firebase console
+
+7. initialize app and connect firestore in app and save in db constant, export db from firebase config
+
+8. test connection by making a get query
+  - create collection reference -> const todosCollectionReference = collection(db, "todos");
+  - getDocs query function from firestore -> const data = await getDocs(todosCollectionReference);
+  - .data() method to parse and return values only
+  
+
+// READ
+
+ const data = await getDocs(todosCollectionReference);
+ 
+ 
+ or
+
+in useEffect onSnapshot method for real time updates on the fronend--
+ 
+ const unsubscribe = onSnapshot(todosCollectionReference, (querySnapshot) => {
+      let todosArr = [];
+
+      querySnapshot.forEach((doc) => {
+        todosArr.push({ ...doc.data(), id: doc.id });
+      });
+
+      setTodos(todosArr);
+    });
+ 
+// CREATE
+
+ await addDoc(todosCollectionReference, { title: todo, isCompleted: false });
+ 
+
+// UPDATE
+
+const todoDoc = doc(db, "todos", id);
+
+await updateDoc(todoDoc, { isCompleted: !isCompleted });
+
+
+// DELETE
+
+const todoDoc = doc(db, "todos", id);
+
+await deleteDoc(todoDoc);
+
+  
+
+questions:
+
+2. how to set default value for a field like isCompleted? - none here
+3. useEffect issue, how to not leave dep array empty and not cause infinite re-renders
+4. check how he re-fetch after adding or updating - onSnapshot does it automatically
+5. check how checkbox is implemented.
+
+6. getDocs vs onSnap shot -- research more about this....
+
+7. using query vs no query
+
+

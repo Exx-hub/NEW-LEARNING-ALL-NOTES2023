@@ -1,0 +1,38 @@
+FCC HTTP COURSE PROJECTS
+
+*create .nvmrc file and write the node version you want to use. ex 18.7.0
+
+run nvm install --- this will download and install node version in nvmrc file
+
+--- this will also automatically set node version to downloaded one but if it doesnt just run NVM USE
+
+
+1.
+create main js - console log hello world
+npm init
+add start to script - node main
+create .gitignore
+
+2. 
+install jest
+add script for test: "jest",
+
+npm test => run jest
+
+
+3. first commit and first push to github
+
+4. install jsdom so you can interact with a dom in node
+
+
+-we're actually doing test driven development i think
+
+create crawl.js 
+create crawl.test.js 
+
+
+helper functions-
+NORMALIZE URLs
+getURLsFromHTML
+
+

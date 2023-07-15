@@ -1,0 +1,46 @@
+Nodejs as a Build Tool and NPM
+
+Beyond Web Servers
+
+
+NodeJs
+-execute code
+-interact with files
+
+
+NPM
+-manage packages
+-run scripts
+
+
+
+
+Understanding NPM - Node Package Manager
+
+npm CLI 
+
+
+-npm can be used to store and share packages
+-other users can use packages stored in npm repository - npm install
+
+
+
+NODEJS
+
+1) spin up a web server
+2) run any JS file
+3) read and write files
+
+
+Build Tool
+-meaning like in react, you are not using node directly but under the hood
+-optimize unoptimized code
+
+-example is in a react app, when you run npm run build, it produces a minified version of your react code.
+-that is readable even in old browsers. etc
+
+
+Using Node in Build Processes
+-like webpack, utility scripts etc
+
+

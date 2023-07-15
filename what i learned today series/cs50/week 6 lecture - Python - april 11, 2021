@@ -1,0 +1,316 @@
+week 6 lecture - Python - april 11, 2023
+
+
+david said that goal of today, learning python is preparation and practice to learn new languages.
+-because in the future, new languages and syntaxes should and will be learned.
+
+
+first python code!
+
+===
+from cs50 import get_string
+
+answer = get_string("What's your name? ")
+print("hello,", answer)
+===
+
+
+print("hello, world")
+print("hello," + answer)
+print(f"hello, {answer}!!")
+
+
+===
+TYPES
+
+str
+int
+float
+bool
+
+
+range
+list
+tuple
+dict
+set
+
+
+===
+CONDITIONALS
+
+if ->
+	if x < y:
+	    print("x is less than y");
+
+if else ->	    
+	if x < y:
+	    print("x is less than y");
+	else:
+	    print("x is not less than y");
+	    
+if else if ->	    
+	if x < y:
+	    print("x is less than y");
+	elif x > y:
+	    print("x is greater than y");
+	else:
+	    print("x is equal to y");
+	    
+	    
+===
+VARIABLES
+
+
+counter = 0
+
+counter = counter + 1
+counter += 1
+
+
+===
+LOOPS
+
+i = 0
+while i < 3:
+    print("meow")
+    i += 1
+
+
+bad design-
+
+for i in [0,1,2]:
+    print("hello, world") 
+    
+better -
+
+for i in range(3):
+    print("hello, world")
+    
+    
+
+while True:
+    print("meow")
+    
+===
+GET INPUT
+
+x = input("x: ")
+
+--then to convert to a number use int() function x = int(input("x: ")) or int(x)
+
+===
+logical OR and AND
+-- instead of || and && , in python its OR and AND
+
+===
+AGREE
+
+s = input("Do you agree? ")
+
+if s == "Y" or s == "y":
+    print("Agreed.")
+elif s == "N" or s == "n":
+    print("Not agreed")
+    
+-- can be written using lists:
+
+if s in ["Y", "y"]:
+    print("Agreed.")
+elif s in ["N", "n"]:
+    print("Not agreed")
+    
+    
+    
+===
+OBJECT ORIENTED PROGRAMMING
+
+-C is like a procedural type of programming. python is object oriented
+
+
+===
+
+FUNCTIONS in python
+
+--declare a function
+
+def meow():
+    print("meow")
+
+--call a function
+meow()
+
+
+--pass in parameters
+
+def greet(name):
+    print(f"Hello, {name}")
+    
+    
+===
+MAIN function and function hoisting
+
+def main():
+        meow(3)
+
+
+def meow(n):
+    for i in range(n):
+         print("meow")
+
+def greet(name):
+    print(f"Hello, {name}")
+
+main()
+
+
+===
+TRY EXCEPT block
+
+-similar to javascript's try catch block
+
+def get_height():
+    while True:
+        try:
+            n = int(input("Height: "))
+            if n > 0:
+                return n
+        except ValueError:
+            print("Not an integer")
+            
+===
+CHANGING Default new line of print
+
+print("?", end="")
+
+
+===
+LIST
+
+scores = []
+or
+scores = list()
+
+
+=sum function and len
+
+scores = [72, 73 , 33]
+
+average = sum(scores) / len(scores)
+print(f"Average: {average}")
+
+
+=append
+scores.append(56)
+
+
+===
+DICT
+
+people = {}
+or
+people = dict()
+
+
+people = {
+    "Carter": "+1-617-495-1000",
+    "David": "+1-949-468-2750"
+}
+
+name = input("Name: ")
+
+if name in people:
+    number = people[name]
+    print(f"Number: {number}")
+
+
+
+===
+UPPERCASE a string
+
+before = input("Before: ")
+
+after = before.upper()
+print(f"After: {after}")
+
+
+
+===
+COmmand line arguments - argv argc
+
+
+from sys import argv
+
+if len(argv) == 2:
+    print(f"hello, {argv[1]}")
+else:
+    print("hello, world")
+
+
+    
+for i in range(len(argv)):
+    print(argv[i])
+
+
+===
+SLICING LISTS
+
+for arg in argv[1:]:
+    print(arg)
+    
+-start at index 1 to the end
+
+argv[0:2]
+-start at first item up to index 2
+
+
+
+
+===
+Importing
+
+import sys
+
+--imports the whole sys library
+
+---methods used need to use sys => sys.exit sys.argv
+
+-can also import partially and specifically
+
+from sys import exit
+from sys import argv
+
+-- use exit without sys anymore
+
+
+
+===
+WRITING AND OPENING FILE
+-create phonebook.csv
+
+
+import csv
+
+file = open("phonebook.csv", "a")
+
+name = input("Name: ")
+number = input("Number: ")
+
+writer = csv.writer(file)
+writer.writerow([name,number])
+
+file.close()
+
+
+------can be written as this -->
+
+
+with open("phonebook.csv", "a") as file:
+    name = input("Name: ")
+    number = input("Number: ")
+
+    writer = csv.writer(file)
+    writer.writerow([name,number])
+
+
+

@@ -1,0 +1,130 @@
+June 30, 2023 - sangam mukherjee react native playlist
+
+
+expo router? will we use or not?
+
+
+1. npx create-expo-app rn-sangam
+
+- npx expo start 
+
+
+==Basic Components:
+
+View -> container that will wrap multiple components together
+
+Text -> to display any text
+
+Image
+
+TextInput -> similar to input element in HTML
+
+Button -> to display any button
+
+ScrollView -> scrolling container that can contain multiple components and views
+
+FlatList -> renders only visible items on the screen, great for performance when list is very large
+
+StyleSheet -> create stylesheet object to add styles to components (1 way of styling) (another way is inline styling)
+	   -> ***in react native display flex is the default
+
+Pressable -> component that can detect various touch interactions such as tapping, long-pressing, and hovering.
+          -> flexible API and allows you to define custom press behaviors using callback functions
+
+Touchable Opacity -> simpler and  older touchable component in React Native
+		  -> It has a simpler API and is mainly used for adding basic touch feedback to components, such as opacity changes when pressed
+
+
+
+
+
+==Handling Events:
+
+onChange -> onChangeText
+
+// automatically gets the value instead of event target 
+const handleChangeText = (text) => {
+    console.log(text);
+  };
+
+onClick -> onPress 
+
+
+==Hooks:
+
+State -> same as react
+
+
+==Display Lists
+
+-map method can still be used for small lists
+
+- Scroll View
+
+- flatlist best option for large list 
+  -- renders only visible items on the screen. built in features like scrolling, pull to refresh, item separators etc.
+  
+  
+
+==Fetching data / http requests
+
+
+- similar to react - useEffect fetch etc.
+
+
+==Loading state
+
+-> activity indicator component -> <ActivityIndicator color="red" size="large" />
+
+if (isLoading) {
+    return <ActivityIndicator 
+    color="red" size="large" />;
+  }
+  
+  
+====================================================
+
+July 2, 2023 - react animation
+
+
+
+import { Animated } from "react-native";
+
+import {useRef} from 'react'
+
+const fadeAnim = useRef(new Animated.Value(0)).current;
+
+// create fadein and fadeout functions using Animated.timing()
+
+  const handleFadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 5000,
+      useNativeDriver: true,
+    }).start();
+  };
+  const handleFadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 3000,
+      useNativeDriver: true,
+    }).start();
+  };
+ 
+ 
+  // with callback -> does something after initial animation
+  
+  const handleFadeInOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      fadeAnim.setValue(0);
+    });
+  };
+
+
+// add ref to animated view
+
+<Animated.View style={[styles.animatedContainer, { opacity: fadeAnim }]}></Animated.View>

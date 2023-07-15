@@ -1,0 +1,35 @@
+ADDING PAGINATION - section21
+
+-data can be fetched in chunks. especially useful for big amounts of data
+
+1. ADDING PAGINATION LINKS
+
+--add pagination link in your front end
+
+	    <section class="pagination">
+                <a href="/?page=1">1</a>
+                <a href="/?page=2">2</a>
+            </section>
+            
+            
+--configure your endpoint, get page value from req.query.page
+
+
+2. RETRIEVING CHUNKS OF DATA BASED ON QUERY
+
+const ITEMS_PER_PAGE = 2;
+
+const { page } = req.query;
+
+const productList = await Product.find({}).skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
+
+
+
+3. PREPARING PAGINATION ON THE SERVER
+
+pagination logic haha
+
+
+
+
+

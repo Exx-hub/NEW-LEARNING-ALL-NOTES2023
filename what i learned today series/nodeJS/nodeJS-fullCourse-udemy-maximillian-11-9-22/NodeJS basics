@@ -1,0 +1,265 @@
+11/9/22
+
+NODE JS BASICS
+
+
+
+==Core Modules==
+
+*Http => launch a server, send requests to client or other servers
+
+const http = require("http");
+
+*https => launch an ssl encypted server
+
+*File System - const fs = require("fs");
+
+ex. fs.writeFileSync("hello.txt", "hello from nodejs");
+- 1st argument path, 2nd arg content
+
+*path
+
+
+*os
+
+
+
+
+==Event Loop==
+--- keeps on running as long as there are event listeners registered
+--- single threaded, super fast
+
+
+
+
+==Create Basic server with just nodejs==
+
+import http
+
+const requestListener = (req,res) => {}
+
+http.createServer(requestListener)
+
+---whenever a request comes execute the requestListener function
+--- node has an event driven architecture, if this happens do this..
+
+
+const server = http.createServer((req,res) => {
+ console.log(req)
+})
+
+server.listen(8080, () => console.log("Server listening"));
+
+---now after listening to the created server, when a request is sent from port 8080, request listener will be called.
+
+
+
+
+==Understanding Requests==
+request object => nodejs generated with all the data of the incoming request
+
+
+some important things for the request object you can log:
+way of accessing some information about the the request.
+
+req.url
+req.method
+req.headers
+
+req.body?
+
+     const server = http.createServer((req, res) => {
+	  console.log(req.url, req.method, req.headers);
+	  console.log(req.body);
+	  // process.exit();
+     });
+
+
+
+==Sending Responses==
+response object -> fill in with data you wanna send back to the client
+
+
+examples:
+
+res.setHeader('Content-Type', 'text/html');
+
+
+returning html content to the response:
+ 
+     const server = http.createServer((req, res) => {
+	  res.setHeader('Content-Type', 'text/html');
+	  res.write('<html>')
+	  res.write('<head><title>My First Page</title></head>')
+	  res.write('<body><h1>Hello from my node js Server</h1></body>')
+	  res.write('</html>')
+	  res.end()
+     });
+
+
+
+
+==Routing Requests==
+==Redirecting Request==
+==Parsing Data from Request==
+
+
+const http = require("http");
+const fs = require('fs')
+const path = require('path')
+
+const server = http.createServer((req, res) => {
+  const url = req.url;
+  const method = req.method;
+
+	// if url is "/"
+  if (url === "/") {
+    res.setHeader("Content-Type", "text/html");
+    res.write("<html>");
+    res.write("<head><title>Enter Message</title></head>");
+    res.write(
+      '<body><form action="/message" method="POST"><input type="text" name="mesage" /><button type="submit">Send</button></form></body>'
+    );
+    res.write("</html>");
+    return res.end(); // you want the return to end the function here
+  }
+
+	// if url is "/message" and method is POST
+  if (url === "/message" && method === "POST") {
+    fs.writeFile("message.txt", "DUMMY"); // create a file with "DUMMY" as content
+    res.statusCode = 302;
+    res.setHeader("Location", "/test"); // redirect to /test
+    return res.end() // you want the return to end the function here
+  }
+
+	// if above if statements dont match
+  res.setHeader("Content-Type", "text/html");
+  res.write("<html>");
+  res.write("<head><title>My First Page</title></head>");
+  res.write("<body><h1>Hello from my node js Server</h1></body>");
+  res.write("</html>");
+  res.end();
+});
+
+server.listen(8080, () => console.log("Server listening"));
+
+
+
+=> Streams and Buffers
+
+example: incoming request
+
+Stream ===Request body part1==Request body part2==Request body part3==> Full Parsed
+
+
+stream => start working on the data early
+buffer => work with chunks of data
+
+
+---applying this to the POST route earlier to get the input from the body and create a new file using that data
+
+
+if (url === "/message" && method === "POST") {
+    const body = [];
+
+    //data event will be fired whenever a new chunk is ready to be read.
+    req.on("data", (chunk) => {
+      console.log("chunk ready", chunk);
+      body.push(chunk);
+      console.log(body);
+    });
+
+    // event fired when incoming data is done being parsed
+    // now need to buffer the data
+    req.on("end", () => {
+      const parsedBody = Buffer.concat(body).toString();
+      const message = parsedBody.split("=")[1];
+      fs.writeFile("message.txt", message);
+    });
+
+    res.statusCode = 302;
+    res.setHeader("Location", "/test");
+    return res.end();
+  }
+
+
+
+==Understanding event driven execution==
+
+-some code in node are listeners that are first registered but not executed immediately (event listeners).
+-after registering, proceeds to next line of code. this is the non-blocking nature of node, it does not wait for code to finish executing.
+
+-some code, especially inside event listeners will be called later. so this is important when writing your code.
+-you may not want code to be executed for some conditions. so keep in mind the order of your code and how it is written.
+
+
+    req.on("end", () => {
+      const parsedBody = Buffer.concat(body).toString();
+      const message = parsedBody.split("=")[1];
+      fs.writeFile("message.txt", message);
+    });
+
+    res.statusCode = 302;
+    res.setHeader("Location", "/test");
+    return res.end();
+    
+    -- this for example, after the callback is registered, node proceeds to changing status code, setheader and ending.
+    -- it will do the writeFile later if end event is triggered.
+    -- if you put the statuscode,setheader and end inside the on event callback, code below this will be read and executed, which you may not want. 
+
+--- also very important is the return keyword, this end the function and stops execution of lines below it.
+
+
+
+==Blocking and Non-blocking==
+
+example:
+
+writeFileSync => this is blocking, cause it's synchronous. what is the file is large, it will block the code until that large file finishes, even other incoming requests will not be handled until large file is done
+
+
+writeFile is always better
+
+
+return req.on("end", () => {
+      const parsedBody = Buffer.concat(body).toString();
+      const message = parsedBody.split("=")[1];
+      fs.writeFile("message.txt", message, (err) => {
+        res.statusCode = 302;
+        res.setHeader("Location", "/test");
+        return res.end();
+      });
+    });
+
+---- after writing file, then do the call back. can check error here too if writing failed etc.
+
+--- sync or blocking code is often just done for debugging code. or catching errors.
+
+
+
+==Node Modules System==
+
+--- splitting code or separating logic into a different file/s to make code cleaner, more readable and scalable
+module.exports = requestHandler / export default requestHandler
+module.exports = {requestHandler} / export { requestHandler }
+
+
+const http = require("http");
+const routes = require("./routes");
+
+const server = http.createServer(routes);
+
+server.listen(8080, () => console.log("Server listening"));
+
+
+
+=====================
+Single Thread
+
+
+Event Loop
+
+
+Blocking Code
+
+

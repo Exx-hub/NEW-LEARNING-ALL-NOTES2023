@@ -1,0 +1,53 @@
+DEPLOYING OUR APP - SECTION 29
+
+
+Deployment Preparations
+
+-use env variables
+-use production api keys
+-reduce error output details , unlike in dev that you need meanigful error output
+-set secrure response headers => implement best practices
+-add asset compression => reduce response size
+-configure loggin => so you know what is happening
+-use ssl / tls => encrypt data
+
+**last 3 often handled by hosting provider
+
+
+
+
+
+1. using environment variables
+-npm i dotenv
+-and import in server like this => require("dotenv").config();
+
+--for some reason, max did not use dotenv, instead he used nodemon.json and added env variables there. to be used for development.
+
+
+2. Setting Secure Response Headers w Helmet
+
+app.use(helmet())
+
+
+3. Compressing assets
+-npm i compression
+
+app.use(compression());
+
+
+4. Setting up Request Logging
+with the use of MORGAN
+
+-npm i morgan
+
+app.use(morgan("combined"));
+
+---to write logs in file system instead of console
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), { flags: "a" }); // flags append
+app.use(morgan("combined", { stream: accessLogStream }));
+
+
+5. SSL / TLS
+
+

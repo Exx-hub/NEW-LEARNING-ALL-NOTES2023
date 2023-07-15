@@ -1,0 +1,67 @@
+OPERATORS
+
+Arithmetic Operators:
+add , subtract , multiply , divide
+
+Modulus operator %
+
+x = x + 1
+x += 1
+
+x = x * 1
+x *= 1
+
+x++
+x--
+
+
+Boolean Expressions
+
+in C, every non zero value is true, and zero is false.
+
+-logical operators and relational operators
+
+logical AND &&
+
+logical OR ||
+
+
+logical NOT ! (bang!)
+!true = false
+
+relational-
+
+> 
+<
+<= 
+>=
+==
+!=
+
+
+CONDITIONAL STATEMENTS
+
+IF
+
+IF ELSE
+
+IF ELSE IF ... ELSE
+
+
+IF 
+IF
+IF ELSE
+
+
+SWITCH STATEMENTS
+
+
+TERNARY OPERATOR
+
+
+
+
+
+
+
+

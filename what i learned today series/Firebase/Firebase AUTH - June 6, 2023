@@ -1,0 +1,67 @@
+June 6, 2023
+
+
+1) Authentication basics
+
+1. create vite app, install firebase, create firebase-config file
+
+2. create project and register project, generate sdk and copy to firebase-config
+
+3. once app and firebase are connected, click authentication from firebase project console
+
+4. choose a sign-in method, for this we are using email/password, enable it
+
+5. in firebase config, initialize auth
+
+- import {getAuth} from 'firebase/auth'
+- export const auth = getAuth(app) --- need to be exported cause we will call in other places in our app
+
+6. import auth into file that will use it
+
+7. Create User
+
+// will create a new user and log the new user in
+const user = await createUserWithEmailAndPassword(auth, regEmail, regPassword);
+
+8. Login User
+
+9. Sign out
+
+
+10. to listen to auth changes use onAuthStateChanged and useEffect
+
+
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user);
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
+
+      return () => listen();
+    });
+  }, []);
+
+
+
+========================
+
+PROTECTED ROUTES with firebase auth
+
+
+-continue with current react app
+
+1. install react router and tailwind
+
+2. setup routes for signin signup and user profile
+
+3. setup firebase and firebase auth
+
+4. create context to save user logged in. - able to use auth user for whole app with context
+
+5. use authUser in global state to protect routes
+- check if authuser is not null, if null navigate to login, use Navigate component of react router
+
+- can also create a ProtectedRoute component

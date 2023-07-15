@@ -1,0 +1,122 @@
+January 3, 2022
+
+
+Cookies and Sessions
+
+
+
+Cookies:
+
+-cookies are used to store data that persists.
+
+-sent from server as response, and used by client and is included in every request made by client thereafter.
+- data from cookies usually used to check user logged in, to persist login etc.
+
+ways to set cookies:
+
+1. res.setHeader("Set-Cookie", "loggedIn=true");
+2. res.cookie("isLoggedIn", true)
+
+
+-npm i cookie-parser
+=> to be able to read value of cookies, and placed in req.cookies in request object.
+-- if no cookieparser, cookie data not formatted and requires javascript trim split etc methods.
+
+
+--- can pass options to cookie creation like httpOnly, sameSite, secure and can add max-age or expiry
+
+
+// COOKIES
+
+// one way to set request cookie
+// res.setHeader("Set-Cookie", "loggedIn=true");
+
+// better way
+// res.cookie("isLoggedIn", true, {
+// httpOnly: true, // accessible only by web server
+// secure: true, // https
+// sameSite: "None", // // cross-site cookie
+// maxAge: 7 * 24 * 60 * 60 * 1000, // cookie expiry set to match refresh token expiry
+// });
+
+=====
+
+Sessions:
+
+- can also be storage for data that needs to persist and secure or unavailable to other users.
+
+-quite similar to token-based authentication
+
+https://www.educative.io/answers/session-based-authentication-vs-token-based-authentication
+
+
+
+-npm i express-session
+
+in server.js
+
+import const session = require('express-session');
+and use as middleware with options
+
+app.use(session({
+  secret: 'lokalsoul secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {maxAge: 7 * 24 * 1000}
+}))
+
+---then use in request body.
+req.session.isLoggedIn = true;
+
+---will create a cookie with an encrypted value
+
+
+---to save sessions, we will store sessions in mongodb, using a third party library connect-mongodb-session.
+
+also in server.js, import connect --- and pass session to it.
+
+const mongoDbStore = require('connect-mongodb-session')(session) 
+
+-- then initialize the store, using same mongoUri you are already using, just create a collection for your sessions
+
+const store = new MongoDBStore({
+  uri: mongoUri,
+  collection: "mySessions",
+});
+
+
+-- after store is setup, we can use the store, in the middleware where we use the session by adding another option.
+-- the store option.
+
+app.use(
+  session({
+    secret: "lokalsoul secret",
+    resave: false,
+    saveUninitialized: false,
+    // cookie: {maxAge: 7 * 24 * 1000}
+    store: store,
+  })
+  
+  
+  -- now this will already add a mySessions collection in your DB
+  
+  
+----to delete cookie and session
+const postLogout = (req, res, next) => {
+  req.session.destroy((err) => {
+    console.log(err)
+    req.redirect('/')
+  })
+};
+  
+
+https://www.npmjs.com/package/connect-mongodb-session
+
+
+
+==//bugfix ---
+
+saved user in session versus the old implementation of middleware saving the found user in req.user (mongoose object) that's why mongoose methods worked like populate and save. but in session, saved object is just plain object so need to findById first to get the mongoose object with methods.
+
+
+req.session.user object is a simple object and not a mongoose object....so it doesn't have prototype object methods..a workaround is to only store the user._id in the session cookie and fetch the user with findById() from the users collection and then use the mongoose object that is returned to implement the getCart and addToCart functionality.

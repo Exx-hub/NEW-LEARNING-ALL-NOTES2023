@@ -1,0 +1,200 @@
+NEXTJS ECOMMERCE BASIR LEARNINGS / NOTES / TAKEAWAYS
+
+
+LEARNED/PRACTICED:
+
+1. react hook form
+2. next dynamic
+3. react chart js
+4. paypal integration
+6. headless ui - component library
+7. practice tailwind
+8. AUTH component to protect routes.
+
+
+
+QUESTIONS/CLARIFICATIONS I HAD:
+
+1. toastify => when in fnky i put toast container in Layout or in _app.js, there was an error rendering. 
+-- tried again in fnky there is still an error.
+
+-- in basir, put in layout, no error. hmm.
+
+--- !!!!will use for another next js project and see error.
+
+
+2. context --- or use redux?
+--both used context api, but can also use redux. i think redux will be more beneficial, along with rtk query.
+--difference also is in basir, cart is only saved in context, not in database. but saved in memory through cookies.
+
+--cart of fnky may load slow because it is updated and saved in database.
+
+--one approach could be, update in database behind the scenes, but in real time, display context?
+
+
+3. ssr / getServerSideProps 
+-basir use getServerSideProps on index and slug to display products and single product.
+-better to use getStaticProps and paths here, and ISR.
+
+
+--so question is useEffect vs getServerSideProps. 
+
+--getServerSideProps for me is fine, but kinda slow in production?
+--unlike useEffect on the client side? question remains. 
+
+!!!!and need to watch more to learn more!
+
+
+4. mongoose implementation
+
+-basir's way is fancy and checks previous and current connection first, also has disconnect.
+-i'm not sure how important these checks are, but connecting to mongoose is pretty much same , just the checks are different.
+
+-is it necessary to have a disconnect and actually disconnect?
+--will check other nextjs apps further.
+
+5. page into render component setup? or just straight do shit in page component?
+-i dont think it matters too much, but i think, 
+--do the Component thing if you need to like CArtItemList.
+--but for loginpage just do it straight there.
+
+
+6. - why fnky takes a whole lot of time to display pages with calculation, getServerSideProps or mongoose?
+--not sure yet, will try to test database with less items
+
+--!!!!!will try other projects!
+
+
+
+7. next auth implementation -- what are the differences. check out other next auth apps
+
+---same implementation of next auth credentials, but basir has these, idk purpose of these yet.
+
+
+    async jwt({ token, user }) {
+      if (user?._id) token._id = user._id;
+      if (user?.isAdmin) token.isAdmin = user.isAdmin;
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?._id) session.user._id = token._id;
+      if (token?.isAdmin) session.user.isAdmin = token.isAdmin;
+      return session;
+    },
+  },
+  
+  
+---!!! will find out with more projects.
+
+
+8. Auth function in _app.js to protect routes? 
+-compare this way to protect routes vs previous ways i learned
+
+-next js app, pretty much the same, the difference is basir used Auth HOC , or Auth component wrapper, just like a custom hook actually, to check first the session with useSession, then proceeds to the child component, since AUth is a wrapper.
+
+-but you can easily call useSession and check for session on every component you want Protected.
+
+-in react apps, since there is no session from nextAuth, we check token from redux or if it is in localStorage, or even cookies also.
+
+
+9. way of routing with condition?  --- this is actually pretty cool.
+-router.push('/unauthorized?message=login required')
+-router.push("login?redirect=/shipping");
+
+
+router.push with queries.
+ex. router.push("login?redirect=/shipping"); --- treat query like a variable that is passed on.
+
+--redirect user to login first, then after successfully logging in, redirect user to shipping. correct flow.
+--able to do this by getting query string from router.query and using this query as redirect in useEffect once
+user is able to sign in, will trigger re-render of component and will trigger useEffect.
+
+ex. router.push("/unauthorized?message=login required");
+-- this is much simpler. simply push to /unauthorized and able to carry data in query string message. 
+-- to display message in unauthorized page.
+
+
+
+10. Mobile Menu and Dropdowns!
+
+--FNKY --- custom plain css
+
+--basir --- headlessui library
+
+
+11. light theme not done? research how it is done in other projects
+
+---check other projects for light theme
+
+
+12. should loading state of a component be initialized to true? so any dynamic content can be fetched first?
+--- so display loading screen while fetching on initial render since loading is true. then when loading finishes display rendered data.
+
+or optional chaining? like display what is available and display others on re-render after fetch?
+
+which is better approach
+
+
+13. const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; vs toFixed()?
+---with epsilon, round based on last digit?
+
+Or to be more specific and to ensure things like 1.005 round correctly
+
+
+
+14. Js-cookie vs localstorage
+
+If you need to store data that is accessible for both the server and the client, use cookies. 
+Otherwise, use local storage. 
+If you need to store larger data, use local storage. I
+f you need to store data that does not expire, use local storage.
+
+
+GREAT TAKEAWAYS I CAN REUSE:
+
+
+1. Position of main layout = navbar, main , footer.
+--display flex col and justify-between
+
+then in main,
+
+ margin auto first, then margin top 1rem. to move a horizontally centered div because of flex, to move to the area 1 rem from the top. (below navbar)
+
+
+2. tailwind grid - grid => grid cols for mobile (default 1) => set for md grid cols for md => set for lg grid cols for lg => and so on => grid gap.
+
+3. review react context => when there is return in a switch case, no need for break.
+
+4. persisting data using js-cookie from client. not localStorage.
+
+5. see cookies and remove from address bar beside refresh button
+
+6. difference of inline, inline-block and block, 
+
+***inline-flex???
+
+https://codepen.io/clairecodes/pen/POjKXY ---- good example and explanation
+
+-display: flex
+parent is block, children are flex items. 
+parent takes up whole line
+
+-disply: inline-flex
+-parent becomes inline, children still flex items.
+-if adjacent element are inline too, parent will line itself with adjacent inline elements. if possible.
+
+7. router.push with queries.
+ex. router.push("login?redirect=/shipping"); --- treat query like a variable that is passed on.
+
+--redirect user to login first, then after successfully logging in, redirect user to shipping. correct flow.
+--able to do this by getting query string from router.query and using this query as redirect in useEffect once
+user is able to sign in, will trigger re-render of component and will trigger useEffect.
+
+ex. router.push("/unauthorized?message=login required");
+-- this is much simpler. simply push to /unauthorized and able to carry data in query string message. 
+-- to display message in unauthorized page.
+
+8. DATABASE SEEDING --- galing!
+--adding initial data to database
+
+9. checkoutwizard component -- galing also!

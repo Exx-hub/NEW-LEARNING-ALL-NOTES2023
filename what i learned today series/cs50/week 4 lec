@@ -1,0 +1,151 @@
+Cs50 Week 4 Lecture -MEMORY -  Mar 30,2023
+
+
+bit map -> bits can represent a color in images
+
+11000011
+10111101
+01011010
+01111110
+01011010
+01100110
+10111101
+11000011
+
+
+hexadecimal - base16
+
+
+0 1 2 3 4 5 6 7 8 9 A B C D E F 
+
+01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F (15)
+
+16 => 10
+17 => 11
+18 => 12
+
+why is hexadecimal useful?
+more succinct - 11111111 === FF
+
+cue that this is hexadecimal to avoid confusion. add 0x
+
+0xE
+0xF
+0x10
+
+
+
+POINTERS - an address of something in computer's memory
+
+* &
+
+ printf("%p\n", &n);    => print address of variable in memory
+
+
+int n = 50;
+
+---if i want to store the address of n in a variable..
+int *p = &n; --- p is going to be a pointer. this variable is an address.
+
+
+int *p = &n; 
+ // store the address of integer n (&n), to pointer p (*p), ampersand n means address of n, not its value
+ 
+ 
+ 
+POINTER ARITHMETICS
+
+
+     char *s = "HI!";
+     printf("%c\n", s[0]);
+     printf("%c\n", s[1]);
+     printf("%c\n", s[2]);
+
+     printf("%c\n", *s);
+     printf("%c\n", *(s+1)); // value of character stored in memory location, one byte ahead of pointer s.
+     printf("%c\n", *(s+2));
+
+
+bracket notation under the hood, does it like this pointer arithmetics
+
+
+
+char *s = "HI!";
+printf("%s\n", s);
+printf("%s\n", s+1);
+printf("%s\n", s+2);
+
+HI!
+I!
+!
+
+
+
+===
+
+malloc - memory allocation
+
+char *t = malloc(strlen(s) + 1);
+
+free - free memory
+
+free(t);
+
+
+// whenever you allocate memory, you must free the memory when youre done
+
+
+==
+VALGRIND
+-look at your code and find memory errors as its executing
+
+valgrind ./memory
+
+==
+gargbage values
+-if you initialize a variable to nothing, and use that variable.
+-you get garbage values or values previously stored in that address in memory
+
+
+===
+
+passing by value 
+passing by reference
+
+
+
+
+=====
+
+machine code
+
+globals
+
+heap - malloc gets memory from here
+
+stack - functions and variables temporarily stored
+
+
+
+heap overflow
+stack overflow
+
+=== buffer overflow
+
+
+
+=================
+
+
+
+
+
+
+
+
+
+
+
+
+
+

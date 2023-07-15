@@ -1,0 +1,34 @@
+amy-dutton-nextjs-prisma-projectlist feb 14
+
+
+FIRST TASTE OF PRISMA!!
+
+ 
+==initial project setup
+1. create nextjs ts latest app 
+
+2. install prisma - npx prisma
+
+3. npx prisma init
+---this will create prisma dir with schema.prisma file and also will create a .env file
+
+4. create database from supabase, add db connection string in env
+
+5. create schemas in schema.prisma file much like models in mongodb?
+
+
+==== now on to the backend setup
+
+6. everytime you make updates to your schema.prisma file, you need to run => npx prisma migrate dev
+--this will ask you for a migration name
+--this command created a migration file -- sql commands automatically written
+
+7. next run command => npx prisma studio
+---see your models in your browser window. like a browser gui
+
+=== frontend setup
+
+8. npm install @prisma/client    and   npx prisma generate
+
+
+takeway --- very very similar to how you would use mongoose. 

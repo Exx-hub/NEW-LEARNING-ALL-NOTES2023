@@ -1,0 +1,110 @@
+VISHWAS Design Tips for Developers - Mar 27, 2023
+
+==
+TABLES - https://www.youtube.com/watch?v=XGHgsoisWJE&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=2
+
+-do not display all fields like first name last name, company, position
+- this design would take up too much of the table
+
+tip# 1 => merge some fields like fullname, profile (company and position) - and layer the data
+
+tip# 2 => make the header standout, whether bg color or font size and uppercase
+
+tip# 3 => make action buttons appear on hover, instead of repetetively displayed on all rows
+
+tip# 4 => no borders instead odd even color coding and even hover effect on each row
+
+tip#5 => badges or tags for fields like status => active, pending,cancelled in a box like tag
+
+
+
+
+
+==
+IMAGES - https://www.youtube.com/watch?v=KcuKy5XOvtI&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=3
+
+Gallery with text - for text that is hard to read for example white text but image has white or light parts
+
+tip#1 => add darker overlay - but will cover whole image, sometimes this is okay
+
+tip#2 => make overlay just at the bottom like 1/4 of the image - this is okay too
+
+best tip => overlay is a gradient that starts from the bottom and lightens on the way to the top -- good effect
+         => gives a natural fade effect
+
+
+Avatars - if avatars have light background and main bg is also light, 
+
+tip# 1 add an inset shadow. shadow inside instead of outside
+
+
+
+==
+EMPTY STATE - https://www.youtube.com/watch?v=bOwSEA1zZX0&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=4
+
+ex. no data to display especially if there is no data fetched from the api, like a search.
+--instead of displaying "No Data".,
+
+-add an image related to service or product, your message, and a button to go somewhere.
+
+
+
+==
+CARDS - https://www.youtube.com/watch?v=uCP0E-s5zrI&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=5
+
+tip#1 - table rows doesnt need to be table rows, they can be CARDS instead especially if rows are few only!
+
+
+tip#2 - selection like radio buttons, can use cards instead
+
+
+
+==
+FORMS - https://www.youtube.com/watch?v=yEpyxNYfI8c&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=6
+
+
+tip#1 - action text in action button, submit is never the best.
+tip#2 - avoid signup and signin because sometimes needs thinking about => Create Account and Login
+
+
+tip#3 - assume all are mandatory and add optional label instead of vice versa
+
+
+tip#4 - label alignment, cause labels have different length => better to just use placeholder texts
+
+tip#5 - unrelated fields should not be put on the same line. causes confusion
+
+tip#6 - placeholders should help in filling in the form, put back label but on top, placeholders should not replace labels
+
+
+
+
+==
+TYPOGRAPHY - https://www.youtube.com/watch?v=X42_N86OKzs&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=7
+
+
+#1 Font-Family => pair fonts together instead of using just one font for everything
+	       => some fonts look great when large but unreadable for smaller fonts sizes
+	       => https://fontjoy.com/
+
+
+#2 font size and font weight
+	      => sometimes font weight is better than increasing size
+	     
+#3 truncating texts => tooltip for truncated text, faded last line or last two words and elipsis
+		    => css line clamping for truncation
+
+
+
+
+==
+COLORS - https://www.youtube.com/watch?v=vHZiluB5RRo&list=PLC3y8-rFHvwiNfZK3QmKLnrPcSAX32INO&index=8
+
+
+tip#1 => GRAYS
+	-add color to your grays - like the color of your brand
+	-add just the right amount of primary or brand color - start with action elements
+	
+
+
+

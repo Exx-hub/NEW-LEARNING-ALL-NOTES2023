@@ -1,0 +1,127 @@
+18/11/22
+
+
+Responsive design -
+
+KEVIN POWELL
+
+https://www.youtube.com/watch?v=VQraviuwbzU
+
+Media Queries Approach
+
+
+media queries => add complexity as screen gets bigger
+
+ex. big screen => font-sze big
+then medium screen => re-set font size to small
+
+--- it should be => medium screen - font size default
+then big screen add media query => font size big
+
+easier to do mobile first. 
+
+mobile => most are unset. just natural positions and defaults, but overwriting set rules as screens go bigger is also okay
+--- like little padding on mobile and add more padding on bigger screens
+
+then when screens get bigger, add media queries to adjust defaults.
+
+
+when going for big screens first,
+
+so you set all your css rules, on medium screens add media query to re-set all css 
+then when mobile the same thing..
+
+
+99% of the time => use min-width for MQ
+--- go mobile first
+
+--- when starting out the site, set the global styling first, colors, themes, typography, background , and a bit of spacing
+--- start with the default order of things first.
+--- then as screen gets bigger, you add the complexity like columns and grids and flexboxes etc.
+
+
+css clamp
+
+==========
+
+min-width => required width to apply rules, screen has to cross or reach this 600px threshold for the rules inside to take effect
+
+max-width => maximum width of screen allowed for the rules to STAY in effect. once over the max width, rules inside no longer apply
+
+--MOBILE FIRST--
+@media (min-width: 600px){
+
+}
+
+--DESKTOP FIRST--
+@media (max-width: 600px){
+
+}
+
+
+===========================================================
+ADRIAN TWAROG
+
+
+-- he did how i usually approached it from desktop first to smaller
+
+--- maybe good idea to set range of max-width and min-width for less breakpoints
+
+examples => 
+*from zero to 480px --- mobile devices
+@media screen and (max-width: 480px){
+	// rules
+}
+
+*from 481 to 768px --- tablet devices
+@media screen and (min-width: 481px) and (max-width: 768px){
+	// rules
+}
+
+*from 769 to 1200 --- laptop devices
+@media screen and (min-width: 769px) and (max-width: 1200px){
+	// rules
+}
+
+*from 1201 and up --- desktop and large screen devices
+@media screen and (min-width: 1201px) {
+	// rules
+}
+
+
+-- or use break point variables (scss)
+$desktop: 1200px
+$laptop: 1024px
+$tablet: 768px
+$mobile: 480px
+
+*for dekstops and larger
+@media screen and (min-width: $desktop) {
+	// rules
+}
+
+*for laptops
+@media screen and (min-width: $laptop) {
+	// rules
+}
+
+*for tablets
+@media screen and (min-width: $tablet) {
+	// rules
+}
+
+*for mobile
+@media screen and (min-width: $mobile) {
+	// rules
+}
+
+
+
+==========================================================
+
+WEB DEV SIMP
+
+
+https://www.youtube.com/watch?v=yU7jJ3NbPdA
+
+

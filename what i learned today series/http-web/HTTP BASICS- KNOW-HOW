@@ -1,0 +1,74 @@
+HTTP BASICS/ KNOW-HOW:
+
+feb 22:
+
+TCP/IP - transmission control protocol / internet protocol
+
+--internet protocol suite. the internet runs on this protocol
+--transfers information between client and server
+
+
+when you type a url and press enter,
+that address is converted into an ip address => dns lookup
+
+
+DOMAIN NAME SYTEM - 
+dns resolver, asks dns server what ip address a certain domain name converts to
+if first time, might ask other dns if they know ip address.
+but after first time, the ip address is cached for next time.
+
+www.alvinacosta.com => domain name
+76.76.21.21 => ip address
+
+browser contacts DNS server => to get ip address of domain name
+
+browser then uses ip address to make a request to the server
+
+gets back a response from server contacted if you will.
+
+
+HTTP Status Codes:
+way of server informing you about result of response.
+
+200 - successful responses
+300 - redirect or moved
+404 - not found / client messed up
+500 - server problem / server messed up
+
+
+PORT NUMBER:
+
+-by default http => port number 80
+-by default https => port 443
+
+ports are used to run multiple services on a single machine.
+localhost => usually 3000
+mongodb => usually 27017
+and so on.
+
+
+REQUEST METHOD:
+
+-once we have connected to the port and ip address by resolving the domain name into the ip address,
+
+-so when a connection is established,
+-next thing client does is sends request method
+
+
+GET POST PUT PATCH DELETE OPTIONS
+
+---get and post most important. for getting resources and sending data.
+
+so why do you need the others?
+
+1. for semantic purposes. like a delete request, duh, for deleting something. and so on.
+
+2. for multiple requests to same endpoint. 
+ex. post request to https://acosta.codes/api/users, also a put request to the same endpoint
+
+
+
+
+
+
+

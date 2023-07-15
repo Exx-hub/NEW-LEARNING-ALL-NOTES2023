@@ -1,0 +1,391 @@
+Pedro Tech GraphQL - Mar 14, 2023
+
+
+what i know:
+
+BE -
+
+create schema
+create resolvers
+
+use express-graphql as middeware - /graphql endpoint
+-pass schema and resolvers in graphqlHTTP
+
+
+FE -
+-use /graphql endpoint in fetch request
+-post method only
+-content type should be application json
+
+pass graphqlQuery in body. (graphql string)
+
+
+ const graphqlQuery = {
+      query: `
+        mutation {
+          createUser(userInput: {email: "${email}", name: "${name}", password: "${password}"}) {
+            _id
+            email
+          }
+        }
+      `,
+    };
+
+
+    fetch("http://localhost:8080/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(graphqlQuery),
+    })
+    
+    
+    
+============================================    
+start of pedro tech course
+Pedro Tech GraphQL - Mar 14, 2023
+
+
+5 basic types in graphql (SCALAR TYPES) -
+
+ID, String, Int , Float, Boolean
+
+
+so far, using tool like postman to send queries from the frontend using an already build graphql api.
+
+so basicall if youre using something like react and interacting with an api, if graphql api,
+your fetch requests should include these in the body as a POST request.
+
+sample queries:
+
+{
+  country(code: "PH") {
+    name
+    native
+    capital
+    emoji
+    currency
+  }
+}
+
+
+{
+  languages{
+    code
+    name
+  }
+}
+
+{
+  language(code: "en"){
+    name
+  }
+}
+
+
+======
+
+Start creating graphql backend api:
+
+1. npm init --y
+2. npm i apollo-server graphql -- install apollo and graphql
+3. install nodemon
+4. configure scripts
+
+
+---watch out cause we're not using express here. instead we using the apollo server
+
+=
+5. initialize apollo server.
+
+const { ApolloServer } = require("apollo-server");
+const { typeDefs } = require("./schema/type-defs");
+const { resolvers } = require("./schema/resolvers");
+
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url, port }) => {
+  console.log(`Your api is running at URL: ${url} PORT: ${port}.`);
+});
+
+
+=
+6. create schema folder (called graphql by max)
+7. create resolvers.js and type-def.js (called schema by max)
+
+=
+8. define type-defs
+
+const { gql } = require("apollo-server");
+
+const typeDefs = gql`
+    type User {
+        id: ID!
+        name: String!
+        username: String!
+        age: Int!
+        nationality: String!
+    }
+
+    
+    type Query {
+        users: [User!]!
+    }
+`;
+
+module.exports = { typeDefs };
+
+=
+9. define the resolvers
+
+const { UserList } = require("../FakeData");
+
+const resolvers = {
+  Query: {
+    users() {
+      // const users =  await User.find() - if using database
+      // return users
+
+      return UserList;
+    },
+  },
+};
+
+module.exports = { resolvers };	
+
+=
+10. side tip => using enums or unions tp limit types of a field. like for nationality. instead of allowin any string
+
+enum Nationality {
+    CANADA
+    BRAZIL
+    INDIA
+    GERMANY
+    CHILE
+  }
+  
+11. add friends to User type
+friends: [User]
+
+
+12. add a new query user to fetch a single user using id as argument
+
+-user(id: ID!): User! 
+
+Query with arguments - a little different from express where it has args and req only.
+
+user: (parent, args, contextValue, info) => {
+      const { id } = args;
+      return UserList.find((user) => user.id === Number(id));
+    },
+    
+13. now added 
+-movies in fakedata
+-movie and movies in typeDefs
+-movie and movies in resolvers
+---then test in apollo graphql sandbox
+
+14. // this is like adding info to fetched user or users. but not unique to that user...
+  User: {
+    favoriteMovies: () => {
+      return MovieList.filter((movie) => movie.year >= 2000);
+    },
+  },
+  
+==  
+15. MUTATIONS
+
+-create mutation and input in type-defs
+
+
+input CreateUserInput {
+    name: String!
+    username: String!
+    age: Int!
+    nationality: Nationality = BRAZIL
+  }
+  
+   input UpdateInput {
+    id: ID!
+    username: String!
+  }
+
+  type Mutation {
+    createUser(userInput: CreateUserInput!): User!
+    updateUsername(updateInput: UpdateInput!): User
+    deleteUser(id: ID!): Boolean!
+  }
+  
+  
+-create resolver for this mutation
+
+ createUser: (parent, args, contextValue, info) => {
+      const { name, username, age, nationality } = args.userInput;
+      const lastId = UserList[UserList.length - 1].id;
+
+      const newUser = {
+        id: Number(lastId) + 1,
+        name,
+        username,
+        age,
+        nationality,
+      };
+
+      UserList.push(newUser);
+
+      return newUser;
+    },
+
+================
+part 2:
+
+Starting with the client (REACT). 
+
+
+https://www.apollographql.com/docs/react/get-started
+
+16. create basic react app => CRA
+
+---unlike with max's express-graphql, when used in react, we just use the api endpoint /graphql
+
+---but here with apollo-client need to install graphql and apollo client in react
+
+17. npm install @apollo/client graphql
+
+
+18. import { ApolloClient, InMemoryCache, ApolloProvider, gql } from "@apollo/client"; -- in index
+
+
+19. create or initialize  apollo client
+
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/graphql",
+  cache: new InMemoryCache(),
+});
+
+
+
+20. Wrap whole app with apollo provider and pass in the client
+
+
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+    
+    
+21. import { useQuery, gql } from "@apollo/client"; --- where you will do your queries
+
+--- so let's try in app.js
+
+---create query then pass to useQuery hook, useQuery will fetch data on component render
+
+
+  const GET_ALL_USERS = gql`
+    query GetAllUsers {
+      users {
+        name
+        username
+      }
+    }
+  `;
+
+  const { loading, error, data } = useQuery(GET_ALL_USERS);
+  
+  
+---and use data in your component like render list of users in this example
+
+
+22. if with variables, assign variables with dollar sign, pass variable values in as 2nd argument to use query
+
+
+const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      age
+      nationality
+    }
+  }
+`;
+
+
+const { data, loading, error } = useQuery(GET_USER, {
+    variables: { id: 2 },
+  });
+  
+  
+23. manual execution like for a click of a button => useLazyQuery
+
+---use state to hold input you want to include like for searching...
+
+-same query with input
+
+const GET_MOVIE = gql`
+  query GetMovie($title: String!) {
+    movie(title: $title) {
+      title
+    }
+  }
+`;
+
+
+-useLazyQuery now also returns a function
+
+ const [getMovie, { loading, error, data }] = useLazyQuery(GET_MOVIE);
+ 
+ 
+-use in onClick and pass variables in this function => onClick={() =>getMovie({variables: { title: searchInput },})}
+
+
+
+24. MUTATIONS on the apollo client
+
+import { gql, useMutation } from '@apollo/client';
+
+
+// create mutation
+const CREATE_USER = gql`
+  mutation CreateUser($userInput: CreateUserInput!) {
+    createUser(userInput: $userInput) {
+      name
+    }
+  }
+`;
+
+// use useMutation
+const [createUser, { data, loading, error }] = useMutation(CREATE_USER);
+
+
+// create handlesubmit and pass to onsubmit, pass variables, same as in the backend
+ const handleSubmit = (e) => {
+    e.preventDefault();
+    createUser({
+      variables: {
+        userInput: {
+          name,
+          age: Number(age),
+          username,
+          nationality: nationality ? nationality.toUpperCase() : undefined,
+        },
+      },
+    });
+  };
+  
+
+25. update or refetch a query after a mutation
+
+--example, refetch user list after creating a user to update users displayed
+
+--add argument to useMutation, refetchQueries and pass query to refetch, also the query name
+--can come from a different component so you might need to export
+
+ const [createUser, { data, loading, error }] = useMutation(CREATE_USER, {
+    refetchQueries: [{ query: GET_ALL_USERS }, "GetAllUsers"],
+  });
+  
+  
+
+26. 

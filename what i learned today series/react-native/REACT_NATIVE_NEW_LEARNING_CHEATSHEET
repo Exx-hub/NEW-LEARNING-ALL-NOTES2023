@@ -1,0 +1,67 @@
+REACT NATIVE NEW LEARNING CHEAT SHEET:
+
+
+1. platform specific file extensions
+
+ex. - HomeScreen.js will work for ios android and web.
+
+-if you want certain things in the Homescreen to be displayed or hidden in say ios, you should create a copy of HomeScreen.js and rename that copy to HomeScreen.ios.js
+
+-also applicable to android with HomeScreen.android.js and web HomeScreen.web.js
+
+- if you want to set for both mobile platforms and not on the web, HomeScreen.native.js
+
+
+
+2. WEBVIEW! --- display webpage snippet in your native app
+
+npx expo install react-native-webview
+
+
+import { WebView } from "react-native-webview";
+
+<WebView style={styles.webViewContainer} source={{ uri: "www.acosta.codes" }} />
+
+
+3. useColorScheme hook from nativewind
+
+
+4. <Image source={{ uri: image }} style={{ resizeMode: "contain" }} />
+
+5. VECTOR icons built in EXPO - import { AntDesign } from "@expo/vector-icons";
+
+
+6. Auto truncate - Text element with numOfLines prop
+
+
+7.<ActivityIndicator /> --- built in spinner component
+
+8. blurRadius property for blur effect of image
+
+
+9. TextInput placeholderTextcolor prop
+
+10. text-md in tailwind is text-base
+
+11. debounce -> lodash
+
+
+12. react native async storage
+
+
+13. secureTextEntry={true} for TextInput (password)
+
+
+14. KeyboardAvoidingView
+
+
+15. scrolling bug in scrollview or flatlist - when wrapped with extra view. and watch out for flex 1
+
+16. applying array of styles and also conditional style like active status
+
+ style={[
+        styles.container,
+        styles.elevationEffect,
+        { backgroundColor: activeItem === name ? "orange" : "white" },
+      ]}
+     

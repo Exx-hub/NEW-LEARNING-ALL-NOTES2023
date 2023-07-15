@@ -1,0 +1,7 @@
+day 4
+
+vh vw vmin vmax
+
+
+-useful for layouts
+-vw can be useful for titles, so as the font size of page titles auto adjusts as the screen gets bigger or smaller

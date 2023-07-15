@@ -1,0 +1,82 @@
+July 4, 2023 - react native image picker - vetricvelRavi
+
+
+
+
+1. create expo app - npx create-expo-app@latest ./
+
+
+2. firebase stuff - create project, register app etc
+--choose web app if using react native?
+
+
+-npm i firebase
+-create firebase config file - paste configuration
+-initialize firebase storage - create default bucket and setup security rules
+
+
+3. install native wind
+
+npm i nativewind
+npm i -D tailwindcss
+npx tailwindcss init - to create tailwind.config,js
+
+-update content field in config - content: ["./App.{js,jsx,ts,tsx}", "./<custom directory>/**/*.{js,jsx,ts,tsx}"],
+
+-add babel plugin - plugins: ["nativewind/babel"],
+
+----use tailwind in components after restarting server or relaunching expo server
+
+
+
+4. install expo image picker -> npx expo install expo-image-picker
+
+edit app.json 
+
+add this inside expo object:
+
+"plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
+    
+    
+5. FIREBASE
+
+---follow docs --- using firebase with expo
+
+
+-configure metro.config is using firebase 9.7 and above
+
+npx expo customize metro.config.js
+
+
+
+
+
+6. save image in state to display in screen and also store in firebase, also able to delete from firebase storage
+
+
+https://docs.expo.dev/guides/using-firebase/
+
+
+=============
+
+
+LEARNINGS:
+
+1. rnfe - react native component shortcut
+
+2. <ActivityIndicator /> --- built in spinner component
+
+3. flex in react native, by default all are DISPLAY FLEX and flex direction is COLUMN by default
+
+4. expo image picker
+
+5. saving to firebase storage
+
+6. deleting from storage

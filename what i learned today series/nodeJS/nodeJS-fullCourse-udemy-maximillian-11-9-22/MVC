@@ -1,0 +1,24 @@
+11/20/22
+
+The Model View Controller - MVC
+
+
+*Separation of Concerns
+
+Model
+-representing data in your code
+-work with data => save , fetch
+--- usually used for database schema and methods, structure of data => ex. a product
+
+Views
+- what user sees
+- rendering the right content
+- decoupled from your application code
+
+
+Controllers
+- connecting your models and your views
+- contains in-between logic
+===> may be split across middleware functions
+
+*Routes

@@ -1,0 +1,41 @@
+ADDING PAYMENTS - Section 23
+
+
+payment process:
+
+1. collect payment method
+2. verify payment method
+3. charge payment method
+4. manage payments
+5. process order in app after confirming payment
+
+**steps 1-4 are complex so typically outsourced.
+
+typical library used for this is stripe.
+
+
+ADD CHECKOUT PAGE and checkout controller
+
+setup stripe in frontend => 
+
+<div class="centered">
+                <button id="order-btn" class="btn">ORDER</button>
+                <script src="https://js.stripe.com/v3/"></script>
+                <script>
+                    var stripe = 		   Stripe('pk_test_51HVenzEQKuJpzb7TQlh59oFF5Zyq3iXfcr3hwq2pKUVJHJZxpTdEIVHgEeol8w43u9OLE5er0wQOI9XY08VaQ1FJ00WlqqRatd');
+                    var orderBtn = document.getElementById('order-btn');
+                    orderBtn.addEventListener('click', function() {
+                        stripe.redirectToCheckout({
+                            sessionId: '<%= sessionId %>'
+                        });
+                    });
+                </script>
+            </div>
+            
+            
+            
+==> setup stripe in backend
+
+npm install stripe
+
+

@@ -1,0 +1,35 @@
+ERROR HANDLING - Section 19
+
+
+==Handling Errors in Route Handler Functions==
+
+The simplest way of handling errors in Express applications is by putting the error handling logic in the individual route handler functions. We can either check for specific error conditions or use a try-catch block for intercepting the error condition before invoking the logic for handling the error.
+
+
+ex. if(!email || !password){
+	return res.status(400).json({ message: "All fields required!" })
+ }
+ 
+ 
+***But this method of putting error handling logic in all the route handler functions is not clean. We will try to handle this more elegantly using the middleware functions of Express as explained in the subsequent sections.
+
+
+
+
+==Default Built-in Error Handler of Express==
+
+When we use the Express framework to build our web applications, we get an error handler by default that catches and processes all the errors thrown in the application
+
+
+---ass explained by max.
+
+if synchronous, express can handle it on its own.
+
+if async, need to pass error to next function, to proceed to custom error route.
+
+
+const errorHandler = (error, request, response, next) {
+  // Error handling middleware functionality
+}
+
+

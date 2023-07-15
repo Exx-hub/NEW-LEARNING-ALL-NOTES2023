@@ -1,0 +1,50 @@
+July 3, 2023 -  ecommerce ui rn tailwind beto
+
+
+UI only with react native using tailwind for nativewind.
+
+
+this project will show or practice on using tailwind with react native
+
+
+
+1. npx create-expo-app@latest <myappname>
+
+
+2. npm i nativewind
+   npm i -D tailwindcss
+   
+   
+3. create tailwind.config.js   -> npx tailwindcss init
+
+4. update tailwind config -> content: ["./App.{js,jsx,ts,tsx}", "./<custom directory>/**/*.{js,jsx,ts,tsx}"],
+
+5. add babel plugin -> plugins: ["nativewind/babel"],
+
+6. test adding tailwind classnames to your components
+
+
+7. import { useColorScheme } from "nativewind";   ***!!! important to use from native wind not react native
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+  
+  <Switch value={colorScheme === "dark"} onValueChange={toggleColorScheme} />
+  
+New React NAtive learning / component:
+
+1. Switch component - <Switch />
+
+2. useColorScheme hook
+
+3. base status bar styling on light or dark -> <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+
+4. SAFEAREAVIEW -  <SafeAreaView /> -> for IOS --- render content within the safe area boundaries of a device
+
+5. IMAGE and IMAGE RESIZEMODE - <Image source={{ uri: image }} style={{ resizeMode: "contain" }} />
+
+6. VECTOR icons built in EXPO - import { AntDesign } from "@expo/vector-icons";
+
+7. Auto truncate - Text element with numOfLines prop
+
+        <Text numberOfLines={2} className="text-sm text-black/60 dark:text-white/70">
+          {description}
+        </Text>

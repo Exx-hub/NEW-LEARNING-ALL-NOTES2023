@@ -1,0 +1,165 @@
+11/29
+
+Section 10 - SQL Intro
+
+SQL - Standard Query Language
+
+goal: store data and make it easily accessible => use a database!
+
+- how to choose a database?
+
+Kinds of databases:
+
+SQL vs NoSQL
+
+
+SQL
+-Tables
+ => records
+
+core sql databae characteristics:
+
+1. Data Schema => all data in a table has to fit! ex. id name age
+2. Data Relations => one to one / one to many / many to many (table are connected)
+
+example query => SELECT * FROM users WHERE age > 28  => select all users whose age are above 28
+
+NoSQL
+-Collections
+ => documents (like javascript objects)
+ -schemaless or not complete
+ 
+ 1. No Strong Data schema, no structure is required
+ 2. no data relations 
+ 
+ 
+ Horizontal and Vertical Scaling
+ - need to scale our database as data increase
+ 
+ 
+ Horizontal Scaling => Add more servers
+ 
+ 
+ Vertical Scaling => increase capacity or cpu power
+ 
+ 
+ 
+INSTALLATION:
+
+1. download the apt from mysql
+then
+
+sudo dpkg -i mysql-apt-config_w.x.y-z_all.deb
+sudo apt-get update
+sudo apt-get install mysql-server
+
+then look in docs how to start server. this can also check if you installed correctly
+
+=> https://www.google.com/search?q=how+to+start+mysql+server+in+ubuntu+22.04&oq=how+to+s&aqs=chrome.0.69i59l2j69i57j69i59j0i67j69i61j69i60l2.1053j0j7&sourceid=chrome&ie=UTF-8
+ 
+ 
+
+START USING SQL DATABASE:
+
+-run sql workbench and click the server youre connected to.
+-create new schema - this will be empty
+
+--- connect sql database to your node app ---
+
+1. npm install mysql2
+2. create database.js file in your express app
+3. setup code to connect to mysql database
+	
+	const mysql = require('mysql2');
+
+	const pool = mysql.createPool({
+	    host: 'localhost',
+	    user: 'root',
+	    database: 'node-complete', // name of created schema
+	    password: 'lokalsoul'
+	})
+
+	module.exports = pool.promise(); // to get back promises and chain with callbacks 
+	
+
+4. import and call this db connection setup in server.js --- a bit similar to calling mongodb connection.
+=> const db = require('./util/database')
+=> db.execute('SELECT * FROM products');
+
+
+5. we have no database data yet, so we should create a products table in our workbench
+- add products as table name
+- add columns like id -- basically setup the columns of the record / table
+- need to create at least one record so we can fetch from our node app
+
+
+6. retrieving data from sql to our node app
+
+db.execute("SELECT * FROM products")
+  .then((result) => console.log("result", result[0]))
+  .catch((err) => console.log("error", err));
+
+
+7. Fetching data and using the model to interact with our database instead of dummy database and class based approach
+
+-remove all method logic in Product model that is dealing with dummy data and the file system
+
+- these Product methods will not directly interact with the database. starting with fetchall.
+
+- in fetchall db.execute("SELECT * FROM products").then()....
+
+
+---then use fetch all in your controller =>
+
+exports.getProducts = (req, res, next) => {
+  Product.fetchAll()
+    .then(([result, meta]) => {
+      res.render("shop/product-list", {
+        prods: result,
+        pageTitle: "All Products",
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+ 
+- add an item to the database
+
+db.execute("INSERT INTO products (title, price, description, imageUrl) VALUES (?, ? ,? ,?)",[this.title, this.price, this.description, this.imageUrl]);
+
+exports.postAddProduct = (req, res, next) => {
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const price = req.body.price;
+  const description = req.body.description;
+  const product = new Product(null, title, imageUrl, description, price);
+  product
+    .save()
+    .then(() => res.redirect("/"))
+    .catch((err) => console.log(err));
+};
+ 
+ 
+- get a single item by Id
+
+ db.execute("SELECT * FROM products WHERE products.id = ?", [id]);
+
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  Product.findById(prodId)
+    .then(([result]) => {
+      const [product] = result;
+      res.render("shop/product-detail", {
+        product: product,
+        pageTitle: product.title,
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+ 
+ 
+-delete an item 
+ DELETE FROM `node-complete`.`products` WHERE (`id` = '2');
+ 

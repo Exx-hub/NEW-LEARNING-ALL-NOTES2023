@@ -1,0 +1,252 @@
+week 4 shorts
+
+==
+HEXADECIMAL base16
+
+-usually used in memory addresses
+
+0x46A2B93D
+
+
+HEXCODE
+since colors are 24 bits RGB
+
+red green blue have 8 bits each
+
+so 8 bits have a maximum values of 256, 255 plus 0;
+
+
+
+===
+Pointers Intro
+
+hdd or ssd 
+=> file storage space, we cant directly work here, manipulation of data is done in RAM, data is moved there
+
+RAM - Random Access Memory
+=>  specific amount of memory is set aside to work with specific data
+=> ex. if you create an integer, 4 bytes of memory are set aside in RAM so you can work with that integer
+
+
+*You can visualize memory as a big array of byte sized cells
+-just like arrays where you can access random parts of it via the indexes.
+-like if you want to get the 3rd value of the array, you point to the index 2, array[2]
+
+-so since memory is like a big array, like using indexes you can access memory through addresses.
+- each location in memory has an address
+
+
+
+==
+
+POINTERS - pointers are just ADDRESSES
+
+- A POINTER IS NOTHING MORE THAN AN ADDRESS
+- pointers are addresses to locations in memory where variables live
+
+
+- A pointer is a data item whose 
+  -value is a memory address
+  - type describes the data located at that memory address, what data type you will find at that address
+   => ex. int *pk = &k    char *s = "HI!";
+  
+  - allow data structures and or variables to be shared among functions
+  
+  -pointer make a computer environment more like the real world
+  
+  
+1 )Simplest pointer available to us in C is the NULL pointer.
+	-pointer that points to nothing, which can come in handy
+
+- when you create a pointer, and dont set its value immediately, you should ALWAYS set it to NULL
+
+
+2) Another way to create a pointer is to extract the address of an already existing variable
+-- we do this with the address extraction operator &.
+
+- if x is an int, then &x is a pointer-to-int, whose value is the address of x.
+
+-if arr is an array of doubles, then &arr[i] is a pointer-to-double, whose value is the address of arr[i].
+  ====> an array's name is actually just a pointer to its first element, just like in string. array of chars
+	saves only the first char,the delimiter, nul or /0 is important
+
+
+
+-main purpose of pointers is to allow us to modify or inspect the location to which it points
+ - dereferencing
+ - we go to that address and change the value there
+
+- dereference operator => go to the address and change value there.
+  *pk = 35; => int k becomes 35
+
+ 
+
+type * - initialize a pointer
+*a - dereference operator => go to the address 
+&a - address of a
+
+
+
+===
+DYNAMIC MEMORY ALLOCATION
+
+
+heap - pool of memory, dynamically allocated memory comes from here
+
+stack - statically allocated like variables and functions come from here
+
+
+malloc() => pass in bytes to allocate.
+         => if there is available memory, this will return a pointer to that memory
+         => if no avail, it will return NULL
+         => ex. malloc(sizeof(int) * 3 ) // 12
+         
+         
+         // statically => int x;
+         
+         // dynamically => int *px = malloc(sizeof(int)); // will find 4 bytes of memory 
+         
+         
+         // get int
+         int x = get_int()
+    
+    	 // array of floats on the stack
+    	 float stack_array[x]
+    	 
+    	 // array of floats on the heap
+    	 float* heap_array = malloc(x * sizeof(float));
+    	 
+    	 
+         
+free() => free up allocated memory
+       => dynamically allocated memory must be freed.
+       => so everytime you use malloc, you need to use free on created memory allocation
+       => only memory that you malloc SHOULD be freed.
+       => do not free a block of memory more than ONCE.
+       
+       => ex. char *word = malloc(50 * sizeof(char));
+       	  
+       	  	// do something with it, then when done
+       	  	
+       	      free(word);
+
+
+
+
+
+
+================
+
+CALL STACK
+- when you call a function, the system sets aside space in memory for that function to do its work
+  - stack frames / function frames
+  - multiple stack frames may exist at the same time.
+
+these FRAMES are arranged in a STACK. Last in, first out.
+--newer frame / new function, is pushed on top of the stack, and becomes active frame
+-- when it is finisehd it is popped off the stack, then the function below it becomes the new active.
+
+---clear example of this is a recursive function like fatctorial
+
+
+
+=======
+
+FILE POINTERS
+
+
+-file manipulation functions all live in stdio.h
+-all of them accept FILE* as one of their parameters except for fopen()
+
+-some of the most common file i/o functions are
+
+*fopen() 
+- opens a file and returns a pointer to it.
+- check return value make sure not NULL
+
+FILE *ptr = fopen(<filename>, <operation>);
+
+FILE *ptr = fopen("file.txt", "r"); - "read"
+
+"w" - write - if file already exists, will overwrite
+"a" - append - will just add
+
+
+*fclose() 
+- closes the file pointed to by the file pointer
+
+fclose(<file pointer);
+fclose(ptr);
+
+
+*fgetc() 
+- reads and returns next character from file pointer to. file  get char
+- the operation of file pointer passed as parameters must be READ "r"
+
+char ch = fgetc(<file pointer>);
+char ch = fgetc(ptr);
+
+can replicate cat command from linux
+
+
+EOF => end of file character
+
+
+*fputc() 
+-write a single character to a file
+- operation should be write or append not read
+
+fputc(<character>, <file pointer>)
+fputc('A', ptr2); - write a capital a to file2.txt
+
+
+can replicate cp command from linux - reads character one by one from a file, writes character 1by1 to another file
+
+
+
+*fread() 
+-reads specific amount of data from a file and store in temporary memory (buffer)
+
+fread(<buffer>,<size>, <qty>, <file pointer>);
+
+int arr[10];
+fread( arr, sizeof(int), 10, ptr)
+
+
+double* arr2 = malloc(sizeof(double) * 80)
+fread( arr2 , sizeof(double), 80, ptr)
+ 
+
+
+
+*fwrite()
+-equivalent for fread but for writing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+

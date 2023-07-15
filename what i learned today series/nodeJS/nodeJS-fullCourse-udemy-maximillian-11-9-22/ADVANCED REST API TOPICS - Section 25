@@ -1,0 +1,111 @@
+ADVANCED REST API TOPICS - Section 25
+
+--creating a rest api then using the endpoints in a reactjs fe app
+
+
+1. setup express server
+2. setup express router
+3. use build in middleware
+4. use cors middleware / setup manual setHeader for cors
+
+5. create routes and controllers
+
+6. install and setup express validator - use express error middleware
+-- set up try catch and next errors with statuscode.
+
+7. connect mongo db and models
+8. create controller funcions, getPosts, getPostById, createPosts
+9. use endpoint in react FE. 
+
+
+
+--for upload, still going to use multer, to save uploaded image in BE file system - CHECK
+
+--i think when upload, save image to images folder in backend server files system, - CHECK
+--save path in database - ex. imageUrl: "images/1676194180788-honda-brio-rs-bt-orange.jpg" - CHECK
+
+--use path in FE like get request. http://localhost:8080/images/1676194180788-honda-brio-rs-bt-orange.jpg - CHECK
+--used like an image address in src... - CHECK!
+
+
+10. install multer on the BE and register middleware with options. and set image now from req.file.
+11. but for file to be readable, you should send image from FE as formData
+
+const formData = new FormData();
+formData.append('title', postData.title)
+formData.append('content', postData.content)
+formData.append('image', postData.image)
+
+-- should not set header to application/json since we are sending an image, so remove
+-- formdata will automatically set the correct headers
+-- setup formdata and pass this as body of post request, no need to JSON stringify
+
+
+12. edit route and controller, including delete image in file system when updating image or deleting post
+
+13. delete a post - create route and controller
+
+
+14. adding pagination
+
+---set sa find ng limit
+---get document count.
+---include has next to request and has prev?
+
+1. add query params to loadPost endpoint => http://localhost:8080/feed/posts?page=${page}
+2. retrieve in backend controller 
+
+you need:
+
+const currentPage = req.query.page || 1;
+const perPage = 2;
+
+const totalItems = await Post.find().countDocuments();
+
+then, query with skip and limit => 
+
+const posts = await Post.find()
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+      
+
+then, => 
+
+include totalItems in the response, for the frontend to read and use.
+--front end will do the logic for pagination using the totalItems value.
+
+--save current page and totalItems in state, and dynamically display next previous buttons from state.
+
+
+
+15. create user Model with posts array Post reference
+
+16. create auth route and auth controller --- the yoosh with bcrypt as well
+
+17. use signup endpoint in client
+
+
+18. implementing authentication with JWT --- login endpoint
+---after verifying email and password, create access token with jwt.sign.
+---include access token in response
+---client then saves token in local storage
+
+19. token in local storage is included in every request hereafter under the authorization headers with Bearer
+
+---include token in authorization headers for every request
+
+20. create middleware in server to check existence of token in headers. grant or restrict access depending on token
+--if present and not expired.
+
+21. after jwt authentication, we need to connect posts and users
+
+22. updating and deleting by reference
+
+23. doing the status api endpoint challenge
+
+
+
+ASYNC AWAIT - mini SECTION 26
+
+
+

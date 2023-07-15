@@ -1,0 +1,133 @@
+Testing Node JS Applications - Section 30
+
+
+Automated Code Testing - write code that tests your code
+
+
+
+
+1. npm i -D mocha chai as dev dependency
+
+2. in scripts -> "test": "mocha", ---- this will look for folder called test and will run files inside it
+
+3. add a folder called "test" because mocha finds a folder called test
+
+4. create a sample test
+
+
+const expect = require("chai").expect;
+
+it("should add number correctly", () => {
+  const num1 = 2;
+  const num2 = 3;
+
+  const answer = num1 + num2;
+
+  expect(answer).to.equal(5);
+});
+
+
+---somehow similar to jest and rtl
+
+
+
+5. just like in jest, there is a DESCRIBE block that can group tests and display a title for those tests. 
+
+
+==
+TESTING is-auth middleware
+
+6. checking if middleware will throw error if no authorization header
+
+const expect = require("chai").expect;
+const authMiddleware = require("../middleware/is-auth");
+
+it("should throw an error is no authorization header is present", () => {
+  const req = {
+    get: () => null,
+  };
+  expect(authMiddleware.bind(this, req, {}, () => {})).to.throw("Not authenticated!!");
+});
+
+
+7. DO not test third party functions, like jwt.verify -- functions you did not create.
+---instead test if your code will throw an error if you pass the wrong token to verify
+
+
+
+8. USING MOCKS or STUBS (mock function?)
+
+-since jswt verify will always throw an error because in our test we are not logged in, we do not have a reak token
+- we use mock functions.
+
+jwt.verify = () => {
+      return { userId: "abc123" };
+    };
+    
+ authMiddleware(req, {}, () => {});
+ expect(req.userId).to.have.property("userId","abc123"); // 1st is property, 2nd is value
+        
+---mocking the result of jwt.verify to return a dummy userId instead of throwing an error.
+
+---so we can test code after jwt verify succeeds which we cannot go to if we do not mock the verify result
+
+
+9. install sinon, so we can create mocks or stubs and also restore its value
+
+--above mock function create a global function value that affects other tests that also uses verify.
+-- so instead of global approach we use sinon, to create a mock function and value, and to be able to restore its value, like so
+
+
+
+ it("should have a userid property after decoding the token", () => {
+    const req = {
+      get: (headerName) => "Bearer xyz",
+    };
+
+    sinon.stub(jwt, "verify");
+    jwt.verify.returns({ userId: "abc123" });
+
+    authMiddleware(req, {}, () => {});
+    expect(req).to.have.property("userId", "abc123"); // check if w property and 2nd arg is value
+    expect(jwt.verify.called).to.be.true; // check if verify indeed was called
+    jwt.verify.restore();
+  });
+
+
+==
+TESTING CONTROLLERS - testing ASYNC CODE
+
+----need to pass done as argument, and call it after your async function, so mocha will know to wait for async
+
+---mock database findone query, and restore
+
+it("should throw an error w code 500 if accessing db fails", (done) => {
+    sinon.stub(User, "findOne");
+    User.findOne.throws();
+
+    const req = {
+      body: {
+        email: "test@gmail.com",
+        password: "tester",
+      },
+    };
+    const res = {};
+    const next = () => {};
+
+    authController.login(req, res, next).then((result) => {
+      expect(result).to.be.an("error");
+      expect(result).to.have.property("statusCode", 500);
+      done();
+    });
+
+    User.findOne.restore();
+  });
+  
+  
+  
+testing databases
+1. stub database query
+2. dedicated testing database
+
+
+***just study this further mocha and chai.. testing nodejs express rest api...

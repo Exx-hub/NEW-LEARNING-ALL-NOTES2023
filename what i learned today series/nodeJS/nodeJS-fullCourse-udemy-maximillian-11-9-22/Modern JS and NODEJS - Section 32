@@ -1,0 +1,23 @@
+Modern JS and NODEJS - Section 32
+
+to be able to use import and export etc
+
+either
+1. replace .js to .mjs
+
+2. in nearest package.json => "type": "module"
+---now all should be done with es modules, cannot have combination
+
+
+-- __dirname and other global variables does not work with es modules, they do not exist
+
+-- need to import them from path
+
+import { dirname } from 'path';
+
+
+Promises in node
+
+const fs = require('fs').promises;
+
+import fs from 'fs/promises';

@@ -1,0 +1,142 @@
+nextjs13-mongodb-prisma-HamedBahram feb 15
+
+using new app directory next js 13 features
+
+1. initiliaze basic next js app with tailwind
+
+2. install prisma =====> npm install -D prisma
+
+-initialize prisma =====> npx prisma init
+
+
+---this creates a prisma dir with schema.prisma file in your app and a .env where you put db URL
+
+
+schema.prisma is where you put your data structures / models / schema
+
+.env => your db connection string
+
+
+--- this time try setting up prisma with mongo db
+
+---in the env file add your mongodb connection string
+
+
+
+3. create models in schema.prisma
+
+
+or
+
+4. import an existing database
+
+
+
+5. install prisma client ====> npm i @prisma/client
+
+---this also automatically invokes ==> prisma generate
+
+
+---but! everytime you change something in your schema.prisma file you do have to run ===> prisma generate
+
+
+=====QUERYING THE DATABASE
+--- so like in mongoose, this is what you do after setting up the models
+
+
+
+
+nextjs and prisma:
+-create lib folder and another folder called prisma inside
+   -create a index.js file where you will initialize a prisma client. similar to mongoose
+
+-also under prisma folder create user.js which are query function related to user.
+
+
+sample prisma queries are:
+
+const users = await prisma.user.findMany(); => like User.find({})
+
+const userFromDB = await prisma.user.create({ data: user }); => like User.save({data: user})
+
+const user = await prisma.user.findUnique({    ====> like User.findOne({id, tweets: true})
+      where: { id },
+      include: { tweets: true },
+    });
+    
+    
+---- so if we test api endpoint in postman or thunderclient, say create a user, we will be able to successfully create a user and see the first user in mongodb
+
+---- success creating and fetching users from mongodb using prisma
+
+
+===Layout and nested layouts
+--first that is rendered is layout component, next are child layouts if any, or child pages
+
+
+
+
+===CONTINUATION
+
+pt 2 feb 17
+
+SUSPENSE, Error Boundaries, STATIC VS DYNAMIC
+
+
+1. SUSPENSE
+loading.jsx
+--to show a simple loading component, or a complicated one like a spinner component,
+--you need to add loading.jsx to the app directory where you want this loading suspense component
+
+----since by default components in app dir are server components, when there is a loading.jsx in the app dir,
+----next js automatically renders that loading component when a server component is fetching data.
+
+error.jsx
+-will act as an error boundary component
+--if any errors occur or the server throws an error, this component will render and prevent the app from crashing.
+--can display custom styled error page 
+
+
+
+2. GENERATESTATICPARAMS === GETSTATICPATHS
+--to generate static pages from paths much like how getStaticPaths and getStaticProps were used
+--this makes the page SSG
+
+
+===CONT PT 3
+
+AUTH, ROUTE GROUPS, DATA FETCHING
+
+
+ROUTE GROUPS - 
+
+-organize routes without affecting url.
+
+-use with parenthesis (routeGroupName). it is like a label and tho it is a folder name, will not affect routing.
+-if there is an about folder with page.jsx inside (routeGroupName), the path will still be just /about.
+
+---also able to have a root layout for each route group
+
+
+AUTH => next auth and prisma adapter
+
+npm i next-auth @prisma/client @next-auth/prisma-adapter
+npm i prisma -D (if not yet installed)
+
+
+====> we are changing our client implementation according to docs, better if we were using TS
+
+import { PrismaClient } from "@prisma/client";
+
+const client = globalThis.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalThis.prisma = client;
+
+export default client;
+
+
+
+====> update schema for next auth 
+=> then npx prisma generate (generate prisma client based on your schema)
+=> no need npx prisma migrate dev (not need for mongodb cause that's not how mongodb works as per hamed)
+

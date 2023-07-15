@@ -1,0 +1,167 @@
+WEBSOCKETS and SOCKET IO - Section 27 feb 14
+
+http => client request server response
+
+websockets => server - push data - client
+--established via http
+
+*you can use both together in one and the same node app.
+
+--in this module we will use SOCKET.IO library
+
+-socket io needs to be added on both server and client
+
+
+
+==
+1. in app js set up socket connections / channels
+
+--store app.listen to a constant "server"
+--below this require socket io and use server constant
+--add a listener to listen for client that will connect to the server
+
+---this is the way to go in 2022
+
+const express = require('express');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+ 
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+    }
+});
+
+db.once("open", () => {
+  console.log("DB connection Established");
+  const server = httpServer.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
+
+  io.on("connection", (socket) => console.log("Client Connected"));
+});
+
+
+
+
+=====
+for the client:
+
+1. npm install socket.io-client
+
+2. import openSocket from 'socket.io-client'
+--in file you want to use socket 
+
+3. use in componentDidMount
+=> openSocket('http://localhost:8080')
+
+4. if no error, you should see "Client Connected" in server console.
+
+
+
+
+========
+testing real time functionality...adding realtime features
+
+-create addPostREalTime function in client to add created post to state without refreshing
+
+- go to server and SHARE IO instance in app across files
+
+
+---to do this, create a new file, socket.js and transfer new Server initialization here
+
+
+socket.js
+
+---transfer new Server instance here.
+
+const { Server } = require("socket.io");
+
+let io;
+
+module.exports = {
+  init: (httpServer) => {
+    io = new Server(httpServer, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+      },
+    });
+    return io;
+  },
+  getIO: () => {
+    if (!io) {
+      throw new Error("Socket.io not initialized");
+    }
+    return io;
+  },
+};
+
+
+
+--- then just require this in app still using const io but requiring this function instead of using const io to create new Server instance.
+
+
+
+app.js
+
+
+
+
+const { createServer } = require("http");
+const app = express();
+const httpServer = createServer(app);
+
+const io = require("./socket").init(httpServer); // this way to share io 
+
+
+
+
+
+feed.js
+
+
+import function from socket.js => const io = require("../socket");
+
+-after creating a post, use getIO to emit action to all connected clients and pass data
+
+
+===>  io.getIO().emit("posts", {
+      action: "create",
+      post: { ...result._doc, creator: { _id: postCreator._id, name: postCreator.name } },
+      });
+
+---next step is adjust client side code to react to emitted event
+
+
+
+===client
+
+const socket = openSocket("http://localhost:8080");
+
+    socket.on("posts", (data) => {
+      if (data.action === "create") {
+        this.addPost(data.post);
+      }
+    });
+ 
+---save socket in a constant and add listener "posts", which you set as emit name, and receives the data object passed,
+---checks if action is create and uses data 
+
+
+
+--- so what this does is it registers an event listener in the javascript code as the component mounts.
+--- the event listens for a "posts" event. it waits for it continuously even after render.
+--- this event listener registers a callback funtion that will be called everytime there is a  "posts" event.
+--- basically the callback function call client function addPostRealTime which adjusts the state
+
+---also there will be an "posts" event emitted by the server everytime a post is created by any user.
+
+
+----DO THE SAME WITH UPDATING AND DELETING to update ui real time too
+---in delete implemented a page reload after delete to update ui. cool
+
+---add sort by createdAt descending in find post

@@ -1,0 +1,223 @@
+WORKING w GRAPHQL - section 28
+
+part2.
+
+
+19.  CREATE GET POST QUERY AND RESOLVER
+
+
+-add in schema - PostData and posts query which returns PostData
+
+
+   type PostData {
+        posts: [Post!]!
+        totalPosts: Int!
+    }
+
+   type RootQuery {
+        login(email: String!, password: String!): AuthData!
+        posts: PostData!
+    }
+    
+    
+-create posts function in resolver => similar to what you have in controller.
+
+
+
+20. USE GRAPHQL endpoint in frontend
+
+
+   const graphqlQuery = {
+      query: `
+          {
+            posts {
+              posts {
+                _id
+                title
+                content
+                imageUrl
+                creator {
+                  name
+                }
+                createdAt
+              }
+              totalPosts
+            }
+          }  
+         `,
+    };
+
+    fetch(`http://localhost:8080/graphql`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.props.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(graphqlQuery),
+    })
+
+
+
+21. ADDING PAGINATION
+
+-add page argument to posts query => posts(page: Int): PostData!
+
+---in resolver => pretty much same as in controller
+
+
+
+22. UPLOADING IMAGES implementation
+-since graphql cannot handle images becuse it only handles json data, we will use a separate rest endpoint for this
+-like setting up a post image middleware
+
+-----Basically, a combination of rest api and graphql
+
+---since graphql cannot handle binary data, we create a rest endpoint that will handle the image.
+
+---so from the front end use the rest api for saving the image.
+
+---image in formData is sent to the server, multer saves image in filesystem, then returns filePath (string) to the FE
+
+---then the filepath string from server is used again, included in the graphql arguments for create post.
+
+!!!!
+put request w image => server saves image w multer => server returns filepath of image to FE => FE includes in graphql
+
+
+-in app =>
+
+app.put("/post-image", (req, res, next) => {
+  if (!req.isAuth) {
+    throw new Error("Not authenticated.");
+  }
+
+  if (!req.file) {
+    return res.status(200).json({ message: "No file provided." });
+  }
+
+  if (req.body.oldPath) {
+    clearImage(req.body.oldPath);
+  }
+
+  return res.status(201).json({ message: "File stored.", filePath: req.file.path });
+});
+
+
+--- in FE =>
+
+--send image to server and let multer save image, and return filePath as response
+
+ fetch("http://localhost:8080/post-image", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${this.props.token}`,
+      },
+      body: formData,
+    })
+    
+    
+ --filepath is included in graphqlQuery
+    
+ fetch("http://localhost:8080/graphql", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.props.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(graphqlQuery),
+        });
+        
+        
+        
+        
+23. VIEWING A SINGLE POST --- trying on my own
+
+1. modify schema
+-add in rootQuery =>  post(id: ID!): Post!
+
+2. create post function in resolver
+
+ post: async (args, req) => {
+    if (!req.isAuth) {
+      const error = new Error("Not authenticated.");
+      error.code = 401;
+      throw error;
+    }
+
+    const postId = args.postId;
+
+    const post = await Post.findById(postId).populate("creator");
+
+    return post;
+  },
+  
+3. use graphql endpoint in FE and pass graphqlQuery
+
+    const graphqlQuery = {
+      query: `
+         {
+          post(postId: "${postId}"){
+            _id
+            title
+            content
+            imageUrl
+            creator {
+              name
+            }
+            createdAt
+          }
+         }
+      `,
+    };
+    
+4. done! :D
+
+
+
+24. UPDATING POST
+-again, schema first, add a mutation => updatePost(id: ID, postInput: PostInputData): Post!
+
+-then update function in resolvers --- long and a little complicated but somehow similar to controller
+
+
+25. DELETING POST
+
+----matarabaho but similar to controller.
+
+
+26. MANAGING USER STATUS
+--create a generic get user graphql endpoint which returns the USER. but in your graphql query, get only what you need
+-- which is the status. instead of making your endpoint just return status. which does not scale.
+
+
+
+27. USING VARIABLES - string interpolation is okay, but best practice is using variables, but kinda confusing...
+
+
+    const graphqlQuery = {
+      query: `
+        query FetchPosts($page: Int) {
+            posts(page: $page) {
+              posts {
+                _id
+                title
+                content
+                imageUrl
+                creator {
+                  name
+                }
+                createdAt
+              }
+              totalPosts
+            }
+          }  
+         `,
+      variables: {
+        page: page, // 1st is the one with dollar sign, 2nd is its value which is also page in above javascript
+      },
+    };
+
+
+
+GRAPHQL is okay...mej may familiarity na ako
+--basically very similar with rest api except for the schema and resolver setup and query string.

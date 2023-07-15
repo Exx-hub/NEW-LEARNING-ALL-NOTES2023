@@ -1,0 +1,144 @@
+TIPS AND TRICKS
+
+
+++change image onclick react
+
+use the event.target.setAttribute()
+
+  const handleClick = (e) => {
+    console.log(e.target);
+    e.target.setAttribute("src", circle);
+    e.target.setAttribute("alt", "circle");
+  };
+
+codepen example: 
+https://codepen.io/SundeepToor/pen/JBYgRv
+
+
+++div unclickable - either initial or after click
+pointer-events: none;
+
+
+++get value from div -- id or textContent
+
+e.target.id
+
+e.target.textContent
+
+pag input pwede name.
+
+
+++populate array - Array(9).fill(null)
+
+
+
+++when using flex for items, and one item has less content =>
+for example you have 3 boxes as flex items in a flex container.
+
+the first box only has a title, while other two have title and caption.
+
+to make them all same sizes even if the first one has no content, add width: 100% to the flex items.
+
+to force them to take up 100% of whatever is available.
+
+
+++animation from display none or unmounted component -- for page transitions too
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+
+
+++CheckoutWizard component, or like progression or steps - in acosta apparel project
+
+
+++using CORS middleware vs manual
+
+manual implementation - by setting headers
+
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  next();
+});
+
+
+++refreshing getServerSideProps data with useRouter
+const refreshData = () => {
+    router.replace(router.asPath);
+  };
+  
+  
+++tailwind fluid grid
+in tailwind config:
+in them: {}
+in extend: {}
+
+gridTemplateColumns: {
+     fluid: "repeat(autofit, minmax(15rem,1fr))"
+}
+
+=== use in classname as grid-cols-fluid
+
+
+
+
+++block - inline - inline block
+
+display:block==>brings on different line
+---takes up whole line
+
+display:inline==>brings on the same line==>but this doesnot let the height,margin-top and bottom,padding-top and buttom to be individually set for each element. So, here comes display:inline-block
+
+display:inline-block lets your bring everything to inline and also define their indivdual height, margin-top and bottom and padding-top and bottom
+
+
+
+++ before and after psuedo element content
+
+https://www.youtube.com/watch?v=xoRbkm8XgfQ
+
+
+
+++vercel deployed site, shows 404 when refreshed on a route
+
+
+
+Add redirect config 
+
+https://medium.com/today-i-solved/deploy-spa-with-react-router-to-vercel-d10a6b2bfde8
+
+in vercel, add vercel.json file in root directory and add
+
+{
+  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
+}

@@ -1,0 +1,90 @@
+DATA TYPES:
+
+INT - integer
+
+4 bytes of memory (32 bits)
+
+-2 to 31st power up to 2 to the 31st power minus 1 for 0.
+
+4 billion or negative 2billion and 2 billion
+
+
+
+unsigned int. (qualifier) - if you know your value will never be int.
+
+0 to 4 billion.
+
+
+
+CHAR - character
+
+1 byte (8 bits)
+
+
+FLOAT - floating point 
+
+4 bytes (32 bits)
+
+
+DOUBLE - double precision of float. to be more precise with decimal values
+
+8 bytes (64 bits)
+
+
+
+VOID - not a data type but a type.
+
+
+
+BOOL - boolean
+
+
+STRING - series of characters
+
+
+
+int c = 20
+
+
+
+LOOPS 
+
+while loop
+- can be infinite loop if just passed with true
+
+while (true)
+{
+// do this
+}
+
+- can be conditional depending on the condition passed. 
+
+while (x < 4)
+{
+// do this
+}
+
+
+
+do
+{
+// do this at least once...and again until condition is false
+}
+while (x < 4)
+
+
+for (int i = 0; i < 4: i++)
+{
+// do this. then increase i. if i equates to 4, dont do this anymore.
+// so code here will be done 3 times. 
+}
+
+
+
+
+
+
+
+
+
+

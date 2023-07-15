@@ -1,0 +1,168 @@
+June 22, 2023 - js mastery Nextjs 13 - promptopia
+
+
+LECTURE:
+
+NEXTJS features:
+1. ssr
+2. file-based routing (app directory) page.jsx
+3. api routes (full stack) route.js
+4. automatic code splitting
+
+
+
+client-side rendering -> client receives basic html and js, the browser downloads and executes the javascript
+                      -> which leads to rendering on the client and display of the website
+                                            
+= Server-Side Rendering -> rendering/ processing on the server, then sends fully rendered html to the browser
+
+
+= Server Components
+
+--all components created inside the app directory are all server components
+ -if you need client components for features like hooks, event listeners, you need to put "use client"
+
+
+= app dir filebased routing
+
+app/page.jsx - "/"
+app/posts/page.jsx - "/posts"
+app/posts/new/page.jsx - "/posts/new"
+app/posts/[postId] - "/posts/1" 
+
+
+= Data Fetching
+
+1. SSR - does not cache data, always fetches data
+
+2. SSG - caches data, hence static
+
+3. ISR - revalidates cache every set interval, combination of ssg and ssr
+
+
+
+= Route Handlers
+
+option 1: create api folder in app folder, andfollow file based routing 
+          ex. app/api/hello/route.js
+          
+option 2: create a route.js file directly in app folder
+          ex. app/route.js
+          
+          ---option 1 is recommended because page.jsx and route.js will clash
+          
+
+= SEO and METADATA
+
+1. static 
+
+2. dynamic
+ - generate metadata function
+
+
+
+=======
+
+Project:
+
+npx create-next-app@latest .
+
+no js
+no eslint
+use tailwind
+no to src
+
+install deps
+-npm i bcrypt mongodb mongoose next-auth
+
+folder archiecture:
+
+all in root:
+
+app
+components
+models
+public
+styles
+utils
+.env (file)
+
+
+
+copy tailwind config and globals from jsmastery github
+download assets and copy into public folder
+
+
+create page.jsx and layout.jsx in app dir
+ -add metadata
+ -construct html of layout
+ 
+ 
+
+1. start creating the HOME page
+
+2. Nav bar
+
+logo
+
+Desktop nav:
+create post link
+signout button
+profile link
+
+conditional signin button
+
+
+--used next auth getProvider
+
+mobile navigation
+- same links as desktop nav
+
+
+3. Next Auth PRovider
+
+create Provider component in components
+-SessionProvider HOC which you will wrap the whole app with so all parts of the app has access to the session
+- wrap everything within the body
+
+
+4. Next auth api
+--setting up Google signin, using new api of next. slightly different 
+
+app/api/auth/[...nextauth]/route.js
+
+
+-setup google console to get client id and client secret
+-paste to env
+- use in next auth for googleprovider
+
+
+5. setup database connection (mongoose)
+
+-create connectToDB function to connect to mongodb
+-set mongo uri in env
+
+-test database via auth, if able to signin / signup
+
+
+6. Create mongoose models (schema)
+
+create User model and export
+
+
+7. complete 
+
+signIn and session async functions in your next auth route handler
+
+
+
+========================
+
+
+Learning:
+
+1. top: 100% or top-full in tailwind, means it will place the absolute div, just below the parent.
+   - if the parent's height is 200px, the absolute div will be 200px from the top.
+   
+   
+2. way of connection to mongoose and keeping track of connection status

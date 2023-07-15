@@ -1,0 +1,76 @@
+NodeJs and TypeScript - Section 33
+
+run tsc app.ts to compile into app.js
+
+tsc --init to create a tsconfig.json
+
+
+type annotation
+
+const num1El: HTMLInputElement = document.getElementById("num1");
+
+
+The type annotation tells the compiler check that the assignment is fully valid and that num1El is indeed compatible with HTMLInputElement
+
+type assertion
+
+const num1El = document.getElementById("num1") as HTMLInputElement;
+
+Somewhat forced,
+The type assertion tells the compiler, I know what I'm doing, message is a UServerMessage, never mind what you think you know, I have more information and I know best.
+
+
+
+ Some checks are still performed even if you use type assertions so you might see double assertions
+
+You should always PREFER a type ANNOTATION to an assertion. Use assertion with care and only if you have to. 
+
+A type assertion is a hammer to get a square peg to fit into a round hole, useful at times but you might take a second look at what you are doing to make sure its right. Make sure it's not:
+
+
+Unions - number | string
+Object
+Array
+
+Type Aliases and Interfaces
+
+
+Generics - type that interacts with another type?
+
+Arrays are generics because of the values stored in it, generic types
+
+promises are generics because of the value it resolves to. that's the generic
+
+
+
+
+
+
+
+====================
+Node Express TS
+
+
+1. initialize node typescript express app
+
+gitignore
+tsc --init
+npm init -y
+
+npm i express
+
+npm i --save-dev @types/node
+npm i --save-dev @types/express
+
+
+you can already do this rest api with typescript
+
+root dir - ./src
+outdir - ./dist
+
+
+
+
+
+
+

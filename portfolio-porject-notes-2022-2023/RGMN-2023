@@ -1,0 +1,161 @@
+May 26, 2023 - June 2, 2023 
+
+DEVELOPMENT:
+
+
+1. create vite app - ts , clean up code
+2. install tailwindcss and animate css, react icons, react router
+3. create initial repo in github and deploy to vercel, for continous pipeline
+
+4. create tab with title and update favicon
+
+
+5. Landing component - create image over lap component
+
+6. create how it works component
+
+7. setup app routing
+--- use recommended createBrowserRouter setup by react router v6
+
+8. Generate workout component UI
+   - choose sport
+   - choose focus
+   
+   - onclicks and navigate to workouts after choosing sport and focus
+   - useState and useNavigate
+   - PASS sport and title in router state when route change. useNavigate and useLocation
+   
+9.  *can use rest api and data base here but with just few data, this will do
+
+    -Create data files, all workouts and exercise Sets
+    -create custom hook to fetch and sort exercises based on sport and level selected
+    -Create 5 workouts per sport and level jumbled
+    --increase time for difficulty - time only app for now
+    	
+
+10. 
+- Upload gifs of all exercises in cloudinary
+- modify workout fetch in hook, generate workoutList with appended imageUrl.
+
+
+11. WORKOUT COMPONENT
+- display workout cards
+- add start button fixed at bottom
+- route to Start Component when clicked and pass workouts as state using navigate and useLocation
+- workouts displayed with timer component
+
+12. timer controls and functions
+- useTimer hook
+- circleTimer component
+- timer control buttons
+- start timer on mount and on every next workout
+- route to complete component if last exercise ends
+
+
+13. COMPLETE component
+- confetti
+- animation
+- home and again buttons
+
+
+
+14. local storage functionality
+
+==============================================
+NOTES and LEARNING:
+
+1. 
+add a background lower z index can use negative, 
+add black color overlay with opacity 60% higher z-index than bg lower than elements can use negative, 
+then elements in this component default z-index or higher to show
+
+
+2. overlay bg color of button to skew button without skewing text inside
+
+ <button className="mx-auto px-4 py-3 rounded-md  text-black w-[170px] h-[60px] md:w-[220px] md:h-[67px] relative">
+ <div className="absolute inset-0 bg-white -z-20 -skew-x-[30deg] rounded-lg"></div>
+  START WORKOUT
+ </button>
+
+
+3. add span for border bottom that is not full width of content
+
+ <h2 className="text-2xl relative w-fit">
+        How does RGMN work?
+   <span className="absolute -bottom-2 lg:-bottom-4 bg-white left-[15%] lg:left-0 right-[15%] h-[3px]"></span>
+ </h2>
+ 
+ 
+4. new react router implementation
+
+
+5. SCROLL TO TOP
+
+useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+
+6. overlay on images, for text readability and effect on hover to lighten
+
+7. squoosh for reducing images to kbs in size
+
+
+8. can still pass data to other routes and as routes change with hooks useNavigate, useHistory
+   - access passed state with useLocation
+   
+
+9. TS learnings
+
+
+10. button that is fixed bottom with darkened overlay effect to add dimming effect to cards
+
+- wrap a div around the button, add height and width then add a gradient TO TOP, black to tranparent
+
+****CAN also be used for a background gradient effect..
+
+
+11. useEffect trigger code inside, put a variable that changes, even if that variable is not inside useEffect
+	- used workoutIndex passed into useTimer hook, and use as dep in useEffect to trigger timer start when index changes.
+	
+
+12. always cleanup useEffect like timers etc para hindi madoble, this is what strict mode is for.
+
+13. wrap functions in useCallback when used in useEffect
+
+
+14. easy animations and confetti - canvas-confetti
+
+
+15. Continue workout implementation with localstorage, but instead of hiding button, route to continue or if no data route to create new workout
+
+
+
+
+ALL DONE!! -
+
+
+MGA PWEDE GAYAHIN:
+
+1. animation - animate.css
+2. girl image for desktop and for mobile, becomes transparent - overlay
+3. continue workout functionality - localStorage
+4. maybe unique routing? like multi step form routing? - normal react router routing
+
+5. confetti when complete workout... clear saved workout when completed - canvas-confetti
+
+6. choose your focus images overlay - image dim for better visual and text
+
+7. why did he use an api? his workouts are not in database but hardcoded in the api. i think it can instead be hard coded without using api? - NO NEED FOR API
+
+8. store gifs in cloudinary too? or try to just use file system? with or without rest api. - CLOUDINARY
+
+9. try to recreate timer standalone app. with circle timer animation and clock timer - DONE
+
+10. custom loading spinner using tailwind and animation - no data fetched in my app :)
+
+11. can create a timer without circle timer, just second timer, but can practice doing the timer animation - DONE
+
+12. can use react-countdown npm if needed - useRef custom component used
+
+13. when you recreate try with no api first, just create api if really needed. - DONE

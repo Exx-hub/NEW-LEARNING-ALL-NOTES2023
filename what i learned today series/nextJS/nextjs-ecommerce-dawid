@@ -1,0 +1,78 @@
+nextjs-ecommerce-dawid
+
+feb 10
+
+
+GOALS:
+1. practice tailwind
+2. see how mongodb is connected
+3. see how getServerSideProps is used
+4. see how data fetching is done
+5. check if faster if using new database
+
+steps:
+
+
+1. npx create-next-app@latest
+2. setup tailwind
+3. setup mongodb and install mongoose
+4. setup seed api and hardcoded data.js
+5. setup models - Product
+
+6. create dbConnect function, and try seeding to populate db with products from data.js
+7. fetch products with getServerSideProps and display in index page
+8. create ProductItem component
+9. map through category names then filter and map through products of each category
+10. add search input and search filter functionality
+
+11. create footer component with navigation - home and cart
+12. create checkout page
+13. create layout component
+
+14. create context for cart global state, and wrap app with provider
+
+15. persist data with use-local-storage-state npm package
+
+
+
+
+
+GOOD TAKEAWAYS:
+
+1. mapping through items to display category names then mapping through products again to display products with specific category. even if you add an item with new category, it will be able to display it.
+
+
+2. Hiding scrollbar in tailwind -
+
+add these in global.css
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+--now you can use scrollbar-hide utility class.
+
+
+3. scroll snapping!
+on parent:
+-overflow-x-scroll snap-x scrollbar-hide
+
+on snap item:
+-snap-start
+
+
+4. heroicons for copying icons / svg instead of installing a library
+
+
+5. space-x-12 => margin right margin left for child elements?
+
+6. using the previous setState parameter in useContext instead of bringing in all items
+
+7. persist data using use-local-storage-state npm package

@@ -1,0 +1,56 @@
+21/11/22
+
+
+TAILWIND
+
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  
+index.css -
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+update react scripts to latest
+
+- npm install react-scripts@latest --- need this for old version of create react app, but if newly created react app, dont need this.
+
+-- tailwind styling should work after this update on react-scripts.
+
+TypeScript
+
+1. install typescript and types => npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+
+2. create or initialize tsconfig =>  npx tsc --init
+
+3. convert js files to ts
+
+4. edit tsconfig
+
+"jsx": "react-jsx",
+"moduleResolution": "node", 
+
+5. one by one fix errors and make app work
+
+6. for type problems use FixMeLAter and go back to it after
+
+export type FixMeLater = any;
+
+
+**for errors when importing images,
+
+create types dir in src, create index.d.ts then declare =>
+
+
+declare module "*.jpg";
+declare module "*.png";
+
+
+find all FixMeLAter and fix hehe

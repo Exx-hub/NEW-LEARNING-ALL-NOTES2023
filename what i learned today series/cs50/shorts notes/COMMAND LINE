@@ -1,0 +1,31 @@
+COMMAND LINE
+
+
+ctrl l - clear
+
+ls - list directory contents
+
+cd - change dir
+
+. - current dir
+
+.. - parent dir of current dir.
+
+pwd - present working dir (current dir)
+
+mkdir - make new directory
+
+mv - mv <source> <destination> => rename or mv to a diffrent dir
+
+cp - copy => cp <source> <destination>  ex. cp hello.txt hi.txt
+
+cp -r pset0 pset3 => copy a directory to another directory
+
+rm - remove --- delete file with prompt
+
+rm -f --- delete forcefully
+
+rm -r --- delete directory w prompt
+
+rm -rf --- delete directory forcefully
+

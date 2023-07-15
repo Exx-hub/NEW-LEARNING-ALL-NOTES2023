@@ -1,0 +1,98 @@
+14/11/22
+
+Dynamic Content and Templating Engines
+
+
+- thus far, we have been returning static html pages
+- most of the time we have some data managed on the server which we want to dynamically output
+- like list of products from a database
+
+
+1. Managing data without database
+2. render dynamic content in our views => templating engines
+3. Understanding Templating Engines
+
+
+
+-- for starters, let's try to store incoming request body data to a variable?
+
+
+- create products array in admin and export
+- import products array in shop and console log.
+- product array can be accessed in the shop file and data persists as long as the server is running.
+- only resets when server resets.
+
+===> this is an example of storing data and using data in node. but not ideal way because all instances of the server has access to data
+==> this is kinda like "dummy data sharing". for testing and for practice
+
+
+
+
+==TEMPLATING ENGINES==
+
+--HTML-ish template with placeholders
+
+=> node/express content plus templating engine.
+=> replaces placeholder with real data into html content
+
+===========> return an HTML file
+
+
+some templating engines:
+
+1. EJS
+2. PUG
+3. HANDLEBARS
+
+
+npm i ejs pug express-handlebars
+
+
+==PUG==
+
+
+// allows to set any value globally in our express application - to get stored value => app.get()
+app.set("view engine", "pug");
+app.set("views", "views");
+
+-- set default templating engine
+
+--after writing the pug file, instead of res.sendfile to send html, we use res.render
+
+--pug => ugly
+--handlebars => ugly
+
+
+
+==EJS==
+
+-- stick with ejs
+
+--- did assignment with EJS and its all good!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

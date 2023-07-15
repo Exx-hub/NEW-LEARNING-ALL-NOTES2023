@@ -1,0 +1,109 @@
+Jan 20, 2023
+
+NEXT AUTH Revisited
+
+
+npm i next auth
+
+
+create auth/[...nextauth].ts in your api folder
+
+-import NExtAuth in the file then
+
+-export default NextAuth(authOptions)
+
+-while passing authOptions inside.
+
+-configure authOptions object.
+
+set session, with strategy = jwt
+
+below session set providers: []
+
+
+import CredentialsProvider, this is our login option in our app. can be google or github etc.
+
+credentialsprovider can be simple email and password.
+
+--configure credentialsprovider in providers array.
+
+
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  providers: [
+    CredentialsProvider({
+      type: "credentials",
+      credentials: {},
+      authorize(credentials, req) {
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
+
+        console.log(email, password);
+
+        // perform login logic
+        // find out user from db
+        if (email !== "alvinfloresacosta@gmail.com" || password !== "123123") {
+          throw new Error("invalid credentials");
+        }
+
+        // if everything is fine
+        return {
+          id: "123123",
+          name: "alvin acosta",
+          email: "alvinfloresacosta@gmail.com",
+        };
+      },
+    }),
+  ],
+};
+
+export default NextAuth(authOptions);
+
+
+---play around with this if you need to.
+
+
+
+
+PROTECTED ROUTES
+
+---from the client, use the useSession hook. to check if there is an existing authenticated user saved.
+
+---render ui depending on loading, authenticated status etc.
+
+
+--- can redirect user to login page if unauthenticated.
+
+
+
+import { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
+
+const Protected: NextPage = () => {
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      Router.replace("/auth/signin");
+    },
+  });
+  console.log(session);
+  return <div>This page is protected</div>;
+};
+
+export default Protected;
+
+
+
+***in production need to add NEXTAUTH_URL and NEXTAUTH_SECRET in env variables
+
+---in development add in env.local
+
+

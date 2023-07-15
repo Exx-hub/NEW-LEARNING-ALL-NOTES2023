@@ -1,0 +1,53 @@
+June 26 ,2023
+
+Creating loading skeleton with react and react-loading-skeleton
+
+
+-use spinner if loading is fast, or when fetching more like when scrolling
+
+- use skeleton if page loads longer and there are multiple pages loading, instead of using multiple spinners
+
+
+
+npm i react-loading-skeleton
+
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
+
+<h2>{post.title || <Skeleton />}</h2>
+<p>{post.body || <Skeleton count={3} />}</p>
+
+
+for userlist for example, it will only render if user array in state is not empty, so putting skeleton
+like above will not show.
+
+
+for this we should create a skeleton component to mimic the user component:
+
+<CardSkeleton />
+
+
+
+import Skeleton from "react-loading-skeleton";
+
+// create an array with cards length, each item is null, [null,null,null...]
+// map through null array and return card skeleton for each card
+
+function CardSkeleton({ cards }) {
+  return Array(cards)
+    .fill(null)
+    .map((_, i) => (
+      <div className="card-skeleton" key={i}>
+        <div className="left">
+          {/* circle because image is circle and 40 is height and width of the image  */}
+          <Skeleton circle width={40} height={40} />
+        </div>
+        <div className="right">
+          <Skeleton count={4} style={{ marginBottom: ".6rem" }} />
+        </div>
+      </div>
+    ));
+}
+
+export default CardSkeleton;

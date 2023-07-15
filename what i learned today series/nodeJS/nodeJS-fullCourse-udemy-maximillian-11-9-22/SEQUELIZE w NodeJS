@@ -1,0 +1,435 @@
+December 1
+
+SEQUELIZE w NodeJS
+
+
+What is Sequelize?
+
+ORM => Object Relational Mapping library
+
+
+
+
+
+1. npm i sequelize
+
+2. connecting to the database =>
+
+in database.js
+
+
+const {Sequelize} = require('sequelize')
+
+const sequelize = new Sequelize('node-complete', 'root', 'lokalsoul', {
+  host: 'localhost',
+  dialect: 'mysql'
+})
+
+
+// test connection
+const tryConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+};
+
+tryConnection();
+
+module.export = sequelize;
+
+
+
+3. Creating / Defining a model --- quite similar to mongoose model
+
+
+const { Sequelize, DataTypes } = require("sequelize");
+
+const sequelize = require("../util/database");
+
+const Product = sequelize.define("product", {
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  price: {
+    type: DataTypes.DOUBLE,
+    allowNull: false,
+  },
+});
+
+module.exports = Product;
+
+
+4. create tables -- using sync, basically this connects your app to sql, and does your configuration like if you defined a Product, will create a table for that. 
+
+
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log(result);
+    app.listen(port, () => console.log(`Server Listening on port: ${port}.`));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
+5. inserting data and creating a product --- similar to mongoose save or create
+
+  Product.create({
+    title,
+    description,
+    price,
+    imageUrl,
+  })
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    
+    
+6. getting data from sql - findAll and findByPk (findById)
+
+ Product.findAll().then(results => console.log(results)).catch(err => console.log(err))
+ Product.findByPk(productId).then(result => console.log(result)).catch(err => console.log(err))
+ 
+ Product.findAll({where: {title: "alvin"}}).then(results => console.log(results)).catch(err => console.log(err))
+
+
+7. Updating and deleting
+
+UPDATE
+
+const prodId = req.body.productId;
+  const updatedTitle = req.body.title;
+  const updatedPrice = req.body.price;
+  const updatedImageUrl = req.body.imageUrl;
+  const updatedDesc = req.body.description;
+
+  Product.findByPk(prodId)
+    .then((product) => {
+      product.title = updatedTitle;
+      product.imageUrl = updatedImageUrl;
+      product.price = updatedPrice;
+      product.description = updatedDesc;
+      return product.save();
+    })
+    .then((result) => {
+      console.log("product updated");
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    
+DELETE
+
+const prodId = req.body.productId;
+
+  Product.destroy({
+    where: {
+      id: prodId,
+    },
+  })
+    .then((result) => {
+      console.log(result);
+      return res.redirect("/admin/products");
+    })
+    .catch((err) => console.log(err));
+    
+--- or use findByPk as well and call destroy on the result of findByPk
+
+
+
+8. Creating another model - User
+
+-same as Product. and will create user table too after sync is called.
+
+--set relations
+
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+
+sequelize
+  .sync({ force: true })
+  .then((result) => {
+    // console.log(result);
+    app.listen(port, () => console.log(`Server Listening on port: ${port}.`));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
+-- Association of data
+ --relation ship of data to other data. 
+ Product ---belongs to many--> Cart
+ Product ---belongs to many--> Order
+ User    --- has many => Products
+ User    ---has one => Cart
+ User    ---has many => Orders
+ 
+ 
+9. creating a dummy user upon sync
+
+
+sequelize
+  .sync()
+  .then((result) => {
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({
+        name: "Alvin",
+        email: "alvinfloresacosta.gmail.com",
+      });
+    }
+    return user;
+  })
+  .then((user) => {
+    console.log(user);
+    app.listen(port, () => console.log(`Server Listening on port: ${port}.`));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
+10. create middleware to add and include fetched dummy user in request object, so it is accessible in all incoming request
+
+
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
+
+
+11. Using Association Methods
+
+-- now in add product, instead of just title desc imageUrl and price, since user is associated with product, product now has a new key which is userId.
+
+-- we now pass the userId to all created products, to associate that product with a user. a user that is currently logged in for example.
+
+-- we will use the req.user we created with the middleware which holds the user
+
+ const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const price = req.body.price;
+  const description = req.body.description;
+
+  const userId = req.user.id;
+
+ Product.create({
+    title,
+    description,
+    price,
+    imageUrl,
+    userId,
+  })
+  
+  
+***but since user and product is associated, sequelize automatically creates a createProduct method which the user in req.user can use
+
+const user = req.user;
+
+ user
+    .createProduct({
+      title,
+      description,
+      price,
+      imageUrl,
+    })
+    .then((result) => {
+      console.log("Created Product Success");
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    
+-- this is equivalent to the implementation above. 
+
+
+12. Fetching Related Products
+
+
+--- for editing products and first finding product by Pk => Product.findByPk(prodId)
+
+-- user in req.user can also be used with another generated method => user.getProducts({ where: { id: prodId } })
+
+-- magic but kinda confusing.
+
+
+---- for getting all products --- same with the use of req.user => req.user.getProdcuts()
+
+ const user = req.user;
+  user
+    .getProducts()
+    .then((products) => {
+      res.render("admin/products", {
+        prods: products,
+        pageTitle: "Admin Products",
+        path: "/admin/products",
+      });
+    })
+    .catch((err) => console.log(err));
+
+
+
+13. One to Many and Many to Many Relations --- creating the cart Model and cartItem Model
+
+-- updating the associations of the models
+
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+User.hasOne(Cart)
+Cart.belongsTo(User)
+Cart.belongsToMany(Product, {through: CartItem})
+Product.belongsToMany(Cart, {through: CartItem})
+
+
+
+14. Creating and Fetching A Cart
+
+-- initialize a cart just like how you initialized a user in the sync.
+
+sequelize
+  .sync()
+  //   .sync({force: true})
+  .then((result) => {
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({
+        name: "Alvin",
+        email: "alvinfloresacosta.gmail.com",
+      });
+    }
+    return user;
+  })
+  .then((user) => {
+    return user.createCart();
+  })
+  .then((cart) => {
+    app.listen(port, () => console.log(`Server Listening on port: ${port}.`));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  
+  
+-- now in shopController, in getCart, use the req.user again, to get the cart associated with the current user
+-- after getting cart, chained with getting the products from the cart
+
+  user
+    .getCart()
+    .then((cart) => {
+      return cart
+        .getProducts()
+        .then((cartProducts) => {
+          res.render("shop/cart", {
+            path: "/cart",
+            pageTitle: "Your Cart",
+            products: cartProducts,
+          });
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+    
+
+15. Adding new products to the Cart or Increasing Qunatity if already in cart
+
+
+exports.postCart = async (req, res, next) => {
+  const prodId = req.body.productId;
+  const user = req.user;
+
+  try {
+    const cart = await user.getCart(); 
+ 
+    const itemAlreadyInCart = await cart.getProducts({ where: { id: prodId } });
+
+    let product;
+    let newQuantity = 1; 
+
+    if (itemAlreadyInCart.length > 0) {
+      product = itemAlreadyInCart[0];
+      newQuantity = product.cartItem.quantity + 1;
+    } else {
+      product = await Product.findByPk(prodId);
+    }
+
+    const addToCart = await cart.addProduct(product, {
+      through: { quantity: newQuantity },
+    });
+
+    res.redirect("/cart");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+
+16. Deleting Related Items and Deleting Cart Products
+
+
+postCartDeleteProduct = async (req, res, next) => {
+  const user = req.user;
+  const prodId = req.body.productId;
+
+  const userCart = await user.getCart();
+
+  const cartProducts = await userCart.getProducts({ where: { id: prodId } });
+
+  console.log(cartProducts);
+
+  const productToDelete = cartProducts[0];
+
+  const deleteItem = await productToDelete.cartItem.destroy();
+
+  res.redirect("/cart");
+};
+
+
+
+
+
+***converted all callbacks into async await - ex.  
+
+ const createdProduct = await user.createProduct({
+      title,
+      description,
+      price,
+      imageUrl,
+    });
+
+
+
+

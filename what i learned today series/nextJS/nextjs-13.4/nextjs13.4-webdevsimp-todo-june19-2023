@@ -1,0 +1,145 @@
+June 19, 2023 - wed dev simp next js 13.4 - todo list app
+
+
+
+npx create-next-app@latest .
+
+
+PRISMA SETUP:
+npm i -D prisma
+
+npx prisma init --datasource-provider sqlite
+
+create model in schema.prisma
+
+npx prisma migrate dev --name init ---- instantiates sqlite databse?
+
+
+
+// globals css and page.tsx
+-remove boilerplate css and page.tsx
+
+// layout.tsx
+-add container and styling to layout
+
+
+
+1. PAGE.tsx
+
+header - title and newtodo navlink
+
+ul - display fetched todos
+
+---> how to fetch? 
+-- can directly fetch inside the component or use database functions because these are server components
+-- turn page component into async and call prisma like fetch
+
+
+-used one databse fetching function
+
+const todos = await prisma.todo.findMany(); 
+
+- used one server actions to update complete property of todo
+
+
+export const dynamic = "force-dynamic"; --- used dynamic to invalidate cache every route to page
+
+
+2. /new/PAGE.tsx
+
+-createTodo server action
+- handle new todo from form.
+
+- link to go back using href=".."
+
+
+
+3. TodoItem.tsx
+
+
+"use client" - client component because of onchange on input
+
+
+
+
+=======
+PRISMA
+
+-sqlite database used
+-used one model (TODO)
+-db.ts file to deal with hot reloading and not instantiate multiple instances of prisma client
+
+========
+NEXTjs 13.4 features used
+
+1. app directory routing
+
+2. DATABASE functions - const todos = await prisma.todo.findMany() --- fetch data from database.
+
+3. "use client" -
+
+-- needed in todoItem.tsx because we have an onchange in the input wc is a client feature
+-- also if you have state hooks, effects etc. these are all client side
+
+4. SERVER ACTIONS - form actions? mutations? send data to server from body, directly in the component w/out api?
+
+- create your server action
+
+// SERVER ACTIONS - takes data from the form
+async function createTodo(data: FormData) {
+  "use server";
+
+  const title = data.get("title")?.valueOf();
+  //   const title2 = data.get("title");
+
+  if (typeof title !== "string" || title.length < 1) {
+    throw new Error("Invalid title");
+  }
+
+  await prisma.todo.create({ data: { title, complete: false } });
+
+  redirect("/");
+}
+
+
+- pass in as action in form
+
+<form action={createTodo}>
+// input title is important
+
+  <input
+  type="text"
+  name="title"
+  className="border border-slate-300 bg-transparent rounded px-2 py-1 outline-none focus-within:border-slate-100"
+  />
+
+</form>
+
+4. Next Link
+-- href for back -> <Link href="..">
+
+
+5. modified nextConfig to allow serverActions
+
+
+6. export const dynamic = "force-dynamic"; --- used dynamic to invalidate cache every route to page
+
+========
+
+tailwind:
+
+1. peer utility class - peer - peer-checked
+
+2. used container utility class
+
+==========
+
+difference from latest next app developed (stronk):
+
+1. src folder
+
+2. pages folder
+
+3. prisma initialization - maybe because of sqlite
+
+4. server action instead of fetch with post method - when doing mutations like create update or delete

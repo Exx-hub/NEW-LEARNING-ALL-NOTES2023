@@ -1,0 +1,83 @@
+June 4, 2023
+
+pedro tech firebase refresher
+
+
+1. create a react app, i used vite
+
+2. npm i firebase - install firebase in your react app
+
+3. go to firebase console and create new project
+
+4. register app and generate sdk 
+   - with firebaseConfig object
+   
+
+5. in src create folder firebase-config.js file
+   - copy firebaseConfig and initialize a connection with initializeApp and pass in firebaseConfig
+   - const app = initializeApp(firebaseConfig)
+   
+6. create firestore database in firebase console
+- encountered error => cannot enable firestore for this project an unknown error occurred
+
+7. modify rules and customize database schema you need, for now create a single collection with one user
+
+
+8. connect your firebase firestore to your react app
+- in firebase config, create db constant , call getFireStore and pass app
+- export db
+
+
+- const db = getFirestore(app)
+
+
+9. test querying from firebase firestore
+
+-> fetch users
+  - in your react app, create users state and create getUsers function and put inside of useEffect.
+  - create a reference to the collection you are connecting to
+  - const usersCollectionReference = collection(db, "users") -> establish a connection to a collection
+  
+  
+--- get all documents in from a collection -> getDocs (useEffect)
+	-const data = await getDocs(usersCollectionReference);
+	- const parsedData = data.docs.map((doc) => {
+           return { ...doc.data() };
+            });
+
+        - setUsers(parsedData);
+        
+
+-> ADDING USERS
+
+--- in an async function 
+    =>  await addDoc(usersCollectionReference, { name, age }); 
+    --- 1st argument is collection you want to connect to
+    --- 2nd arument is object you want to add 
+  
+
+-> UPDATE USERS
+
+
+  const handleUpdate = async (id, age) => {
+    console.log(id, age);
+
+    const newData = { age: age + 1 }; // values to update
+
+    const userDoc = doc(db, "users", id); // get reference to document using id
+
+    await updateDoc(userDoc, newData); // update doc function pass in doc reference and values to update
+
+    console.log("document has been updated");
+  };
+  
+  
+-> DELETE
+
+    const handleDelete = async (id) => {
+      const userDoc = doc(db, "users", id);
+      await deleteDoc(userDoc);
+
+      console.log("document has been deleted");
+     };
+

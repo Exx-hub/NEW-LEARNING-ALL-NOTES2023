@@ -1,0 +1,158 @@
+July 1, 2023 - Products App - sangam rn
+
+
+npx create-expo-app@latest .
+
+
+
+==folder structure
+
+
+==ROUTING using REACT NAVIGATION
+ -> react navigation for this project
+ 
+   -npm install @react-navigation/native
+   -npx expo install react-native-screens react-native-safe-area-context
+   -npm install @react-navigation/native-stack
+   -npm install --save @types/react-native
+   
+1) creating stack navigator
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+   <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Favorites" component={Favorites} />
+        <Stack.Screen name="Product Details" component={ProductDetails} />
+      </Stack.Navigator>
+    </NavigationContainer>
+ 
+    
+2) bottom tabs navigation like a bottom navbar
+
+-npm install @react-navigation/bottom-tabs
+
+
+function MyTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="List of Products" component={ProductListing} />
+      <Tab.Screen name="Favorites" component={Favorites} />
+    </Tab.Navigator>
+  );
+}
+
+ <Stack.Screen
+  name="Bottom Tabs"
+  component={BottomTabs}
+  options={{
+   headerShown: false,
+  }}
+ />
+ 
+
+
+==Fetching Data and Context API
+
+-context api 100% the same as in a react app.
+1. create context
+2. create context provider component (HOC) -> pass data through value prop, can add state
+3. wrap whole app with HOC
+4. use context in components with useContext
+
+5. use data from context to display as flatlist
+
+
+==Navigation Methods
+
+  const navigation = useNavigation()
+
+  const handlePress = (id) => {
+    console.log(id);
+    navigation.navigate("productDetails", { id });
+  };
+  
+
+==Navigate to dynamic page/route
+
+-getting data from navigation
+ 
+ --> const route = useRoute();
+ 
+ --> const id = route.params.id
+ 
+ 
+ 
+== HEADER ELEMENTS
+
+1. set options in stack.screen 
+
+
+or
+
+
+2. if you need props or id to use as parameter use like this
+
+useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <Pressable style={styles.button} onPress={() => setModalVisible(!modalVisible)}>
+            <Text style={styles.buttonText}>Add to favorites</Text>
+          </Pressable>
+        );
+      },
+    });
+  }, []);
+  
+
+== MODAL COMPONENT for REACT NATIVE
+
+const [modalVisible, setModalVisible] = useState(false);
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+       >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>  
+ 
+
+
+== STYLING Buttons
+
+- Button element native to react native, has limited styling and has no style prop
+
+---an alternative would be using a pressable and text instead
+
+
+ <Pressable style={styles.button}>
+    <Text style={styles.buttonText}>Add to favorites</Text>
+ </Pressable>
+ 
+ 
+ 
+---- context delete update similar to react, state mgt
+
+--- crud like operation done on context similar to react
+
+

@@ -1,0 +1,186 @@
+feb 1 started amazona basir
+
+STEPS:
+
+1. setup initial nextjs app, also setup tailwindcss
+2. create layout component w navbar, children and footer as usual
+-also create customHeadTags
+
+3. list products
+-create dummy data json
+-add images in public
+-create productItem component and map throught data items and render one productItem each. in a grid container
+
+4. product detail page
+
+5. context and reducer for cart 
+
+6. add to cart functionality and remove cart item
+
+7. cart badge
+
+8. cart page --- use context to get cart items and display cart items table
+
+feb3
+9. saving cart items in memory  -- to persist -- using js-cookie and fixind hydration error with DYNAMIC
+---npm i js-cookie
+
+Cookies.get('cart') and Cookies.set('cart')
+
+--done setting up cookie but getting HYDRATION error from next js because there is a mismatch in cookie content from the server and the client
+
+*to fix this issue we will render cartScreen as client side component instead of serverside
+
+---using next/dynamic
+
+----1. import dynamic from "next/dynamic"; 
+
+1st way => export default dynamic(() => Promise.resolve(Navbar), {ssr: false});
+
+
+2nd way 
+=> Separate cart page logic into CartComponent
+=> create DynamicCartComponent and pass CartComponent into dynamic callback function
+
+const DynamicCartComponent = dynamic(() => import("@/components/CartComponent"), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
+
+--render DynamicCartComponent instead of CartComponent.
+
+---one thing dynamic does is, prevents hydration error due to UI mismatch -- server client difference.
+---so use this To dynamically load a component on the client side, you can use the ssr option to disable server-rendering. gets.. haha
+
+
+
+10. Login page and form validation with react-hook-form
+
+--setup and use and practice react hook form
+
+
+11. setup and connect mongo db.
+
+---follow along with his mongodb way of connecting, then compare to yours.
+---cause there are multiple ways to connect to mongodb
+
+a. create new collection in mongodb
+b. get connection string
+c. i downloaded compass to check it out and test my new connection.
+d. pasted connection string in compass and tried to connect. voila. connection successful.
+
+
+12. create db.js and create db connection functions
+-connect
+-disconnect
+
+-(again im just following his implementation, using connection object and connection object checks)
+
+
+13. seed samples? i think this is his way of injecting data?
+
+-create models for User and Product
+-create seed.js in pages/api
+
+import User from "@/models/User";
+import data from "@/utils/data";
+import db from "@/utils/db";
+
+const handler = async (req, res) => {
+  await db.connect();
+  await User.deleteMany();
+  await User.insertMany(data.users);
+  await db.disconnect();
+  res.send({ message: "seeded successfully." });
+};
+
+export default handler;
+
+
+feb4
+14. create login API endpoint using next auth
+- also using react toastify
+
+
+a. install next auth and create auth folder in pages/api => create [...nextauth].js
+b. configure NextAuth
+c. Wrap app with session provider with session prop
+d. go to login page and use signIn in your submitHandler function.
+e. also install react-toastify to add toast to your login function
+f. also add a useEffect redirect if session exists meaning if there is a user logged in.
+g. display name of user if logged in, display login linked if not.
+
+
+
+15. User Menu Dropdown and logout functionality
+- install headless ui
+-use menu and menu item as dropdown just like in ant d.
+
+--in one of the link pass signout function with clear cookie and dispatch cart-reset actions
+
+
+16. create shipping screen
+-create CheckoutWizard component => much like steps in EDS.
+--- cool checkout wizard!
+
+--create shipping screen address form using react-hook-form again.
+--create new case in reducer for saving shipping address.
+--use setvalue of react hook form to autofill input fields of user values
+
+
+
+17. use Auth function in _app.js
+-then add .auth to component to make protected route. 
+
+- create unauthenticated page, to redirect here when from a protected route and not signed in. 
+
+
+18. creating the PaymentScreen / payment method page
+
+
+19. inject products to database with seeding
+
+20. fetching products from data base by getServerSideProps and displaying data on products list
+
+21. fetching products by id with getServerSideProps
+
+22. creating products/[id].js api, then calling endpoint in add to cart to check for item stock quantity
+-use in addToCartHandler
+
+
+feb5
+21. Create place order screen
+
+22. Order model and 
+
+23. order api
+
+24. place order handler function - dispatch clear cart items after order saved to db
+
+25. added useEffect reroute conditon in place order
+
+26. create order by id api endpoint to fetch single order
+
+27. create order screen
+-use reducer to manage state
+
+28. register screen and register api endpoint
+
+29. paypal integration
+-go to developer.paypal.com
+-create app in sandbox mode
+-get client id and put in env as PAYPAL_CLIENT_ID
+
+--install paypal npm => npm i @paypal/react-paypal-js
+--wrap app with paypal script provider
+--create paypal api endpoint
+--create loadPaypalScript and put in useEffect.
+--Paypalbuttons
+
+
+PAYPAL not paid attention to so much...
+
+30. order history screen
+
+
+

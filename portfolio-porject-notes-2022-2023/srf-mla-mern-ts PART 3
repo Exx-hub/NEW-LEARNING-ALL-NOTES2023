@@ -1,0 +1,171 @@
+January 9, 2023
+
+
+srf-mla-mern-ts PART 3
+
+back to BE:
+
+1. add hardcoded courses data in database
+
+2. create getAllCourses endpoint
+
+
+3.create enroll course endpoint...
+
+-able to add course to a user's courses array. but courseId only for now -- in postman
+
+
+switch to FE:
+
+4. create courseApiSlice and fetch courses through rtk query endpoint, then use rtk query hook to getCourses and display in
+   CourseList.
+   
+
+5. when add course is clicked, course is added to logged in user's courses array. agad agad hahaha
+
+
+6. show or display add course buttons if user logged in or not. ---checks if there is token. making guests unable to add course.
+---but even if buttons are displayed, maybe because of existing token but expired, backend will not allow enrolling
+---if token is expired or invalid.
+
+BE and FE
+7. populate courseIds saved in courses array of use. but limit populate to just show id and title not every detail of enrolled course.
+-- display in user profile.
+
+
+----stopped at populating courseIds and displaying course titles of enrolled courses of users..
+
+
+January 11, 2023 - part 4 notes
+
+
+1. Create modal for adding course, and cleaner add course flow.
+-when add course is clicked, modal appears. displays course details of clicked course. has cancel and confirm buttons.
+-if cancel closes modal and resets state, confirm call enroll endpoint to add course to users enrolled courses.
+
+
+2. Form validation for login and register - disable buttons if no input value, display error message
+
+-create helpers folder 
+ -create login validate helper function and registerValidate helper function to keep track of errors
+
+
+typescript tip! -- empty object at first but has email and password values
+
+
+interface LoginValidateValues {
+    email: string;
+    password: string
+}
+
+
+let errors = {} as LoginValidateValues;
+
+
+3. login and register form validation, error handling, custom hook for both. form submission and button disable flow and condition
+
+tasks done today haha
+
+=> confirmation modal - DONE
+=> disable buttons when modal open - DONE
+=> form validation - DONE
+=> disable form button / cannot be triggered if not complete values - DONE
+=> hooks for login and register - DONE
+=> register rtk query endpoint - DONE
+=> use title hook - DONE
+=> active nav links - DONE
+=> useAuth custom hook - DONE
+=> show or hide links if logged in or not - DONE
+
+
+
+January 12, 2022 Part 5
+
+
+1. fix persist issue with protected routes
+--able to persist logged in user info using local storate but having issue with protected routes
+--protected route is looking for token, token becomes null for a some time before being restored,
+--so app reads token as null and prevents profile route and redirects to login page but acts like user is logged in still.
+--only problem is it redirect to login page while being logged in.
+
+
+2. logout functionality
+--adding clear credentials in authState function and removing local storage item
+
+3. react-spinners and conditional loading text on buttons when loading.
+
+
+4. usage of react toastify for notifications
+
+---replace browser alerts with react toastify notifications
+
+5. add mobile menu and animation with keyframes
+
+6. add basic css style to user profile
+
+
+=> basic persist login, maybe hook or just localstorage? or in state? - DONE
+=> clear credentials in FE, and localstorage removeItem - DONE
+=> spinner components for fetching - DONE
+=> loading placeholder text when fetchingfor buttons - DONE
+=> replace alerts with toastify - DONE
+=> mobile nav menu - done
+=> add keyframes animation to mobile nav and modal - done
+=> styling user profile - dONE
+
+
+7. deploy?
+
+
+deploying node ts api can be tricky
+
+
+https://dev.to/tirthpatel/deploy-node-ts-express-typescript-on-vercel-284h
+
+
+---able to deploy a basic express ts app on vercel. planning to rebuild current server with this deployed one.
+
+--take away, when building node ts server, try to make initial deploy. so you can just update future deploys.
+
+
+******able to make server work. by fixing architecture.
+
+---my folders were outside src. moved all project folders inside src so was able to make it work.
+
+ex. moved controllers,routes, models inside src. 
+
+--at first these folders were outside src, kasama ng dist. so walang mabasa yung path sa deployed app.
+
+
+- so again, all ts files and folders go inside src, when transpiled will go to dist or build folder as js files.
+
+
+Project archi:
+
+>dist
+>node_modules
+>src
+*env
+*gitignore
+*package-lock
+*package.json
+*tsconfig.json
+*vercel.json
+
+
+--yehey!
+
+
+**now connect your fe to api
+
+SRF MNL - DONE! congrats!
+
+
+
+
+===========================
+**jwt decode --- not sure if i need this for now. cause diko naman ginagamit yung info na laman ng jwt sa FE
+
+**typescript any --- look for TS concerns, issues and etc.
+-- confirm, go back to typing mongoose reference. in both User and Courses
+

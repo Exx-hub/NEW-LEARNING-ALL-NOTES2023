@@ -1,0 +1,33 @@
+Jan 4, 2022
+
+Authentication
+
+
+currently using SESSION-BASED authentication approach.
+
+signup flow and login flow similar to standard way, without tokens for now.
+but using bcrypt to encrypt passwords.
+
+
+CSRF - cross site request forgery
+
+CSRF protection
+
+https://www.google.com/search?q=csrf+still+relevant+today&oq=csrf&aqs=chrome.0.69i59j69i57j0i512l2j0i20i263i512j69i60l3.1386j0j7&sourceid=chrome&ie=UTF-8
+
+npm i csurf
+
+
+
+// middleware
+// set variables available to your views, so isAuthenticated variable and csrfToken is accessible in your views,
+// even if you dont include them in your res.render options
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+
+
+

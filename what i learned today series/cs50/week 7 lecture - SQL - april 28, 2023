@@ -1,0 +1,235 @@
+week 7 lecture - SQL - april 28, 2023
+
+
+
+https://cs50.readthedocs.io/libraries/cs50/python/#cs50.SQL
+
+
+Structured Query Language 
+
+ --> querying databases
+ 
+ 
+= Flat-file database 
+
+---type of database that stores data in a plain text file
+
+- csv
+- xml
+- json
+
+
+
+= Relational database
+
+-tables
+ -rows and columns
+
+C - create , insert
+R - select
+U - update
+D - delete, drop
+
+CREATE TABLE table (column type, ...)
+
+
+
+===
+
+sqlite3 favorites.db
+
+sqlite> .mode csv
+sqlite> .import favorites.csv favorites
+sqlite> .schema
+
+
+SELECT * FROM favorites;
+SELECT title FROM favorites;
+
+
+
+-methods-
+
+COUNT  -----> SELECT COUNT(*) FROM favorites;
+DISTINCT ---> SELECT DISTINCT(title) FROM favorites; => fetches list of unique title values
+-----------------------> SELECT COUNT(DISTINCT(title)) FROM favorites; (combination)
+-----------------------> SELECT COUNT(DISTINCT(title)) AS titleCount FROM favorites; (put in a variable)
+
+AVG
+LOWER
+MAX
+MIN
+UPPER
+
+
+
+-helpers-
+
+WHERE 
+---- SELECT COUNT(*) FROM favorites WHERE genres = 'Comedy';
+---- SELECT COUNT(*) FROM favorites WHERE genres = 'Comedy' AND title = 'Friends';
+  
+LIKE
+ORDER BY - SELECT genres, COUNT(*) FROM favorites GROUP BY genres ORDER BY COUNT(*) ASC;
+LIMIT --- SELECT genres, COUNT(*) FROM favorites GROUP BY genres ORDER BY COUNT(*) DESC LIMIT 1;
+GROUP BY --- SELECT genres, COUNT(*) FROM favorites GROUP BY genres ORDER BY COUNT(*);
+
+
+-INSERT-
+
+INSERT INTO favorites (title, genres) VALUES ('EXchange 2', 'Korean Variety');
+
+
+
+-UPDATE-
+
+UPDATE table SET column = value WHERE condition;
+
+UPDATE favorites SET Timestamp = '10/28/2019 21:20:13' WHERE title = 'EXchange 2';
+
+
+
+-DELETE-
+
+DELETE FROM favorites WHERE genres = 'Korean Variety';
+
+
+
+================================================
+
+---SCHEMAS---
+
+
+
+
+
+-SQL DATA TYPES-
+
+BLOB (binary large object)
+INTEGER
+NUMERIC (like date)
+REAL (float)
+TEXT
+
+NOT NULL
+UNIQUE
+
+
+PRIMARY KEY
+FOREIGN KEY - id column in a table that references the primary key
+
+
+
+========================================================
+
+
+IMDB - shows.db
+
+SELECT * FROM people LIMIT 10;
+
+
+combined =>
+
+SELECT title FROM shows WHERE id IN (SELECT show_id FROM genres WHERE genre = 'Comedy') LIMIT 10;
+
+--- select ids from genres with Comedy genre first, then from that list select all titles from shows
+    that have ids included in the first query. lol
+
+
+looking for Steve Carell shows--
+
+SELECT id FROM people WHERE name = 'Steve Carell';
+
+SELECT * FROM stars WHERE person_id = (SELECT id FROM people WHERE name = 'Steve Carell');
+
+SELECT show_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = 'Steve Carell');
+ 
+to get all titles of his shows =>
+
+SELECT title FROM shows WHERE id IN (SELECT show_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = 'Steve Carell')); 
+
+
+USING JOIN =>
+
+sqlite> SELECT title FROM people
+   ...> JOIN stars ON people.id = stars.person_id
+   ...> JOIN shows ON stars.show_id = shows.id
+   ...> WHERE name = 'Steve Carell';
+
+or => 
+
+
+sqlite> SELECT title FROM people, stars, shows
+   ...> WHERE people.id = stars.person_id
+   ...> AND stars.show_id = shows.id
+   ...> AND name = 'Steve Carell';
+
+
+=====
+
+
+JOIN
+
+
+SELECT * FROM shows LIMIT 10;
+
+SELECT * FROM genres LIMIT 10;
+
+SELECT * FROM shows JOIN genres ON shows.id = genres.show_id LIMIT 10;
+
+
+shows and ratings
+
+SELECT * FROM shows JOIN ratings ON shows.id = ratings.show_id LIMIT 10;
+
+
+
+=====
+LIKE
+
+
+SELECT * FROM people WHERE name LIKE 'Steve Car%';
+
+--- will return all steves with surname starts with Car
+
+
+
+====================================================================
+
+INDEXING
+
+
+CREATE INDEX name ON table (column,...);
+
+CREATE INDEX title_index ON shows (title);
+
+--- will create a B-tree
+
+
+======================================
+
+using SQL in python
+
+
+ 
+from cs50 import SQL
+
+db = SQL("sqlite:///favorites.db")
+
+favorite = input("Favorite: ")
+
+rows = db.execute("SELECT COUNT(*) as n FROM favorites WHERE genres = ?", favorite) # ? is a placeholder
+
+# rows = db.execute("SELECT COUNT(*) as n FROM favorites WHERE genres = 'Comedy'") # hardcoded
+# execute returns a list of dictionaries
+
+print(rows) # [{'n': 117}]
+
+
+row = rows[0]
+print(row) # {'n': 117}
+
+print(row['n']) # 117
+
+
+--- when it comes to SQL using f string in python is bad.. for security  

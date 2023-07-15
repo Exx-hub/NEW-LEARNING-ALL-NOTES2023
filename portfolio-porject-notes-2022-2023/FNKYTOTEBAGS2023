@@ -1,0 +1,97 @@
+Janury 16, 2023
+
+started project
+
+FNKY tote bags - next js ts full stack app
+
+
+1. started with the navigation
+
+2. then the shop page with shop items
+
+3. product changing image on hover
+
+4. other routes done - product detail, signup page, login page
+
+5. connected mongodb and mongoose, created products data, able to fetch products and display
+---connectDb helper function
+---created models too
+
+6. did authentication with next auth and create new user api
+
+7. started protecting routes with useSession hook --next auth as well
+
+
+--- able to deploy to vercel working up to authentication
+
+**add env variable for nextauth_url and nextauth_secret in production for deployment to work.
+
+
+
+8. add to cart api, and add to cart buttons working
+
+9. create cart page ---- hard coded for now
+
+
+10. fetch cart, populate cart items from user cart with product ids
+
+
+11. create cart context for cart item count - done with reduce, also done item cart quantity in cart page
+
+12. create wishlist page, add to wish list , fetch wishlist and populate
+
+13. remove from wishlist
+
+----able to but not able to refresh and update ui. will continue doing orders part for now, going back to refresh part last.
+
+14. add shipping address to checkout
+
+15. add to orders api
+
+16. clear cart after add order
+
+17. get orders and display orders in orders page
+
+18. remove item from cart
+
+19. add to cart by quantity
+
+20. trying to fix - re-render after request to reflect/update ui
+
+Solution --- refreshData function in page component and fetchCartItems function from context...
+
+21. tried to deploy but encountered 500 error. found out this is because of populate...
+
+----found solution, need to import or use or call Product model, even if you will not directly use it. before populating, with Products
+
+
+const products = await Product.find()
+
+  const foundUser = await User.findOne({ email }).populate(
+    "cart.items.productId"
+  );
+  
+  
+ --- in this example, products and Product model is really not needed, but without this, populate of Product within User does not work.
+ --- it seems you need to import or call Product for user to be able to recognize the model for population?
+ 
+ ---also need to do this for creating Order.
+ 
+ 
+ 
+ 
+22. added createdOn field in Order model, sets new Date when order is created.
+23. created function to calculate delivery date, which is 7 days after order is created.
+24. display ETD and shipping address in orders
+25. disable checkout button if no shipping address
+
+26. media queries --- also added mobile nav menu
+
+
+27.react toastify?
+
+28. make images static instead of from cdn, check if app loads faster
+
+
+
+

@@ -1,0 +1,74 @@
+Dec 7, 2022 - web dev simp markdown blog
+
+1. npm init
+2. install dependencies and nodemon
+3. setup basic express server and test
+4. set up view engine (ejs)
+
+5. setup routes
+
+6. set up ejs views
+
+7. set up add new article route post and get
+
+8. connect to db mongoose , set up db connection
+
+9. create models folder and an articleSchema - structure correct data on schema
+
+10. start creating data and testing adding and reading data
+
+
+11. install marked and slugify
+
+12. add pre validate function to articleSchema, to create slug using the title as new article gets created
+
+articleSchema.pre("validate", function (next) {
+  if (this.title) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+
+  next()
+});
+
+
+13. delete and edit buttons
+
+a link <a> can only do get requests
+
+and a form method and action, can only do get or post
+
+so we need to instsall a library called method-override to be able to use delete or put in a form method
+
+after installation in server.js
+
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
+
+
+in html:
+
+	  <form action="/articles/delete/<%= article.id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
+          </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

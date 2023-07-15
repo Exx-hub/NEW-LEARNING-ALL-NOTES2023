@@ -1,0 +1,23 @@
+UNDERSTANDING VALIDATION - Section 18
+
+Prevent user from entering anything , and that invalid data saved to database. --- this must be avoided.
+
+
+
+How to Validate?
+
+1. client-side validation (optional and more for user experience.)
+-like displaying errors, disabling the button etc.
+
+
+2. server-side validation
+-more important for security
+
+
+-use a library for this express-validator
+
+---will have to study documentation on this to check if outdated lecture
+
+
+sanitizing input!
+

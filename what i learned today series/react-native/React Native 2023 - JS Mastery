@@ -1,0 +1,103 @@
+React Native 2023 - JS Mastery - April 5, 2023
+
+Expo for RN is like CRA or Vite for React.
+
+
+new feature -> Expo Router (file based routing like nextjs)
+
+Text -> like p
+
+View -> like div
+
+buttons -> TouchableOpacity
+
+map function -> FlatList
+
+ScrollView
+
+SaveAreaView - if you want content visible within the visible area
+
+
+for larger lists with smooth scrolling, got for flat list
+
+for smaller lists, go for map
+
+
+
+== App Building Start
+
+
+
+1. npx create-expo-app@latest --example with-router
+
+2. create app folder and inside, create index.js and _layout.js
+
+3. setup initial boiler plate for index and layout
+
+4. install additional dependencies
+--- npm i expo-font axios react-native-dotenv
+
+
+5. can startup basic app by running  --- npm start
+
+
+6. add predefined, assets ,styles, constants folders -- to make development faster
+
+7. start with index - basically the home page
+
+imports -
+
+
+import { useState } from "react";
+import { View, ScrollView, SafeAreaView } from "react-native";
+import { Stack, useRouter } from "expo-router"; // like react router of some sort
+import { COLORS, SIZES, icons, images } from "../constants";
+import { Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome } from "../components";
+
+
+
+8. 
+
+SafeAreaView - main container
+
+Stack - like pages in routing. 
+
+Stack.Screen - screen of a stack
+	     - can add options like header styles
+
+ScrollView
+
+View
+
+	    
+	    
+Custom components:
+ScreenHeaderBtn
+Welcome
+Popularjobs
+Nearbyjobs
+
+
+9. Populate code for empty components
+a. ScreenHeaderBtn - use props the same way in react
+
+const ScreenHeaderBtn = ({ iconUrl, dimension }) => {
+  return (
+    <TouchableOpacity>
+      <Image source={iconUrl} />
+    </TouchableOpacity>
+  );
+};
+
+
+b. Welcome
+
+c. Popular jobs
+
+
+10. Create custom hook for fetching - useFetch
+
+11. Use custom hook to fetch data from api and display components based on fetched data
+
+12. dynamic page, single job details page
+

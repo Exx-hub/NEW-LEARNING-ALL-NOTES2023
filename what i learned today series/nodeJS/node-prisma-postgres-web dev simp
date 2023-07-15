@@ -1,0 +1,199 @@
+web dev simp node prisma starter
+
+
+1. install dependencies
+
+=> npm i -D prisma typescript ts-node @types/node nodemon
+
+2. create a tsconig file
+
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "lib": ["esnext"],
+    "esModuleInterop": true
+  }
+}
+
+
+3. initialize prisma to create env file and schema.prisma
+
+=> npx prisma init --datasource-provider postgresql
+
+
+
+schema.prisma =>
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+generator => what your code is generated into
+
+
+4. add your DB Connection string to env.
+
+5. create your models
+
+6. run npx prisma migrate dev --name init => migrate your changes
+
+7. install prisma client => npm i @prisma/client
+
+---intial generation already done when migrated
+
+---if you need to manually re generate client => npx prisma generate
+
+
+8. create a file script.ts and paste this code
+
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
+---this allows you to access and interact with the prisma client.
+
+---put your prisma queries in this file
+
+ex. const users = await prisma.user.findUnique({ where: { id: 1 } });
+
+
+====
+so this is the basic overview of prisma:
+
+1. schema.prisma
+-datasource 
+=> which is the database you are using
+=> only one datasource should be connected
+
+-generator 
+=> generates a prisma client or library if you will, to interact with database, instead of writing raw sql or mongodb queries
+=> can have multiple generators
+
+
+-models => structure of data in your database. "schemas"
+
+----all in this one file.
+
+----next is you make your migrations or changes you make in the schema file
+
+
+======
+Relationships:
+one to one
+one to many
+many to many
+
+
+
+2. after changes or models setup =>
+npx prisma migrate dev again
+
+
+query examples:
+
+  // find user using a unique field, and filtering data returned
+  const user = await prisma.user.findUnique({
+    where: { email: "Sally@test.com" },
+    select: { email: true, name: true },
+  });
+  
+  
+  // create multiple, pass data array
+   const users = await prisma.user.createMany({
+    data: [
+      {
+         name: "Kyle",
+         email: "Kyle@test.com",
+         age: 27,
+      },
+      {  name: "Sally", 
+         email: "Sally@test.com", 
+         age: 32 
+      },
+    ],
+  });
+  
+  
+  // create with select filter
+  const user = await prisma.user.create({
+    data: {
+      name: "Kyle",
+      email: "Kyle@test.com",
+      age: 27,
+      userPreference: {
+        create: {
+          emailUpdates: true,
+        },
+      },
+    },
+    select: {
+      userPreference: { select: { id: true } },
+      name: true,
+    },
+    
+    
+ // pagination => skip the 1st, get next 2
+ // something like items per page and skip as well in mongoose
+ 
+   const user = await prisma.user.findMany({
+    where: { name: "Sally" },
+    take: 2,
+    skip: 1
+  });
+
+// sort result using a field. in this example using age and ascending order
+ const user = await prisma.user.findMany({
+    where: { name: "Sally" },
+    orderBy: {
+      age: "asc",
+    },
+  });
+
+ 
+ //not filter
+ 
+   const user = await prisma.user.findMany({
+    where: {
+      name: {
+        not: "Sally",
+      },
+    },
+  });
+  
+  // age less than, gt for greater than
+   const user = await prisma.user.findMany({
+    where: {
+      age: {
+        lt: 20,
+      },
+    },
+  }); 
+  
+  // name is sally and age > 20
+  const user = await prisma.user.findMany({
+    where: {
+      name: "Sally",
+      age: {
+        gt: 20,
+      },
+    },
+  });
+  
+  // kinda like includes. will return all records that has .com in their email
+  // endsWith and startsWith may be used too
+    const user = await prisma.user.findMany({
+    where: {
+      email: { contains: ".com" },
+    },
+  });
+

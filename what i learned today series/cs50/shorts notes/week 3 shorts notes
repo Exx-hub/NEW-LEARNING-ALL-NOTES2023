@@ -1,0 +1,44 @@
+Week 3 Shorts
+
+
+LINEAR search - its like one by one search until found., then it stops or when the list ends.
+
+worst case - the target is at the last place or not at all. - O(n)
+best case - target is at the first place. - Omega(1)
+
+
+BINARY search - divide and counquer, divide by half each time. like the yellow pages tore in half everytime
+	      - list should be sorted lower to greater left to right
+	     
+worst case -  O(log n)
+best case - Omega(1)
+
+
+
+BUBBLE sort - comparing items by two and swapping if not in order, then compare next adjacent pair
+
+worst case - O(n * n) or n to the 2nd power
+best case - Omega(n)
+
+
+
+SELECTION sort - search and find smallest and swap smallest to the first element. then start with 2nd element
+
+worst case - O(n * n) or n to the 2nd power, n squared
+best case - Omega of n squared
+
+
+
+MERGE sort - sort smaller arrays then combine/merge, leverages something like recursion
+	   
+worst case - O(n log n)
+best case - Omega(n log n)
+
+
+==
+
+RECURSION - function that calls itself
+	  - ends if base case reached, then goes back up the call stack
+
+
+

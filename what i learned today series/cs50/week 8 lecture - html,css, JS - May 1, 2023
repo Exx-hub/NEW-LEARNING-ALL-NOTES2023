@@ -1,0 +1,94 @@
+week 8 lecture - html,css, JS - May 1, 2023
+
+
+first internet -> ARPANET
+
+
+=
+TCP/IP - 
+
+IP -
+IP Addresses - #.#.#.# ex. 192.168.123.123
+
+--getting data from a sending machine to another
+
+TCP - transmission control protocol
+-distinguishes one type of service from another
+
+-- getting data to the correct machine and correct service and guarantees delivery of packets
+(port numbers to determine type of service)
+
+=
+PORT Number
+-to which service is relevant
+
+80 - HTTP
+
+443 -  HTTPS
+
+21 - FTP
+
+25 - SMTP
+
+53 - DNS
+
+
+=
+DNS - Domain Name System
+
+- convert domain names to ip addresses and vice versa
+	www.acosta.codes =>  71.76.81.222 
+
+
+=
+TLD - top level domain
+
+.com
+.io
+.org
+
+
+=====
+
+Fully Qualified Domain Name
+
+https://www.example.com/folder/file.html
+
+
+protocol/scheme - https
+hostname - www
+domain name - example
+tld - .com
+path - /folder
+file - /file.html
+
+
+
+==
+
+HTML
+
+
+==
+
+
+CSS
+
+
+==
+
+JS
+
+
+
+
+
+
+
+
+
+
+
+
+
+

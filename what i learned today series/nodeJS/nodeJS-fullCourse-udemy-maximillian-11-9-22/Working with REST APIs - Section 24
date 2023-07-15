@@ -1,0 +1,99 @@
+Working with REST APIs - the basics
+
+
+Decoupling Frontend and Backend
+
+*when you need a different kind of response, not html pages.
+
+*Front end ui is decoupled from the backend server.
+
+-like rest api for a mobile app, mobile app does not use html
+-single page apps like react Front End
+-service apis like google maps where you need the data.
+
+
+
+
+REST API => REpresentational State Transfer
+
+=> we transfer data instead of user interfaces w data
+=> and the frontend deals with the data however needed.
+
+JSON is primary form of data used in rest api data exchange
+
+
+
+API enpoint === http method and path ex. POST /login
+
+
+HTTP Methods = GET POST PUT PATCH DELETE OPTIONS
+
+
+REST Principles
+
+1. Uniform Interface - clearly defined api endpoints , clearly defined req res data structure
+
+2. Stateless Interactions - server and client dont store any connections history, every request is handled separately
+
+3. cacheable - servers may set caching headers to allow client to cache responses
+
+4. client-server - server and client are separated, client is not concerned with persistent data storage
+
+5. layered-system - server may forward request to other apis
+
+6. code on demand - executable code may be transferred from server to client
+
+
+
+....starting new rest api project
+
+
+-initialize new express project.
+-do basic initialization.
+- getPost route and createPost route
+
+-testing on postman
+
+
+CORS - cross origin resource sharing => 
+
+security mechanism from the browser, that does not allow you to share resources across origins/domains
+
+
+--if both client and server are on the same domain.  works
+
+-- but if they are not on the same domain, there will be cors issues. 
+
+
+----to overwrite this, since rest apis are used by different clients (origins),
+=> use cors middleware
+
+or manually set headers in an express middleware
+
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  next();
+});
+
+
+--- for post request, content type application json is important for the body to be read by server (body is json).
+--- so content-type should be application/json, if not set, body will be blank object, even with JSON.stringify
+
+
+
+
+REST APIS
+-all about data , no ui logic is exchanged
+- normal node servers which expose endpoints for the clients to send requests to.
+- json is the common data format, used both in request and response
+- decoupled from the clients that use them
+
+requests and responses
+-attach data in json format and let the other end know by setting content type header => application/json
+- cors errors occur when using and api that does not set cors headers, and your client and server are on different origins
+
+

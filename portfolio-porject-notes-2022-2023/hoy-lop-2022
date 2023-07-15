@@ -1,0 +1,93 @@
+11/27/22
+
+Pauline Blog - NextJS TS 
+
+
+1. bootstrap a new nextJs - TS app
+
+2. npm i react-icons
+
+3. npm i react-syntax-highlighter
+4. npm i react-markdown
+
+
+
+5. did home page ui design day 1
+
+
+6. ROUTING
+
+7. added subNavigation component to blog and top picks
+
+8. used global container styles for container of each page.
+
+9. markdown logic using post-utils
+
+10. blog PAGE view / layout
+
+11. footer with socials
+
+12. media queries
+
+13. top picks logic
+
+14. SubLayout Component --- includes subnavigation and socials -- children wrapped
+
+before change:
+
+/blog/index.tsx
+
+ // <article className="container">
+    //   <SubNavigation title="Blog" />
+    //   <BlogList blogs={props.blogs} />
+    //   <Socials isFooter={true} />
+    // </article>
+
+
+/blog/[slug].tsx
+
+ // <article className="container">
+    //   <SubNavigation title="hoy Lop!" />
+    // <section className={styles.blogPostMain}>
+    //   <section className={styles.blogPostHeader}>
+    //     <p>{readableDate}</p>
+    //     <h2>{blog.title}</h2>
+    //   </section>
+    //   <section className={styles.blogPostBody}>
+    //     <ReactMarkdown components={customRenderers}>
+    //       {blog.content}
+    //     </ReactMarkdown>
+    //   </section>
+    // </section>
+    //   <Socials isFooter={true} />
+    // </article>
+    
+
+/top-picks/index.tsx
+
+<article className="container">
+      <SubNavigation title="Top Picks + Recos" />
+      <BlogList blogs={blogs} />
+      <Socials isFooter={true} />
+    </article>
+    
+    
+================================
+-remaining todos:
+
+markdown anchor tags - change color
+other content>
+page transition
+youtube link
+socials link
+tabs - text
+beauty nature bargains - page and links
+typescript things..
+
+===============================
+upgrades:
+youtube embed in markdown?
+study more about markdown features
+how to add new files?
+
+animations for page transitions?

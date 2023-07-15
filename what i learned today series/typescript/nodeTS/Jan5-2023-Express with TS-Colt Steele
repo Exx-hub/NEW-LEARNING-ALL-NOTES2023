@@ -1,0 +1,85 @@
+January 5, 2023
+
+Colt Steele - Express with TS 
+
+1. write TS in a TS file
+2. turn those TS into JS
+3. serve JS
+
+
+
+-install type declarations
+npm i @types/express @types/node
+
+
+- we dont use require in TS
+
+// const express = require("express"); --- no types
+import express from "express" --- you can see types with this now
+
+
+
+import express, {Express, Request, Response} from "express";
+
+just by installing the types for node and express,
+express already figured out or inferred the types of app request and response
+you dont really need to explicitly type but you can.  
+
+
+-- now since you have converted index.js into ts, we cant run it in node anymore using node index command.
+-- what we need to do is convert the typescript code into javascript so node can read it.
+
+
+=> so create a tsconfig file --- tsc --init
+
+
+--- in tsconfig, uncomment outDir and add ./dist as value. this will transpile your typescript code into js inside the dist folder.
+--- so app.ts gets transpiled into app.js into the dist folder.
+
+
+=== add scripts to automate these => 
+
+&& => do this and then this
+
+&  => do these at the same time.
+
+"build": "tsc" ====> one time transpiling of ts files into js files.
+
+"build": "rimraf dist && tsc", ==> can also use rimraf package to delete old dist contents when building
+
+
+"start": "node dist/index.js", ====> standard command, runs index.js
+
+
+"dev": "tsc -w & nodemon dist/index.js" 
+
+====> watches changes in your index.ts and transpiled automatically into your index.js and runs index.js using nodemon
+    
+    
+    
+ "scripts": {
+    "build": "rimraf dist && tsc",
+    "prestart": "npm run build",
+    "start": "node dist/index.js",
+    "predev": "npm run build",
+    "dev": "tsc -w & nodemon dist/index.js"
+  },
+  
+  build in scripts with pre - so when you run start or dev scripts with pre and same name gets run first.
+  can also have post scripts   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+

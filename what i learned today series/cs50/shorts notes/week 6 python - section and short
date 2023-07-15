@@ -1,0 +1,157 @@
+week 6 python - section and short
+
+topics:
+
+string
+dot notation (methods)
+loops
+dictionaries
+libraries
+file reading and writing
+
+
+
+
+
+== Strings
+
+text = input("What is your name? ")
+
+-comparing strings
+
+if text == "alvin":
+    print("Same.")
+    
+text[0] // "a"
+
+
+
+== Dot Notation 
+
+-we can use string methods using dot notation
+
+text.strip() - remove whitespaces
+text.lower() - converts all chars into lowercase
+text.catpitalize() - convert first char into uppercase
+
+
+text.split() - split a string into items delimited
+
+== LOOPS
+
+for/in - iterate through something called an "iterable"
+
+iterables:
+-string
+-list
+-tuple
+-dicts
+-range
+-sets
+
+
+
+for c in text:
+    print(c)
+    
+    - loop through each char of the text
+
+for word in words:
+    print(word)
+    
+    - can be used for lists too
+    
+    
+for _ in words:
+    print("Goodnight Moon")
+    
+--looping through word list but not using variable we use underscore    
+== Slicing a list
+word[2:] - item at 2nd index and up to end of list
+word[2:4] - item at 2nd index and item before 4th index
+
+*1st argument is inclusive 2nd argument is exclusive
+
+
+
+== DICTIONARIES
+
+- key value pairs
+- for lookup
+- similar to javascript object
+
+book = dict() or book = {}
+
+book["title"] = "Corduroy"
+book["author"] = "JK Rowling"
+
+print(book["title"]) // Corduroy
+
+or
+
+book = {
+    "title": "Goodnight moon",
+    "author": "Margaret Wise Brown"
+}
+
+-- can also be list of dictionaries
+
+
+== TUPLES
+
+("George Washington", 1789)
+(1,2,3,4,5)
+
+-tuples are iterable
+
+my_list = [(1, 2), (3, 4), (5, 6)]
+
+# Iterate over the list of tuples and unpack them
+for a, b in my_list:
+    print(a, b) 
+
+
+
+
+== METHOD CHAINING -- just like in javascript
+
+book["title"] = input("Title: ").strip().capitalize()
+
+
+
+== LIBRARIES AND MODULES
+
+csv module -
+
+-csv -> comma separated values
+
+import csv
+
+from csv import DictReader
+
+
+
+== File READING and WRITING
+
+import csv
+
+books = []
+
+# add books to your shelf by reading from books.csv
+
+# open while indented, and close when indentation ends
+with open("books.csv") as file:
+    file_reader = csv.DictReader(file)
+    for book in file_reader:
+        books.append(book)
+
+for book in books:
+    print(book["Title"])
+    
+    
+
+
+=====================================================================
+
+week 6 short
+

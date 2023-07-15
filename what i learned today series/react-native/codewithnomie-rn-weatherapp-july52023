@@ -1,0 +1,197 @@
+July 5, 2023 - react native weather app code with nomi
+
+
+libraries used:
+
+expo
+nativewind
+react navigation
+react native hero icons
+react native svg
+react native progress - for loading
+react native async storage - similar to local storage
+
+api:
+https://www.weatherapi.com/
+
+
+1. npx create-expo-app@latest
+
+
+2. setup native wind
+
+
+3. Navigation
+
+install react navigation
+
+    npm install @react-navigation/native
+   -npx expo install react-native-screens react-native-safe-area-context
+   -npm install @react-navigation/native-stack
+   -npm install --save @types/react-native
+
+
+-create navigation folder
+-create AppNavigation component - create stack navigation here
+- render AppNavigation in App.js
+
+
+4. background image
+
+      <Image
+        blurRadius={70}
+        source={require("../assets/images/bg.png")}
+        className="absolute w-full h-full"
+      />
+
+
+5. Install react native heroicons along with react native svg (should instsall both)
+
+
+npm i react-native-heroicons react-native-svg
+
+
+ex.
+
+import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
+
+<MagnifyingGlassIcon size={18} color="white" />
+
+
+6. saerch input component and toggling search input with useState, conditional rendering
+
+
+7. autocomplete suggestions
+
+8. forecast section view
+  - location
+  - weather icon
+  - temperatature and weather desc
+  - more stats
+
+9. NExt days forecast
+-<ScrollView />
+
+
+10. configuring API
+
+
+11. create api folder in your app, and weather.js file
+
+-install axios
+-create api call functions
+
+
+12. when user types a in the search input, locations are fetched based on query, autocomplete are populated 
+
+13. when a location is clicked, that location is saved in state, and data for the location is fetched
+
+
+14. populate hardcoded data with fetch data from state after fetch
+
+
+15. add a useEffect to fetch default data once app loads
+
+
+16. install and use npm i react-native-progress --- for loading display
+
+
+<Progress.CircleSnail thickness={10} size={140} color="#0bb3b2" />
+
+
+17. react native async storage --> much like local storage
+
+setItem and getItem
+
+key value pairs but is async
+
+======================
+
+NEW LEARNING:
+
+1. LogBox
+
+
+2. for tailwind config, add exception for every folder? 
+
+ content: [
+    "./App.{js,jsx,ts,tsx}", 
+    "./screens/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
+    "./navigation/**/*.{js,jsx,ts,tsx}"
+  ],
+  
+
+3. Image component - source property - can be uri or static --->  <Image source={require('./my-icon.png')} />
+
+--- blurRadius property for blur effect of image
+
+
+4. helper function for bg color opacity
+
+export const theme = {
+   bgWhite: opacity => `rgba(255,255,255, ${opacity})`
+}  
+
+ex. 
+<View style={{ backgroundColor: theme.bgWhite(0.2) }}></View>
+
+---takes in opacity and adjust bg color based on opacity
+
+----by adjusting opacity, it creates a light gray to solid white bg based on opacity
+
+
+5. TEXTINPUT component
+
+             <TextInput
+              placeholder="Search city"
+              placeholderTextColor="lightgray"
+             />
+             
+             
+6. text-md in tailwind is text-base haha   
+
+
+7. <ScrollView /> --->     
+
+
+8. debounce -> lodash
+
+--- delay triggering api call for 1200ms to avoid multiple api calls.
+
+--- this can also be used to delay input validation, so as not to immediately display error validation message
+    while user is typing.
+    
+ex.  const handleTextDebounce = useCallback(debounce(handleSearch, 1200), []);
+
+-use this for onChangeText instead of handleSearch
+
+
+             <TextInput
+                onChangeText={handleTextDebounce}
+                placeholder="Search city"
+                placeholderTextColor="lightgray"
+                className="pl-6 h-10 flex-1 text-white"
+              />
+
+
+
+9. when user types a in the search input, locations are fetched based on query, autocomplete are populated 
+
+10. when a location is clicked, that location is saved in state, and data for the location is fetched
+
+
+11. populate hardcoded data with fetch data from state after fetch
+
+
+12. add a useEffect to fetch default data once app loads
+
+
+13. install and use npm i react-native-progress --- for loading display
+
+<Progress.CircleSnail thickness={10} size={140} color="#0bb3b2" />
+
+
+14. react native async storage
+
+npm i @react-native-async-storage/async-storage

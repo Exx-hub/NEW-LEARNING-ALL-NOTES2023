@@ -1,0 +1,45 @@
+11/25/22
+
+DYNAMIC ROUTES and ADVANCED MODELS - SECTION 9
+
+
+1. add an id to your created Product. i used uuid. same implementation as i did with MAX
+
+2. create route and pass dynamic id. /product-detail/id
+
+colon and variable => :id or :productId --- for it to be dynamic
+
+ejs => <a href="/product-detail/<%= product.id %>" class="btn">View</a> --- link that calls dynamic product route, passes product id
+routes => router.get("/product-detail/:id", getProductDetail);
+
+
+-- to access dynamic route, in middleware, access through req.params.id ---id property is what you set with the colon.
+-- it can be whatever you name it after the colon.
+
+
+STATIC class methods => means that method can be called from class without instantiating the class
+
+--- all your methods in Product class are database methods that are built in , for example, mongodb.
+--- but since you are not using a database yet, we are doing the functions manually. like saving, findbyid, fetching all etc.
+
+
+
+
+req.params => url/1345 => 1234
+req.query => url?edit=true => edit: "true"
+
+
+
+---- did tasks on my own, add to cart, delete item, edit item. but all got too complex and had to just copy max's code in the end.
+---- good practice tho using JS and object oriented class usage
+
+---- these basically are abstracted in mongoose. but yes basic MVC pattern nonetheless.
+
+
+
+
+
+
+
+
+

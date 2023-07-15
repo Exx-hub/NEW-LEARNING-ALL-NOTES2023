@@ -1,0 +1,36 @@
+UNDERSTANDING ASYNCHRONOUS REQUESTS - section 22
+
+*doing some client side javascript
+
+--adding javascript to our client-side
+--create admin js and pass as script to products.ejs (html)
+
+--remove form and add onlick to button, deleteProduct funtion onclick passing this. which is the button itself.
+
+--in your js, get value of hidden inputs to get value of product id to delete and csrf token and pass in fetch delete.
+
+-this function also removes the html element as it is deleted from the server.
+
+const deleteProduct = (btn) => {
+  // note - can just pass prod id and csrf token in ejs in the button and access them easily like in jsx.
+  const productId = btn.parentNode.querySelector("[name=productId]").value;
+  const csrfToken = btn.parentNode.querySelector("[name=_csrf]").value;
+
+  const productElement = btn.closest("article");
+
+  console.log(productElement);
+
+  fetch(`/admin/product/${productId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "csrf-token": csrfToken,
+    },
+  })
+    .then((result) => result.json())
+    .then((data) => {
+      console.log(data);
+      productElement.parentNode.removeChild(productElement);
+    })
+    .catch((err) => console.log(err));
+};

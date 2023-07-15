@@ -1,0 +1,142 @@
+REACT MASTERCLASS:
+
+core react-
+  -HOOKS
+   - how hooks really work - how they exactly work
+   - useState, useEffect, useRef
+   
+react eco system-
+   -what you need to know apart from core react
+   1. apollo graphql
+   2. swr
+   3. react query
+   
+   ui-
+   1. chakra ui
+   2. tailwind
+   3. material ui
+   4. ant design
+   
+   server-side rendering
+   1. nextjs
+   2. astro
+   
+   
+advanced react concepts-
+1. react suspense..
+2. react server components
+-react v18+
+
+
+
+NEXT JS-
+REACT NATIVE-
+SONNY SANGHA
+--pick up learnings
+
+
+
+
+
+REACT: 
+advanced:
+-context
+-refs
+-error boundaries
+-PORTALS
+-all hooks
+-custom hooks
+-HOC
+
+react articles:
+-Reconciliation
+-Composition and Inheritance
+
+ecosystem:
+1. state mgt - redux etc / react qeury / apollo client
+2. routing - react router, react location
+3. styling - styled, tailwind, chakra matui ant
+4. forms - formik, react hook form
+5. TESTING - jest + react testing librry, cypress
+6. MISC - TYPESCRIPT, storybook , react i18Next,firebase
+
+7. next steps - gatsby,nextjs, remix, react native
+
+
+focus on TS, next js, react native, react
+
+
+HOW TO WRITE BETTER REACT:
+https://www.freecodecamp.org/news/best-practices-for-react/?fbclid=IwAR1_XpA7-noUTxOMVS_TQwAEK8Nkoern_ZfVDS4PgeBUh15_B8_A9IomsZs#learn-the-building-blocks-of-react
+
+
+vanilla JS:
+https://www.freecodecamp.org/news/top-javascript-concepts-to-know-before-learning-react/
+
+REACT BASICS:
+https://reactjs.org/docs/hello-world.html
+
+HOOKS:
+https://reactjs.org/docs/hooks-intro.html
+
+
+If I had to choose the most important concepts to know at a bare minimum, I'd suggest these:
+
+-what is "state"?
+-ups and downs of class and functional components
+-what are component re-renderings and how do they work?
+-how to trigger re-renderings
+-different component lifecycles and how to interact with them
+-Virtual DOM
+-Benefits of CSR (Client Side Rendering) and SSR (Server Side Rendering) in general and in React
+-Controlled vs. Uncontrolled Components
+-State Lifting
+-at least one global state management technology (Context API, Redux/Toolkit, Recoil)
+-Component Patterns (especially how to choose the right pattern)
+
+
+
+POINTS to remember when coding in react:
+
+-use functional components (like arrow-functions)
+-don't use inline-styles
+-maintain a proper import structure (third-party imports first --> internal imports below)
+-format your code before committing
+
+
+
+Create a good folder-structure
+-https://www.robinwieruch.de/react-folder-structure/
+
+Maintain a structured import order
+
+ Learn different component patterns***
+ 
+ Test your code
+-https://reactjs.org/docs/testing.html
+
+Integrate Typescript (or at least use default props and prop types)
+-https://www.freecodecamp.org/news/how-to-code-your-react-app-with-typescript/
+
+
+Use lazy-loading / code splitting
+-https://reactjs.org/docs/code-splitting.html
+
+
+Extract reusable logic into custom hooks
+
+
+Handle errors effectively
+-React Error Boundary
+-Use try-catch to handle errors beyond boundaries
+
+Keep your key prop unique across your whole app
+
+
+***Implement the useReducer hook earlier
+ Use shorthand for boolean props
+Avoid curly braces for string props
+Erase non-html attributes when spreading props
+Write a fragment when a div is not needed
+Integrate self closing tags when no children are needed
+

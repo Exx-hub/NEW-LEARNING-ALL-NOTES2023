@@ -1,0 +1,80 @@
+13/11/22
+
+RTK Query vs React Query
+
+****if youre using redux then obviously use rtk query, if not using redux go for react query
+****if youre using redux then obviously use rtk query, if not using redux go for react query
+****if youre using redux then obviously use rtk query, if not using redux go for react query
+****if youre using redux then obviously use rtk query, if not using redux go for react query
+
+
+
+rtk query
+
+ApiProvider and pass api => if you have no store and saved global state. just using the fetching functionality
+	--- Can be used as a Provider if you do not already have a Redux store.
+
+Provider and pass store => if you do have a store and save global state?
+
+
+hooks automatically created from builder
+
+use hooks in component to fetch data 
+
+ex. useGetTodosQuery and useAddTodoMutation -> automatically created from 
+
+const extendedTodoApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    getTodos: builder.query({
+      query: () => "/todos",
+      transformResponse: (res) => res.sort((a, b) => b.id - a.id),
+      providesTags: ["Todos"],
+    }),
+    addTodo: builder.mutation({
+      query: (todo) => {
+        return {
+          url: "/todos",
+          method: "POST",
+          body: todo,
+        };
+      },
+      invalidatesTags: ["Todos"],
+    }),
+    
+    
+    
+    
+ React Query
+ 
+ 1. wrap app with QueryClientProvider, create a new instance of QueryClient and pass as client prop to QueryClientPRovider
+ 	
+ 	-can also add ReactQueryDevtools in main component to see and use react qeury dev tools in browser
+ 	
+ 	<ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+ 
+ 2. fetcher function => ex.
+ 
+  const fetcherFunction = () => {
+  return axios.get("http://localhost:4000/superheroes");
+};
+
+
+3. use hook in component so it fetches on render of component
+
+ex. const { data, isLoading, isFetching, error, isError, refetch } = useQuery(queryKey, () => fetcherFunction())
+
+
+-- will return loading fetching error and data. can be used to conditionally render elements like spinner then data comes.
+
+
+
+
+****if youre using redux then obviously use rtk query, if not using redux go for react query
+
+
+
+
+
+
+
+

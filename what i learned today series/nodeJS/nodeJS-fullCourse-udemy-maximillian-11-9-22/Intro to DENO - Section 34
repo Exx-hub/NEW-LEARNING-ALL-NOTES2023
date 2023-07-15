@@ -1,0 +1,54 @@
+Intro to DENO - Section 34
+
+
+installation guide in - deno.land
+
+
+to run a file in deno => deno run app.ts
+
+
+
+
+== The Deno Runtime (namespace) API
+
+
+
+
+global Deno object
+
+
+
+const text = "This is a test - and it should be stored in a file!";
+
+const encoder = new TextEncoder();
+const endocedText = encoder.encode(text);
+
+Deno.writeFile("message.txt", endocedText).then(() => {
+  console.log("Wrote to file!");
+});
+
+
+=====> deno run --allow-write app.ts ------ need permission flag
+
+
+
+
+How are deno features organized?
+
+Deno Namespace APIs - built in. no import needed. using the Deno object
+Standard Library - built in also but needs to be imported
+3rd part Libraries - installed and imported?
+
+
+
+
+==
+Standard Library features
+
+
+
+***MAX udemy deno part needs to be updated.
+
+
+
+

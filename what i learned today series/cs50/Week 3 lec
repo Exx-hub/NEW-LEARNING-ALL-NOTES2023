@@ -1,0 +1,91 @@
+Cs50 Week 3 Lecture - Mar 23,2023
+
+
+=ALGORITHMS=
+
+Search-
+
+linear search - this is checking each door one by one
+
+binary search - this was like tearing the phone book in half
+
+
+Big O notation
+
+O(n 2)   to the 2nd power - selection sort bubble sort
+
+O(n log n) => merge sort
+
+O(n)   => linear search
+
+O(log n)   => binary search
+
+O(1)
+
+
+
+Big O
+Omega => lower bound? best case
+Theta
+
+
+Segmentation fault (core dumped) => touched memory that you shouldnt have
+
+like accessing numbers[4] when numbers array only has 3 or 4 items. 4th index is a fifth item. outside of memory
+
+
+==SORTING==
+
+selection sort algorithm - selecting the next lowest element ?
+
+bubble sort - comparing pairs and sorting by the pair
+
+
+merge sort
+
+
+==RECURSION==
+-break up a problem into smaller pieces
+
+
+
+
+=time space=
+
+
+Big O notation - how many steps does an algorithm take at the worst case scenario. most steps algo takes
+	       - upper bound, meaning algorithm will not run slower than this
+
+Omega notation - best case, lower bound, will not run faster
+
+
+
+
+=DATA STRUCTURES=
+
+-creating own type
+
+typedef struct
+{
+	string name;
+	string number;
+}
+person;
+
+
+-create array and use person data type
+
+person people[2];
+
+-assign name and number to each person in the array using DOT notation
+
+    people[0].name = "Carter";
+    people[0].number = "+1-909-495-2999";
+
+    people[1].name = "David";
+    people[1].number = "+1-645-143-1215";
+    
+
+    
+
+

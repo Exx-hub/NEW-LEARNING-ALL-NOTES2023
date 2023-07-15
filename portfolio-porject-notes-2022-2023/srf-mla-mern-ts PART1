@@ -1,0 +1,223 @@
+started - January 5, 2023
+
+https://devimalplanet.com/how-to-build-and-run-typescript-watch-mod
+
+Starting with srf-mla BE
+
+
+TS-node =>  is a TypeScript execution engine and REPL for Node. js. It JIT transforms TypeScript into JavaScript, enabling you to directly execute TypeScript on Node. js without precompiling.
+
+--- so basically node cannot run ts files. what ts-node does is it allows you to run ts files in node. behind the scenes it runs tsc which transpiles your ts code into js code.
+
+--on server dir:
+
+1. npm init -y
+
+2.install dependencies:
+ npm i express mongoose jsonwebtoken bcrypt cors
+ npm i express-validator dotenv
+
+3. install typescript
+  npm i typescript
+
+4. install dev dependencies
+ 
+=> npm i -D nodemon
+=> npm i -D ts-node ts-node-dev
+
+5. initialize tsconfig
+-- tsc --init
+
+ in tsconfig, uncomment moduleResolution: node and 
+ outDir: "./build" => but create a build folder 
+ rootDir: "./src"  => create src folder and create app.ts there.
+ 
+ --when tsc is run, will compile app.ts from src into app.js into build 
+
+6. configure scripts in package.json
+    "start": "node ./build/app.js",
+    "dev": "ts-node-dev ./src/app.ts",
+    "build": "tsc -p"
+
+7. create a dist directory, because everything that we code in ts will be transpiled into js in the dist folder.
+
+8. updated scripts
+
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node dist/server.js",
+    "predev": "npm run build",
+    "dev": "tsc & nodemon src/server.ts"
+  },
+
+
+9. creating the User Model with TS typing
+
+import mongoose from "mongoose";
+
+export interface IUser {
+  firstname: string;
+  lastname: string;
+  mobile: string;
+  email: string;
+  password: string;
+}
+
+const userSchema = new mongoose.Schema<IUser>({
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
+  mobile: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+});
+
+export default mongoose.model<IUser>("User", userSchema);
+
+
+10. mongoose connect
+
+use ConnectOptions type for options to pass typescript check.
+
+import mongoose, { ConnectOptions } from "mongoose";
+
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+} as ConnectOptions;
+
+
+****update okay so they say in mongoose version 6 and higher, options are already default so we dont need to pass options unless
+we mean to put a different value for the defaults.
+
+11. create connectDb function in config using mongoose connect
+
+12. install dotenv and import import "dotenv/config";
+
+13. after successfully connecting to the db, start with the register endpoint to create a user and test if able to create a user collection in the database
+
+
+14. also install bcrypt to encrypt user password when creating a user.
+
+
+15. login and register endpoints done and tested, time to test in FE.
+
+16. cors error in FE so we need to install and use cors as middleware.
+
+default config if you dont explicitly set an options object for cors
+
+{
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+}
+
+=========================================================
+
+switching to FE
+
+
+17. testing register endpoint in FE
+
+18. simple implementation of register and login using fetch api done in FE.
+
+============
+
+back to BE to implement token before implementing rtk query in FE
+
+
+19. jsonwebtoken => accesstoken and refreshtoken implementation in BE
+
+-import jwt and add types npm i --save-dev @types/jsonwebtoken
+
+-create and pass access token using jwt when successfully logged in.
+
+-- will skip refresh for now, will just use jwt access token for authorization, without refresh feature yet.
+
+20. creating verifyJWT middleware
+
+21. to add user property in request object
+
+=> 
+declare namespace Express {
+  export interface Request {
+    user: any;
+  }
+  export interface Response {
+    user: any;
+  }
+}
+
+
+--- need this so TS wont get mad haha
+
+--as for the req.user = decoded.userEmail;
+
+need to extend the 
+
+interface JwtPayload {
+  userEmail: string;
+}
+
+for ts to know that you are expecting a userEmail from the decoded jwt. 
+
+----stopped at verifyJWT
+
+--- will continue tomorrow at creating courses endpoint. enroll to course, view courses etc.
+
+--- also profile endpoint, User find by email after logging in and display user info?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+save vs create in mongoose
+
+-save is an instance method so you need to instantiate a Model before using.
+  ex. const newUser = new User({
+  	name: "alvin"
+  })
+
+-create is a static method of the Model, dont need to instantiate a new Model instance to use.
+
+	const newUser = User.create({name: "alvin})
+
+
+mongodb+srv://AlvinAcosta:lokalsoul@mern-ts-rtk-cluster.2uvyfpx.mongodb.net/srfmla_DB?retryWrites=true&w=majority
+
+
+SIDENOTES:
+
+*side note TS postfix or exclamation point after variable
+
+    // process.env variable is string or undefined
+    // mongoose connect does not accept this, but only accepts string
+    // so you add a postfix ! , tells TS that you know for sure this is not undefined.
+    // postfix or exclamation point after
+    // In TypeScript, a postfix ! removes null and undefined from the type of an expression.
+    // This is useful when you know, for reasons outside TypeScript's inference ability, that a 
+    // variable that "could" be null or undefined actually isn't.
+    
+** nullish coalescing operator
+
+//nullish coalescing operator in js
+
+Expression:
+	Left ?? Right
+if left is null or undefined , then Right will be the value
+
+
+
+

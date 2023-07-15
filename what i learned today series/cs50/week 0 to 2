@@ -1,0 +1,183 @@
+cs50 notes:
+
+
+week 1:
+
+bits 
+
+bytes = 8 bits
+
+24-bit RGB
+
+ascii -> unicode.
+
+pseudo code
+
+LINUX
+
+command line interface
+
+cd cp ls mkdir mv rm rmdir
+
+
+data types
+conditionals
+while loop
+for loop
+do while
+
+comments
+operators
+
+creating functions in c
+
+
+computers use 32 bits to represent an integer
+integer overflow because bits are also allocated for negative values
+
+for large numbers use long and get long. %li for printf format code
+
+integer overflow
+-truncation
+-floating point imprecision
+-type casting
+
+
+
+week 2:
+
+command-line arguments
+
+clang -o hello hello.c ===> make hello
+
+clang -o hello hello.c -lcs50
+
+
+
+COMPILING:
+
+1) preprocessing => like importing libraries w function you can use in your code.
+
+2) compiling => converts into assembly code?
+
+3) assembling => converts into zeros and ones..machine code?
+
+4) linking => links your code and libraries like cs50.h and stdio.c
+
+==== COMPILING. 
+
+
+
+DEBUGGING
+
+1) printf or in javascript simply console.log
+
+2. debugger
+--step over - do one line?
+--step into - go into the function and execute there
+
+3. rubber duck
+
+
+
+
+Data Types
+
+bool => 1 byte (8 bits)
+int => 4 bytes
+long => 8 bytes
+float => 4 bytes
+double => 8 bytes
+char => 1 byte
+string => ? bytes
+
+
+
+
+==
+ARRAYS
+
+
+    int scores[3];
+    scores[0] = 72;
+    scores[1] = 73;
+    scores[2] = 33;
+    
+
+// function that takes in an array as argument
+    
+float average(int arr[])
+{
+    int sum = 0;
+    for (int i = 0; i < N; i++)
+    {
+        sum += arr[i]; 
+    }
+
+    return sum / (float) N;
+}
+
+
+
+STRING 
+- variable length
+
+***strings are array of chars?
+[H,I, !]
+
+string s = "HI!"
+
+---in memory strings use and extra byte. something like a delimiter. so the computer knows to separate strings.
+
+H I ! \0 = 4 bytes
+
+
+
+
+<string.h>
+<ctype.h>
+	strlen(s)
+	toupper(s[i])
+
+
+
+COMMAND LINE ARGUMENTS
+./greet Alvin Acosta => argv[0] ./greet , argv[1] Alvin, argv[2] Acosta
+
+argc = argument count, so abouve is 3
+
+#include <stdio.h>
+#include <cs50.h>
+
+int main(int argc, string argv[])
+{
+    
+}
+
+
+
+COWSAY
+
+
+
+EXIT STATUS
+what is int in intmainvoid? 
+
+zero is automatically returned by default. thats why its int.
+
+but you can declare your return if you want. like return 0 if correct if not return 1.
+
+
+
+echo $?
+
+
+
+CRYPTOGRAPHY
+-encryptyion
+-decryption
+
+Ceasar's Cipher
+
+
+

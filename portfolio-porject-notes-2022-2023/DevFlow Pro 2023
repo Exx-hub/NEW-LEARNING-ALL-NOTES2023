@@ -1,0 +1,283 @@
+June 10, 2023 - DEVFLOW AI / DevFlowAI 
+
+
+-dev utilty productivity app-
+
+
+Planning:
+
+// DESIGN CONCEPT //
+
+https://dribbble.com/shots/19893363-Task-and-Project-Management-Mobile-App
+https://dribbble.com/shots/19725204-Task-Manager-Landing-Page
+
+
+
+
+// FEATURES //
+
+1. personal profile, greeting , weather and time?
+
+
+2. ai chat bot
+
+3. pomodoro timer? current project / ticket - https://pomofocus.io/
+
+4. debugging rubber ducky - duck with some animation. quack the code
+
+5. sticky notes
+
+6. goals - life goals and career goals eto yung parang todo app.
+
+
+
+
+
+pages?
+
+
+1. HOME => banner landing page shit and navigation , greeting nandito pede din plus overview ng personal data like how many tasks or projects currently meron. etc.
+
+
+then a page for one feature.
+each page/feature is independent naman. so no order ng development. and kahit paisa isa and dag dag.
+importante maganda yung concept ng landing page.
+
+
+
+
+
+Development:
+
+
+1. bootstrap app - install dependencies 
+-vite
+-tailwind
+-react router
+-firebase
+-react icons
+
+2. setup firebase and firebase config
+
+
+3. Setup Routing and Navigation
+
+4. setting up main bg gradient, added roboto font and changed favicon and title
+
+
+5. APP and HOME component --- setup routing
+
+- setup createBrowserRouter with children, to be able to nest navbar and main contents.
+- create Layout component and set as main element for "/" path. with your page routes as children
+- also add Navbar component to Layout and use Outlet to display nested routes from layout
+
+// Home page
+
+---> NAVBAR
+- logo and navlinks
+-hide navlinks if in home page
+-active page link styling
+
+-- navlinks complete
+
+---> greeting and time
+
+---> WEATHER Component
+-fetches weather data from api and displays icon based on weather and temperature 
+-relocated weather to top right inside navbar
+
+---> Feature Card
+---> Icon Square 
+-hover animation, navlinks
+
+--done with home page including media queries
+
+
+
+// CHAT BOT page
+
+-converting javascript implementation to react.
+-used streaming data to display answer word by word fashion not all at once.
+
+-fixing and understanding streaming.. - FIXED
+- now fixing abort controller does not cancel.. -- placed controller outside, as a global variable
+
+- media queries done
+
+
+// ERROR Page
+
+- done
+
+
+
+// rubber ducky page
+
+
+- done
+
+
+// GOALS PAGE
+
+-dev goals and life goals -> nested route - NO, just state switching and conditional display
+
+- fetch goals and filter based on type -> life or career
+- add goals
+- delete goals
+
+
+// Sticky notes page
+
+- grid layout 
+- hover effect
+- 120 character limit to the input
+- media queries for the grid
+
+- encountered bug when deleting, it moves the notes' index when one is deleted, causing notes to change color
+- this was a problem with using index. so added new field to the document. "ordinal", so when one note is deleted, layout does not shift.
+
+- fixed deleting by the solution above but another bug was caused by this. when you add a new note after deleting,
+sometimes the ordinal will be the same with one of the remaining because i am not adding an ordinal field when adding a note based on todos.length.
+
+-fixed bug by first saving into state the ordinals of the notes remaining once fetched,
+-then find the missing numbers when compared to [0,1,2,3,4,5]
+-when missing numbers are found, get the lowest of those.
+-that will be the ordinal when you create a new one. then cycle repeats.
+
+-created a helper function for this.
+
+
+export const getMissingOrdinal = (arr: (number | undefined)[]) => {
+  const ordinals = [0, 1, 2, 3, 4, 5];
+
+  const set1 = new Set(arr);
+
+  const missingNumbers = ordinals.filter((num) => !set1.has(num));
+
+  return Math.min(...missingNumbers);
+};
+
+
+-fixed issue, able to delete in place, and add in correct place
+
+
+
+// mobile nav
+
+- DONE!!
+
+
+
+
+// Pomodoro
+
+
+- DONE
+
+
+// AUTH SETUP
+
+- remove weather for now
+- add person icon and sign in link?
+
+
+
+// DEPLOYMENT
+
+--whitelist domain for firebase auth
+--import env variables in vercel
+-- deploy, very easy
+
+
+
+hooks used:
+
+---> useGreeting Hook
+-returns greeting
+-returns evening afternoon and morning depending on the time, used for greeting.
+
+---> useGetTime 
+-returns time as string - used to display time
+-also returns isAm --- used for moon or sun in icon
+
+
+--> useTimer
+--for watching time in pomodoro
+
+
+---> useTitle
+
+
+
+Learning:
+
+1. Layout and nested routes in new createBrowserRouter using Outlet
+
+2. favicon not showing up, added question mark and it works
+   - <link rel="icon" type="image/x-icon" href="/favicon.ico?" />
+   
+3. created switch case to conditionally display icon
+--- was getting typescript error when i was trying to implement with object lookup
+--- so created a function instead with a switch case
+
+  const getIcon = (weather: string | undefined) => {
+    switch (weather) {
+      case "Clouds":
+        return <FaCloud />;
+      case "Rain":
+        return morning ? <FaCloudShowersHeavy /> : <FaCloudMoonRain />;
+      case "Clear":
+        return morning ? <FaCloudSun /> : <FaCloudMoon />;
+      default:
+        return;
+    }
+  };
+  
+4. calc in tailwind -> h-[calc(100vh-58px)]  ->  100vh minus height of navbar 
+
+5. animation using keyframes
+--- extend in tailwind config
+
+
+  keyframes: {
+        "slide-down": {
+          "0%": { transform: "translateY(-50px)", opacity: 0 },
+          "100%": { transform: "translateY(0)", opacity: 1 },
+        },
+      },
+      animation: {
+        "slide-from-top": "slide-down 300ms both",
+      },
+      
+      
+6. used another switch case for icon square react icons. unable to pass as props, typescript is angry
+
+
+7. USEMATCH of react router to get path, instead of using location.pathname in useLocation
+
+8. env in vite , variable has to start with VITE, to use -> import.meta.env.VITEVARIABLE
+
+9. type abort Controller -> let controller: AbortController | null = null;
+
+10. add stream true to be able to get streamed response
+
+
+11. Goals component, conditionally render career goals and life goals using state toggle with tabs
+    --- career and life share state instead of state for each.
+    
+12. cannot do same animation on both components that are conditionally rendered?
+
+13. Cool GRID LAYOUT
+
+14. hover and unhover blur effect!!!!!!!!!!!!!!
+
+
+15. encountered error, layout shift when using index when deleting. also when adding after deleting
+    - used some javascript to get ordinals of notes, get missing when compared to array of 6 numbers 0-6
+    - from missing get lowest, this will be ordinal of note that will be created next.
+    -fixed issue, able to delete in place, and add in correct place
+    
+    
+16. USE opacity and CSS for transition animations, instead of react conditional render for easier transition animation. use opacity 0 and 1, add condition to classname, change classname based on state
+
+17. Watching time with interval and useEffect

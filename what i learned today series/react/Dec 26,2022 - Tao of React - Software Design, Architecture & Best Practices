@@ -1,0 +1,102 @@
+Dec 26, 2022
+
+Tao of React - Software Design, Architecture & Best Practices
+
+
+==Components==
+
+1. Favor functional components
+
+2. Write Consistent Components
+- pick a style or architecture and stick to it.
+
+3. Name your components
+
+4. Organize helper functions
+
+
+5. Don't Hardcode Repetitive Markup
+- use loops, object lookups
+
+6. Manage Component Size 
+-  a single function cannot do multiple things, just like functions, components are functions too.
+-  if a component is doing too many things extract them into smaller functions and call them instead.
+-  If a part of the markup is complex, requires loops and conditionals - extract it.
+
+- Rely on props and callbacks for communication and data. Lines of code are not an objective measure. Think about responsibilities and abstractions instead.
+
+7. Write Comments in JSX
+
+8. Use Error Boundaries
+
+9. Destructure Props
+
+10. Manage the Number of Props
+
+11. Pass Objects Instead of Primitives
+
+12. Conditional Rendering
+
+13. Avoid Nested Ternary Operators
+
+14. Move Lists in a Separate Component
+
+15. Assign Default Props When Destructuring
+
+
+
+==State Mgt==
+
+1. use reducers for more complex state than multiple use States
+
+2. Prefer Hooks to HOCs and Render Props
+
+3. Use Data Fetching Libraries
+
+4. State Management Libraries
+
+
+==Component Mental Models==
+
+1. Container components and Presentational components
+
+2. Stateless & Stateful
+
+
+==Application Structure==
+
+1. Group by Route/Module
+
+2. Create a Common Module
+
+
+==Performance==
+
+1. Dont optimize prematurely
+
+2. Watch The Bundle Size
+
+3. Rerenders - Callbacks, Arrays and Objects
+
+
+==Data Fetching==
+
+1. Use a Data Fetching Library
+
+2. 
+
+==Styling==
+
+1. Use CSS-in-JS*
+
+2. Keep Styled Components Together
+
+
+==Testing==
+
+1. Don't Rely on Snapshot Tests
+2. Test Correct Rendering
+3. Validate State and Evetns
+4. Test Edge Cases
+5. Write Integration Tests
+

@@ -1,0 +1,47 @@
+USE PERSIST HOOK to keep token and user info after refresh
+
+-persist logged in user
+
+
+1. in login function and api call, 
+
+save user data in local storage
+
+ -localStorage.setItem("user", JSON.stringify(data));
+ 
+---so even if you refresh, user data will be in local storate, may be expired token tho. but not focusing on this for now.
+
+
+2. create a custom hook that will be called at the top level of your app. 
+-- hook may be used in a wrapper for your whole app so it will be called first when you refresh.
+
+--in my case i used the custom hook in my Layout wrapper component. since the layout wrapper is wrapping the whole app and gets called first on every refresh, i did not create a persistLogin route component.
+
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { storeCredentials } from "../features/auth/authSlice";
+
+const usePersist = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const persistedUser = localStorage.getItem("user");
+
+    if (persistedUser) {
+      const userFound = JSON.parse(persistedUser);
+
+      console.log("userFound", userFound);
+      dispatch(storeCredentials(userFound));
+    }
+  }, []);
+};
+
+export default usePersist;
+
+
+--so in this hook, there is a useEffect which will run on component mount. since this hook will be used at the top level, useEffect will be run when the app mounts.
+
+1. will check for "user" property saved in local storage if any.
+2. if there is, will dispatch a redux action store credentials
+3. this saves back the saved user info in local storage back to our global auth state.
+4. since value of token and user is saved in auth state and is checked for authentication, once restored after calling dispatch in this custom hook, login will be persisted.

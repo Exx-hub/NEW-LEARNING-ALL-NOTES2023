@@ -1,0 +1,411 @@
+WORKING w GRAPHQL - Section 28
+
+graphql is more flexible than rest api.
+
+--you can fetch just the data you need.
+
+
+A graphQL Query example
+
+
+{
+ query {
+        user {
+             name
+             age
+           }
+       }
+}
+
+
+query => operation type, can be mutation or subscirption
+
+user => operation endpoint
+
+name age => requested fields, data you want
+
+
+
+1.CLEAN up rest api server 
+- remove socket io code, remove routes in app and remove routes folder as well. graphql uses different routing?
+
+2. npm i graphql and npm i express-graphql
+
+3. create graphql folder and in it schema.js and resolvers.js
+
+--create schema
+
+const { buildSchema } = require("graphql");
+
+module.exports = buildSchema(`
+    type TestData {
+        text: String!
+        views: Int!
+    }
+
+    type RootQuery {
+        hello: TestData!
+    }
+
+    schema {
+        query: RootQuery
+    }
+`);
+
+
+---create resolver
+
+module.exports = {
+  hello() {
+    return {
+      text: "Hello World!",
+      views: 1245,
+    };
+  },
+};
+
+
+4. use express-graphql in app to use schema setup
+
+- const { graphqlHTTP } = require("express-graphql");
+
+const graphqlSchema = require('./graphql/schema')
+const graphqlResolver = require('./graphql/resolver')
+
+and use as middle ware passing created schema and resolver, so need to import created schema and resolver too.
+
+
+app.use("/graphql", graphqlHTTP({
+  schema: graphqlSchema,
+  rootValue: graphqlResolver
+}));
+
+
+
+5. TEST in postman the graphql test endpoint that you setup
+---POST request, http://localhost:8080/graphql
+
+-with body => 
+
+{
+  "query": "{ hello { text } }"
+}
+
+--- this should return 
+
+
+{
+  "data": {
+    "hello": {
+      "text": "Hello World!"
+    }
+  }
+}
+
+
+6. CLEAN UP React App used as front end - remove socket io calls and functions to update socket io calls
+
+
+
+7. DEFINING SCHEMA FOR MUTATION (signup request)
+
+
+const { buildSchema } = require("graphql");
+
+module.exports = buildSchema(`
+    type Post {
+        _id: ID!
+        title: String!
+        content: String!
+        imageUrl: String!
+        creator: User!
+        createdAt: String!
+        updatedAt: String!
+    }
+
+   type User {
+        _id: ID!
+        name: String!
+        email: String!
+        password: String!
+        status: String
+        posts: [Post!]!
+    }
+
+    input UserInputData {
+        email: String!
+        name: String!
+        password: String!
+    }
+
+    type RootMutation {
+        createUser(userInput: UserInputData): User!
+    }
+
+    type RootQuery {
+        temp: String
+    }
+
+    schema {
+        query: RootQuery
+        mutation: RootMutation
+    }
+`);
+
+
+8. CREATE MUTATION RESOLVER
+
+--very similar to logic you would write in a controller. for signup endpoint
+
+const bcrypt = require("bcryptjs");
+const User = require("../models/User");
+
+module.exports = {
+  createUser: async (args, req) => {
+    const { email, name, password } = args.userInput;
+
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+      throw new Error("Email already registered.");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newUser = new User({
+      email,
+      name,
+      password: hashedPassword,
+    });
+
+    const createdUser = await newUser.save();
+
+    return { ...createdUser._doc, _id: createdUser._id.toString() };
+  },
+};
+
+
+9. TEST this mutation using  graphiql: true add to our graphql middleware setup
+
+app.use("/graphql", graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true
+  })
+);
+
+--then in your browser enter http://localhost:8080/graphql
+
+enter this mutation =>
+
+mutation {
+  createUser(userInput: {email: "alvinfloresacosta@gmail.com", name: "Alvin Acosta", password: "123123"}) {
+    _id
+    email
+  }
+}
+
+
+---check mongodb if user was indeed created.
+
+
+10. ADDING INPUT VALIDATION
+
+--install validator => npm i validator
+
+--this is the one express-validator uses under the hood.
+
+---use this in resolver just like how you would validate in a controller
+
+example:
+
+const errors = [];
+    if (!validator.isEmail(email)) {
+      errors.push({ message: "Email is invalid." });
+    }
+
+    if (!validator.isEmpty(name)) {
+      errors.push({ message: "Name is required." });
+    }
+
+    if (!validator.isEmpty(password) || !validator.isLength(password, { min: 5 })) {
+      errors.push({ message: "Password too short." });
+    }
+
+    if (errors.length > 0) {
+      const error = new Error("Invalid input.");
+      error.data = errors;
+      error.code = 422;
+      throw error;
+    }
+
+11. HANDLING ERRORS
+--add in graphql middleware call
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true,
+    customFormatErrorFn: (error) => ({
+      message: error.message || "An error occurred.",
+      status: error.originalError.code || 500,
+      data: error.originalError.data,
+    }),
+  })
+);
+
+
+12. CONNECTING THE FRONTEND
+--so instead of the usual fetch to api url , and passing data into the body, we do it like this for grapql
+
+
+    const email = authData.signupForm.email.value;
+    const name = authData.signupForm.name.value;
+    const password = authData.signupForm.password.value;
+
+    const graphqlQuery = {
+      query: `
+        mutation {
+          createUser(userInput: {email: "${email}", name: "${name}", password: "${password}"}) {
+            _id
+            email
+          }
+        }
+      `,
+    };
+
+
+    fetch("http://localhost:8080/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(graphqlQuery),
+    })
+    
+  
+-try creating a user, you should get a cors error, becuase graphql does not accept OPTIONS
+-add this in setheader middleware before calling next
+  =>  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  
+  
+13. ADDING A LOGIN QUERY and a RESOLVER
+
+add in schema -
+
+ type AuthData {
+        token: String!
+        userId: String!
+    }
+    
+ type RootQuery {
+        login(email: String!, password: String!): AuthData!
+    }
+
+
+add in resolver - very similar logic and code with authController login function, 
+1. find email/user
+2. verify password
+3. create jwt
+4. return userid and jwt
+
+
+14. ADD LOGIN TO FRONTEND
+
+
+    const { email, password } = authData;
+
+    const graphqlQuery = {
+      query: `
+          {
+            login(email: "${email}", password: "${password}") {
+                token
+                userId
+            }
+          }
+        `,
+    };
+
+    fetch("http://localhost:8080/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(graphqlQuery),
+    })
+
+
+
+
+15. CREATE POST MUTATION
+
+-- add createPost in RootMutation in schema.js
+-- create createPost in resolver -- again similar to create post logic in controller function
+
+
+16. EXTRACTING USER DATA FROM AUTH TOKEN
+
+--- in rest api, this was done via verifyToken middlaware, then if token is verified, pass user info to req.user
+--- which can be accessed in the enpoints.
+
+===> this implementation with rest api, if no token, it immediately blocks the request and throws an errro
+
+------middleware was modified. basically using req.isAuth now.
+
+===> it seems here in grapql implementation, request is not blocked, but instead req.isAuth is false.
+
+
+17. ADD VERIFYTOKEN MIDDLEWARE IN APP.JS instead of ON EACH ROUTE
+-app.use(verifyToken)
+
+---place this middleware call before graphql middleware
+
+
+===> with isAuth to fase or true, the resolver will use that to decide if to continue or not. so isAuth is first checked
+
+start resolvers with this -
+
+    if (!req.isAuth) {
+      const error = new Error("Not authenticated.");
+      error.code = 401;
+      throw error;
+    }
+    
+18. SETTING UP FRONT END to CREATE POST
+--so yeah using graphql endpoint instead of the rest api
+
+
+
+    let graphqlQuery = {
+      query: `
+        mutation {
+          createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "some url"}) {
+            _id
+            title
+            content
+            imageUrl
+            creator {
+              name
+            }
+            createdAt
+          }
+        }
+      `,
+    };
+
+    fetch("http://localhost:8080/graphql", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.props.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(graphqlQuery),
+    })
+    
+    
+
+continued...next notes.

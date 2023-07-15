@@ -1,0 +1,16 @@
+Typescript tips and tricks
+
+1. use uknown instead of any
+---espceially useful in fetching data/promises
+
+2. use the "is" operator => TYPEGUARDS
+
+
+3. use the "satisfies" operator 
+
+
+4. using enums correctly
+---either provide a string for each enum type or just use unions
+
+5. use built in pre-defined utility types
+ex. Partials and Records

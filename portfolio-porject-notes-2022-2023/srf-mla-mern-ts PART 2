@@ -1,0 +1,156 @@
+January 7, 2023
+
+srf mla mern ts PART 2
+
+
+adding rtk to the srf manila FE:
+
+
+1. npm install @reduxjs/toolkit react-redux
+
+2. create app folder and create store.ts file
+ --initialize store with configureStore
+ 
+ import { configureStore } from "@reduxjs/toolkit";
+
+export const store = configureStore({
+  reducer: {},
+});
+
+3. Provide the store to your app --- wrap whole app with provider and pass the store to provider
+ 
+ <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
+  
+  
+4. create features folder --- this will hold slices of each feature of your app. ex. users, courses, auth etc.
+--not just slices but also the component vies of each feature will be in the features folder.
+
+---so in features/users => userSlice, userView, user css will be placed here.
+
+
+5. create features/auth/authSlice and intialize global state using with createSlice
+--store credentials and clear credentials as reducer methods. 
+-- this will save token in global state after rtk query fetch
+-- also clear token from state for logging out
+
+6. create apiSlice ---> this is like axios, where your api calls / queries 
+
+-- so for now i created basic api slice with login endpoint included. automatically created useLoginMutation which i can use in my login component to do the login api call. but endpoints should be place in an external api slice. not here in the central one.
+
+
+export const apiSlice = createApi({
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8080",
+  }),
+  tagTypes: [],
+  endpoints: (builder) => ({
+    login: builder.mutation({
+      query: (userAndPass) => ({
+        url: "/login",
+        method: "POST",
+        body: { ...userAndPass },
+      }),
+    }),
+  }),
+});
+
+7. add the api service or apiSlice reducer to your store
+
+https://redux-toolkit.js.org/tutorials/rtk-query
+
+
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "../features/counter/counterSlice";
+import { apiSlice } from "./api/apiSlice";
+
+export const store = configureStore({
+  reducer: {
+    [apiSlice.reducerPath]: apiSlice.reducer,
+    counterState: counterReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
+  devTools: true,
+});
+
+
+8. use login mutation in login component...
+
+const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
+
+--then save token in global state (authSlice);.
+
+-- add authState in store to be able to keep track of authSlice global state
+
+---***able to get token after login and save to authSlice.
+
+----need to test using the token to get data from server.
+
+--- to try getting user info to display in profile page
+
+
+================================
+
+BACK TO BE:
+
+9. create user routes and user controller
+-update login to also return userId with token
+-update also authSlice to retrieve this id after login
+
+--create getUserById endpoint to fetch single user info by id.
+-- update schema, add courses array.
+
+
+10. initial Course model, course route and course controller done.
+
+
+
+========================================
+back to FE:
+
+11. moved auth endpoints to own authApiSlice from central apiSlice.
+
+
+12. note: --- if will save fetched data to global state, need authSlice and authApiSlice.
+
+13. created userSApiSlice for fetching user using user id from login. not saving data to global state, so i dont need enity adapter and i dont need userSlice. just this userApiSlice will do.
+
+
+14. testing jwt restriction. adding verifyJWT middleware to getUser
+
+15. adding the accessToken to request headers --- to make request go through.
+---> in apiSlice
+
+prepareHeader and include credentials to include token in request object.
+
+
+16. cors warning came up because of including authorization in headers, fixed with cors options from dave gray in BE. 
+--added custom corsOptions to cors middleware.
+
+17. able to check access token in request headers authorization. but if no token, middleware blocks the request immediately.
+
+18. able to display dynamic User Profile data. based on getUser fetch.
+
+19. able to create protectedRoute component using Outlet. 
+-able to restrict access for users without token
+
+- valid token => able to fetch data from BE and able to view data from FE.
+- expired token => unable to fetch data, data is not displayed in FE. instead, prompt to relogin is displayed.
+		=> able to still go to restricted link, but no data displayed. just relogin prompt.
+-if no token at all, FE wont allow even viewing of page. will redirect to login.
+
+1. so BE layer of route protection, denying the fetching if jwt is expired (middleware)
+2. FE layer of protection
+
+
+
+
+
+

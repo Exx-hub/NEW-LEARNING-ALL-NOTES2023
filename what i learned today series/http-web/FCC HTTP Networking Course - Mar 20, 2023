@@ -1,0 +1,293 @@
+FCC HTTP Networking Course - Mar 20, 2023
+
+
+CHAPTER 1 - http
+
+
+Hyper Text Transfer Protocol
+
+
+
+protocol => set of rules , computers use to communicate, tells computer how to parse data
+
+
+http requests and responses
+
+client => requesting computer
+server => sends back a response with info that was requested after processing that request
+
+---in super simple terms its like a question and answer system.
+
+client asks a question, server answers , if he knows the answer.
+
+
+
+HTTP powers websites -
+- protocol designed to transfer information between computers 
+
+
+client - sending a request
+server - responding to a http request 
+(sometimes a backend can also sends a request to other servers, this makes it also a client)
+
+
+
+=
+FETCH API
+-set of built in functions and tool that we can use to make http requests in javascript 
+
+=
+WEB Clients - website => FE => computer phone tablets..
+
+=
+WEB Servers
+
+=
+Web Addresses
+- IP addresses => ex. 8.13.165.7 ---- 0 to 255
+
+IPv4
+IPv6
+
+
+CHAPTER 2 - DNS
+
+
+-DNS => Domain Name System
+
+amazon.com => 8.13.145.663
+
+
+1. Resolve dns - obtaining ip address from domain name
+2. use ip address
+
+=
+ICANN - controls DNS and root nameservers
+
+
+=
+Sub Domains
+api.boot.dev
+blog.boot.dev
+
+
+
+URL Api in Javascript
+--useful when parsing a url string, and will parse it in sections
+
+const urlObj = new URL('https://example.com/example-path')
+
+--then you can extract the hostname => urlObj.hostname
+
+protocol: "https:"
+username: ""
+password: ""
+hostname: "example.com"
+host: "example.com" ====> includes the port number, if no port will be same as hostname
+href: "https://example.com/example-path"
+origin: "https://example.com"
+pathname: "/example-path"
+port: ""
+search: ""
+searchParams: URLSearchParams {}
+hash: ""
+
+
+
+CHAPTER 3 - URIs and URLs
+
+URI - uniform resource identifier
+1. URL
+2. URN
+
+URL "SCHEMES" or protocols
+1. http
+2. ftp
+3. mailto
+4. https
+
+
+*mailto uri opens an email client with email address ready
+
+
+=
+PORTS
+
+http => port 80
+https => port 443
+
+
+CHAPTER 4 - Synchronous and Async
+
+Asynchronous - do something while doing something else.
+
+
+Promises in Javascript
+
+Async await
+callbacks
+
+
+
+CHAPTER 5 - Error Handling in JS
+
+try catch
+
+
+Bugs vs Errors
+
+bugs are bad and unexpected --- fixed in code
+ex. a function that returns an incorrect calculation
+
+"debugging"
+
+
+errors not always bad and are expected --- handled in code
+- no internet 
+- database server down (mongodb) for example
+- incorrect user input like incorrect password
+
+"error handling"
+
+
+
+
+CHAPTER 6 - HTTP Headers
+
+-http headers allow clients and servers to pass additional information with each request or response.
+-headers are just case-insensitive key-value pairs that pass additional meta data about the request or response
+
+HTTP requests from a web browser carry with them many headers, including but not limited to:
+-type of client (eg. Google Chrome)
+-the OS (eg Windows)
+-the preferred language (eg US English)
+
+We can also define custom headers in each request.
+
+
+Headers API - build in browser functions
+
+-Headers.get()
+
+ex. const contentType = res.headers.get('content-type');
+
+
+
+WHY ARE HEADERS USEFUL?
+- from design to security, but most often, are used as metadata or data about the request.
+
+-one example is for authentication. a user's credentials can be included in the request headers
+
+
+
+
+CHAPTER 7 - JSON
+
+json - stringified representation of a javascript object
+
+used in:
+1. http requests and response bodies
+2. in noSQL databases liike mongodb
+3. formats for text files .json files 
+
+after making an http request using the fetch api, we get a response object. this response object offers some methods we can use to interact with the respose.
+
+one useful method is .json() => takes response stream returned by a fetch and returns a promise that resolves into a javascript object parsed from the json body of the htpp reponse.
+
+
+JSON.stringify() -- opposite of parse and useful when sending data, converts javascript object into a string to send
+
+JSON.parse() -- useful when getting data from server and converting into javascript objects
+
+
+
+XML => html like json alternative
+
+xml -
+
+<root>
+  <id>1</id>
+  <name>Alvin</name>
+  <age>35</age>
+</root
+
+
+json -
+
+{
+"id": "1",
+"name": "Alvin",
+"age": "35"
+}
+
+
+
+CHAPTER 9 - HTTP Methods
+
+-set of methods we use everytime we make an http request
+
+GET - getting information or specified resource, considered safe method because you are not changing anything
+    - use query parameters for info like user id
+
+POST - send data to a server, typically to create a new resource
+     - has body to send info
+     - need to include content type in the headers
+
+
+PUT  - create or update if not yet existing
+
+
+PATCH - update partial of the resource
+
+DELETE - no brainer
+  
+
+
+CHAPTER 9 - HTTPS Security
+
+SSL and TSL
+
+client sends request to a server, there are a lot of intermediaries the data will go through
+-public wifi, isp, cloud provider. 
+-meaning data is exposed, that's why encrypting data with https is important
+-then server can decrypt the data 
+
+public key is used for encrypting
+private key used for decrypting
+
+
+
+but since client and server is a two way street,
+
+we need a symmetric key which can encrypt and decrypt
+
+
+
+1. server generates public and private key
+2. client contacts the server
+3. server sends the public key
+4. client and server negotiate a symmetric key
+5. client now sends encypted http request
+6. server is able to decrypt the request and able to send back an encypted response
+7. client can also decrypt the respose 
+
+
+
+CHAPTER 10 - URL PATHS
+
+=
+URL Query Parameters
+
+  
+=
+RESTful APIs
+
+
+=
+STATUS CODES
+100-199 - informational. very rare
+200-299 - successful responses
+300-399 - redirection messages
+400-499 - client errors
+500-599 - server errors
+

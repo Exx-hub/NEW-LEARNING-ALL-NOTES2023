@@ -1,0 +1,54 @@
+Dec 17, 2022
+
+Node MAximillan - Section 12
+
+NoSQL and MongoDB
+
+mongodb === humongous database
+
+
+mongodb
+
+project                =>    cluster        =>  database  =>      collections        =>             documents
+node-maximillan-udemy      node-udemy-2022        shop    =>   1. products 2. cart   =>    {id: 1, title: "bag", price: "14.99}
+
+
+
+
+1. install mongodb in node app => npm i mongodb
+2. create database connection helper function
+
+const mongodb = require("mongodb");
+
+const MongoClient = mongodb.MongoClient;
+
+const mongoUri =
+  "mongodb+srv://alvinacosta:lokalsoul@node-udemy-2022.j8p86sm.mongodb.net/?retryWrites=true&w=majority";
+
+const mongoConnect = async () => {
+  try {
+    const client = await MongoClient.connect(mongoUri);
+    console.log("DB Connected");
+
+    return client;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = mongoConnect;
+
+
+3. use mongoConnect in server.js as you connect your app.
+
+4. this app previously used sequelize so remove all instances of it including models. this will break your app, so you need to create models for mongodb from scratch.
+
+
+5. work on the models for product, class based approach because no mongoose is used.
+
+6. creating or saving a new item in database, similar to mongoose. but in mongodb it just uses insertOne. create or save in mongoose is already abstracted, but they are insert one under the hood.
+
+7. fetching all items => in mongodb just use find(). similar to mongoose. but you have to pass toArray() to the result.
+
+8. fetching an item by id, in mongoose we just use findById , in mongo db we need to use  .find({ _id: new mongodb.ObjectId(id) })
+to find by database object id. findbyid in mongoose does this under the hood.

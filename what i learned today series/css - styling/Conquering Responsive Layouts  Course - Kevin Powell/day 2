@@ -1,0 +1,75 @@
+11/19/22
+
+Conquering Responsive Design
+
+EM vs REM
+
+
+em => relative to the font-size of the immediate parent. --- when used with font sizes, but if used for padding and margin, relative to its own font size.
+
+example for font size:
+
+.parent {
+   font-size: 1rem (will be relative to the root 16px)	
+}
+
+.child {
+   font-size: 2em => 32px 
+}
+
+.grand-child {
+   font-size: 1em => 32px   => compounding!!!
+}
+
+example for margin and padding:
+
+.parent {
+   font-size: 1rem (will be relative to the root 16px)	
+}
+
+.child {
+   font-size: 2em => 32px
+   margin: 1em => 32px! relative to its own font size 
+}
+
+
+rem => relative to the font size of the root or html --- still relative to root even when used for margins and padding
+
+
+example:
+
+html {
+  font-size: 10px
+}
+
+.parent {
+   font-size: 1rem (10px)	
+}
+
+.child {
+   font-size: 2em => 20px 
+}
+
+.grand-child {
+   font-size: 1em => 10px   
+}
+
+example for margin and padding:
+
+.parent {
+   font-size: 1rem (will be relative to the root 16px)	
+}
+
+.child {
+   font-size: 2rem => 32px
+   margin: 1rem => 16px! relative still to root font size 
+}
+
+
+** if for padding, while scaling, em could be the better choice but for layout like margin, rem still
+** for typography, rem is more consistent and easy to scale
+
+
+SUMMARY: use rem hehe especially for font size, you can use em for margins and paddings
+
+

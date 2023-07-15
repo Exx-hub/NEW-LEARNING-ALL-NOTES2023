@@ -1,0 +1,55 @@
+July 12, 2023 - Academind React Native 3 hour course
+
+
+==React native Refresher
+
+
+Components are compiled to native views
+
+--- react native maps reusable components to respective platform equivalents
+--- converts <View> into android.View and UIView (for android and IOS)
+
+
+Javascript logic is not compiled, instead react runs a javascript thread (runtime)
+
+
+
+Custom components => combination of react native core components
+
+const MyButton = ({title}) => {
+  return (
+       <View>
+        <Button title={title} />
+       </View>
+  )
+}
+
+
+Views uses flexbox by default. also by default direction is column.
+
+
+Sometimes, a feature will work on android but not on ios and vice versa.
+-ex. border radius on a Text element will work on android but not on ios.
+-solution: wrap the Text in a more generic element (View) and apply border radius there.
+
+
+===FLATLIST=== 
+option 1- if your list item has a "key" property, flatlist will automatically use this as keys for the list
+option 2- key extractor should be used if your list item does not have "key", for example, "id"
+
+
+==PRESSABLE==
+
+can return a callback that takes in {pressed} for ripple effect in ios. android has built in ripple
+
+ <Pressable
+        android_ripple={{ color: "#210644" }}
+        style={(item) => item.pressed && styles.pressedItem}
+        onPress={() => handleDelete(item)}
+     >
+
+
+     
+==MODAL==
+
+<Modal visible={modalVisible} animationType="slide"></Modal>

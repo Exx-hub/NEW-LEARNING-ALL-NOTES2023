@@ -1,0 +1,69 @@
+11/10/22
+
+Debugging and Development Workflow
+
+
+
+==Understanding NPM Scripts==
+
+NPM - Node Package Manager
+
+
+npm init - initialize project with package.json (config file)
+
+====> scripts
+"start" - reserved script command => npm start
+"start-server" - you can name anything => npm run start-server
+
+
+
+==Installing 3rd Party Packages==
+
+
+usual node project:
+
+Local Project
+<Your Code>
+Core Node Packages
+Dependencies (3rd Party) ex - Express, dotenv, cors (from npm Repository)
+
+
+npm install - go through your package.json and install dependencies and devdependencies there
+=> will create the node_modules folders
+
+
+
+example - install nodemon in your devdependencies
+
+=> npm i nodemon -D
+
+--- packages are installed in the node_modules.
+
+
+
+
+==Understanding Differenet Error Types==
+
+Types of Errors
+1. Syntax Errors - typos or commands unknown to node or javascript
+
+2. Runtime Errors - errors from code that break when you run them
+
+3. Logical Errors - when your app doesnt work the way it should, no warnings shown.
+
+
+==Finding and Fixing Syntax Errors==
+==Dealing with Runtime Errors==
+
+==Logical Errors==
+-your app continues to work but not the way you expect it to.
+
+--one tool to help with solving the problem is with the use of the debugger, which is integrated in vscode.
+
+===> Debugger --- study further.
+
+
+
+
+
+

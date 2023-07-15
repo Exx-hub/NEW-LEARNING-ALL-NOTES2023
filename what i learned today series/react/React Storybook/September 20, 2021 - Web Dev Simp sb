@@ -1,0 +1,74 @@
+September 20, 2021
+
+
+React Story Book - Web Dev Simp
+
+
+Create a starter react project with two components
+
+story book allows testing of components in isolation without rendering the component or running the app
+
+
+--to install and setup storybook:
+
+-after you create your app, run => nxp sb init
+
+
+--after which a storybook folder will appear in your app that has 2 files
+
+1. main.js => config file
+2. preview.js => global config file
+
+
+--and inside src, there will be a new stories folder where all storybook code will go
+
+--in package.json
+1. added a script called storybook that we can run => npm run storybook
+
+-- this will open storybook in your browser
+
+---for this tutorial delete all content of stories folder. to be able to start from scratch.
+
+
+1. create Button.stories.js
+
+
+import Button from "../components/Button"; // component that uses this button
+
+
+// start with this export default => your actual story
+
+export default {
+  title: "Button",
+  component: Button,
+};
+
+// named stories
+export const Red = () => <Button label="press me" backgroundColor="red" />;
+
+
+
+// Storybook args concept
+
+const Template = (args) => <Button {...args} />;
+
+export const Red = Template.bind({});
+
+Red.args = {
+  backgroundColor: "red",
+  label: "press me",
+  size: "md",
+};
+
+
+
+// argTypes -
+
+export default {
+  title: "Button",
+  component: Button,
+  argTypes: { handleClick: { action: "handleClick" } },
+};
+
+
+
