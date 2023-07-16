@@ -65,3 +65,17 @@ import { WebView } from "react-native-webview";
         { backgroundColor: activeItem === name ? "orange" : "white" },
       ]}
      
+     
+     
+17. ImageBackground
+
+
+      <ImageBackground source={require('./img1.jpg')} style={styles.image}>
+        <LinearGradient
+        colors={["#09203f", "#537895"]}
+        start={[0.1, 0.1]}
+        style={styles.linearGradient}
+        >
+          <Text style={styles.text}>ANTI SOCIAL CLUB</Text>
+        </LinearGradient>
+      </ImageBackground>
